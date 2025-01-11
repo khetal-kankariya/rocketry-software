@@ -6,7 +6,7 @@
 #include <INA226.h>
 #include <RTClib.h>
 #include <SoftwareSerial.h>
-#include <TinyGPSPlus.h>
+#include <TinyGPS++.h>
 #include <Wire.h>
 #include <utility/imumaths.h>
 

@@ -3,9 +3,7 @@
 
 #include <Arduino.h>
 
-#include "header_without_sensordata.h"
-// #include "softwarestates.h"
-// #include "structs.h"
+#include "header.h"
 
 extern telemetry_data_struct telemetry_data;
 extern String telemetry_string;

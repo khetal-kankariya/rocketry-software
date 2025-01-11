@@ -37,11 +37,7 @@ void loop() {
   }
 }
 
-/*
-void setup1() {
-  Serial.begin(115200);
-  Serial1.begin(115200);
-}
+void setup1() { Serial.begin(115200); }
 
 void loop1() {
   if (is_fresh_start()) {
@@ -49,12 +45,12 @@ void loop1() {
     increment_software_state();
 
     String command;
-    command = Serial1.read();
+    command = Serial.read();
 
-    if (command == "starttele") {
+    if (command == "telestart") {
       Serial.read();
     }
-    if (command == "stoptele") {
+    if (command == "telestop") {
       // Serial.;
     }
     if (command == "calibrate") {
@@ -70,6 +66,7 @@ void loop1() {
     }
   } else {
     // TODO how to check latest software state
+
     int latest_software_state;
 
     set_software_state(latest_software_state);
@@ -84,4 +81,3 @@ void loop1() {
     }
   }
 }
-*/
