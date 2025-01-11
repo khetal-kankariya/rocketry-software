@@ -143,7 +143,10 @@ float read_gyro_spin_rate() { return 0; };
 String read_software_state() { return get_software_state_string(); };
 
 // MiCS reading (CO/CH4/C2H5OH/H2/NH3)
-float read_gas_concentration() { return mics.getGasData(CO); };
+float read_gas_concentration() {
+  // return mics.getGasData(CO);
+  return 0;
+};
 
 bool is_fresh_start() {
   // TODO check previous logs and return true if fresh start
