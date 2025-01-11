@@ -17,6 +17,8 @@ float bmp_altitude, bmp_pressure, aht_temperature, ina_voltage, l89_time,
     bno_acceleration_x, bno_acceleration_y, bno_acceleration_z, gyro_spin_rate,
     mics_gas_concentration;
 
+bool send_telemetry = false;
+
 void setup() {
   setup_sensors();
   millis_time_init = millis();
@@ -25,7 +27,7 @@ void setup() {
 
 void loop() {
 
-  if (Serial.available()) {
+  if (send_telemetry) {
     check_sensor_status();
 
     make_telemetry_data();
@@ -48,10 +50,10 @@ void loop1() {
     command = Serial.read();
 
     if (command == "telestart") {
-      Serial.read();
+      send_telemetry = true;
     }
     if (command == "telestop") {
-      // Serial.;
+      send_telemetry = false;
     }
     if (command == "calibrate") {
       int i = 5;
@@ -67,7 +69,7 @@ void loop1() {
   } else {
     // TODO how to check latest software state
 
-    int latest_software_state;
+    int latest_software_state = get_last_state_string();
 
     set_software_state(latest_software_state);
   }
