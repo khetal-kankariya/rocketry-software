@@ -1,4 +1,4 @@
-#include "functions_without_sensordata.h"
+#include "functions.h"
 #include "calculated_data.h"
 #include "previous_data.h"
 

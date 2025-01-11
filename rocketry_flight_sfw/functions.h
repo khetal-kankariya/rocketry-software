@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS_WITHOUT_SENSORDATA_H
-#define FUNCTIONS_WITHOUT_SENSORDATA_H
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "telemetry.h"
 #include <Arduino.h>
