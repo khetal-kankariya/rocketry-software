@@ -37,6 +37,13 @@ void setup() {
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+
+  bno.begin();
+  aht.begin();
+  bmp.begin_I2C();
+  rtc.begin();
+  mics.begin();
+  INA.begin();
 }
 
 void setup1() { Serial.begin(115200); }

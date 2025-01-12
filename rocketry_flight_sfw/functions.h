@@ -30,6 +30,7 @@ extern TinyGPSPlus gps;
 extern RTC_DS3231 rtc;
 extern DFRobot_MICS_I2C mics;
 extern INA226 INA;
+extern SoftwareSerial openLog;
 
 void setup_sensors();
 

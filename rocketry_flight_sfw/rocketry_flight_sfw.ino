@@ -21,7 +21,6 @@ bool send_telemetry = false;
 
 void setup() {
   setup_sensors();
-  millis_time_init = millis();
   Serial.begin(115200);
 }
 
@@ -43,13 +42,17 @@ void setup1() { Serial.begin(115200); }
 
 void loop1() {
   if (is_fresh_start()) {
-    // BOOT to SETUP
-    increment_software_state();
 
-    String command;
-    command = Serial.read();
+    // BOOT to SETUP
+    if (software_state_num == 0) {
+      increment_software_state();
+      Serial.println(software_state_num);
+    }
+
+    String command = Serial.readString();
 
     if (command == "telestart") {
+
       send_telemetry = true;
     }
     if (command == "telestop") {
@@ -58,12 +61,13 @@ void loop1() {
     if (command == "calibrate") {
       if (calibrate_sensors()) {
         // SETUP to LAUNCH
-        increment_software_state();
+        if (software_state_num == 1) {
+          increment_software_state();
+        }
       }
     }
   } else {
     // TODO how to check latest software state
-
     int latest_software_state_num = get_last_state_num();
 
     set_software_state(latest_software_state_num);
@@ -94,4 +98,6 @@ void loop1() {
   default:
     break;
   }
+
+  delay(100);
 }

@@ -2,14 +2,14 @@
 #include "calculated_data.h"
 #include "previous_data.h"
 
-Adafruit_AHTX0 aht;
-Adafruit_BMP3XX bmp;
+// Adafruit_AHTX0 aht;
+// Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
-TinyGPSPlus gps;
-RTC_DS3231 rtc;
-DFRobot_MICS_I2C mics(&Wire, MICS_I2C_ADDRESS);
-INA226 INA(0x40);
-SoftwareSerial openLog(2, 3);
+// TinyGPSPlus gps;
+// RTC_DS3231 rtc;
+// DFRobot_MICS_I2C mics(&Wire, MICS_I2C_ADDRESS);
+// INA226 INA(0x40);
+// SoftwareSerial openLog(2, 3);
 
 void setup_sensors() {
   Wire.setSDA(4);
@@ -17,13 +17,20 @@ void setup_sensors() {
   Wire.begin();
   Wire.setClock(400000);
 
-  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-  bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+  // bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  // bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  // bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  // bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
-  pinMode(burnwire_pin, OUTPUT);
-  pinMode(buzzer_pin, OUTPUT);
+  // pinMode(burnwire_pin, OUTPUT);
+  // pinMode(buzzer_pin, OUTPUT);
+
+  // aht.begin();
+  // bmp.begin_I2C();
+  bno.begin();
+  // rtc.begin();
+  // mics.begin();
+  // INA.begin();
 }
 
 float reference_pressure, reference_altitude;
@@ -80,12 +87,14 @@ void check_sensor_status() {
 // RTC reading
 String read_time() {
 
-  unsigned long totalTime = millis() / 1000.0;
-  DateTime now = rtc.now();
+  // unsigned long totalTime = millis() / 1000.0;
+  // DateTime now = rtc.now();
 
-  String time_string = String(now.hour(), DEC) + ": " +
-                       String(now.minute(), DEC) + ": " +
-                       String(now.second(), DEC);
+  // String time_string = String(now.hour(), DEC) + ": " +
+  //                      String(now.minute(), DEC) + ": " +
+  //                      String(now.second(), DEC);
+
+  String time_string = String(00) + ": " + String(00) + ": " + String(00);
 
   return time_string;
 };
@@ -95,19 +104,28 @@ int read_packet_count() { return packet_count += 1; }
 
 // BMP reading
 float read_altitude(float pressure) {
-  return bmp.readAltitude(reference_altitude), 1;
+  // return bmp.readAltitude(reference_altitude), 1;
+  return 0;
 };
-float read_pressure() { return bmp.pressure; };
+float read_pressure() {
+  // return bmp.pressure;
+  return 0;
+};
 
 //!
 // AHT reading
 float read_temperature() {
-  aht.getEvent(&humidity, &temp);
-  return temp.temperature;
+  // aht.getEvent(&humidity, &temp);
+  // return temp.temperature;
+
+  return 0;
 };
 
 // INA reading
-float read_voltage() { return INA.getBusVoltage(); };
+float read_voltage() {
+  // return INA.getBusVoltage();
+  return 0;
+};
 
 // velocity reading
 float read_velocity() {
@@ -178,49 +196,51 @@ bool calibrate_sensors() {
   return (set_reference_alt_pressure() && set_reference_orientation());
 }
 
-void write_to_openlog(String telemetry_str) { openLog.println(telemetry_str); }
+void write_to_openlog(String telemetry_str) {
+  // openLog.println(telemetry_str);
+}
 
 String get_last_openlog_log() {
-  String result = "";
-  String all_logs = openLog.readString();
-  all_logs.trim();
+  String result = " ";
+  // String all_logs = openLog.readString();
+  // all_logs.trim();
 
-  int length_all_logs = all_logs.length();
+  // int length_all_logs = all_logs.length();
 
-  if (length_all_logs > 0) {
-    int startIndex = 0;
-    int endIndex = 0;
+  // if (length_all_logs > 0) {
+  //   int startIndex = 0;
+  //   int endIndex = 0;
 
-    while (endIndex != -1) {
-      endIndex = all_logs.indexOf('\n', startIndex);
-      if (endIndex == -1) {
-        result = all_logs.substring(startIndex);
-      } else {
-        result = all_logs.substring(startIndex, endIndex);
-        startIndex = endIndex + 1;
-      }
-    }
-  }
+  //   while (endIndex != -1) {
+  //     endIndex = all_logs.indexOf('\n', startIndex);
+  //     if (endIndex == -1) {
+  //       result = all_logs.substring(startIndex);
+  //     } else {
+  //       result = all_logs.substring(startIndex, endIndex);
+  //       startIndex = endIndex + 1;
+  //     }
+  //   }
+  // }
 
   return result;
 }
 
 String get_last_state_string() {
-  String last_log = get_last_openlog_log();
+  // String last_log = get_last_openlog_log();
 
-  String last_state_string;
-  int startIndex = 0;
-  int endIndex = 0;
+  String last_state_string = state_numToString(software_state_num);
+  // int startIndex = 0;
+  // int endIndex = 0;
 
-  while (endIndex != -1) {
-    endIndex = last_log.indexOf(',', startIndex);
-    if (endIndex == -1) {
-      // last_state_num = last_log.substring(startIndex);
-    } else {
-      last_state_string = last_log.substring(startIndex, endIndex);
-      startIndex = endIndex + 1;
-    }
-  }
+  // while (endIndex != -1) {
+  //   endIndex = last_log.indexOf(',', startIndex);
+  //   if (endIndex == -1) {
+  //     // last_state_num = last_log.substring(startIndex);
+  //   } else {
+  //     last_state_string = last_log.substring(startIndex, endIndex);
+  //     startIndex = endIndex + 1;
+  //   }
+  // }
 
   return last_state_string;
 }
