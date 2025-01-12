@@ -56,30 +56,42 @@ void loop1() {
       send_telemetry = false;
     }
     if (command == "calibrate") {
-      int i = 5;
-      while (i--) {
-        if (calibrate_sensors()) {
-
-          // SETUP to LAUNCH
-          increment_software_state();
-          break;
-        };
+      if (calibrate_sensors()) {
+        // SETUP to LAUNCH
+        increment_software_state();
       }
     }
   } else {
     // TODO how to check latest software state
 
-    int latest_software_state = get_last_state_string();
+    int latest_software_state_num = get_last_state_num();
 
-    set_software_state(latest_software_state);
+    set_software_state(latest_software_state_num);
   }
 
-  if (software_state_num == 2) {
-    if (bno_acceleration_y > 0 && bmp_altitude > 0 && l89_altitude > 0) {
+  switch (software_state_num) {
+  case 2:
+    if (velocity > 0 && bmp_altitude > 0 && l89_altitude > 0) {
       increment_software_state();
     }
-  } else if (software_state_num == 3) {
+    break;
+  case 3:
     if (bmp_altitude >= 1000 || velocity <= 0) {
+      increment_software_state();
     }
+    break;
+  case 4:
+    trigger_burnwire();
+    increment_software_state();
+    break;
+  case 5:
+    if (velocity == 0 || bmp_altitude == 0) {
+      increment_software_state();
+    }
+  case 6:
+    sound_buzzer();
+    break;
+  default:
+    break;
   }
 }

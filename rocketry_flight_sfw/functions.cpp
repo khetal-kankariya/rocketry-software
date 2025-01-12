@@ -21,6 +21,9 @@ void setup_sensors() {
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+
+  pinMode(burnwire_pin, OUTPUT);
+  pinMode(buzzer_pin, OUTPUT);
 }
 
 float reference_pressure, reference_altitude;
@@ -147,6 +150,24 @@ float read_gas_concentration() {
   // return mics.getGasData(CO);
   return 0;
 };
+
+void trigger_burnwire() {
+  digitalWrite(burnwire_pin, HIGH);
+  delay(2500);
+  digitalWrite(burnwire_pin, LOW);
+}
+
+void sound_buzzer() {
+
+  digitalWrite(buzzer_pin, HIGH);
+  delay(200);
+  digitalWrite(buzzer_pin, LOW);
+  delay(200);
+  digitalWrite(buzzer_pin, HIGH);
+  delay(200);
+  digitalWrite(buzzer_pin, LOW);
+  delay(500);
+}
 
 bool is_fresh_start() {
   // TODO check previous logs and return true if fresh start
