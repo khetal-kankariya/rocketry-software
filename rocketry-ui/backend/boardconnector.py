@@ -1,6 +1,6 @@
 import serial, serial.tools.list_ports
 
-sumserial = serial.Serial(port="/dev/ttyACM0", baudrate=115200)
+sumserial = serial.Serial(port="COM6", baudrate=115200)
 
 serialPorts = serial.tools.list_ports.comports()
 
