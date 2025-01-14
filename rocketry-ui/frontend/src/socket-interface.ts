@@ -159,6 +159,7 @@ export const calibrate_sensors = async () => {
 				duration: 1500
 			});
 
+			console.log(calibration_status);
 			response = false;
 		}
 	}

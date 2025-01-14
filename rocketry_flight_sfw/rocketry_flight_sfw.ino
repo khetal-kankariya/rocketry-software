@@ -34,7 +34,7 @@ void loop() {
 
     Serial.println(telemetry_string);
 
-    delay(1000);
+    delay(500);
   }
 }
 
@@ -46,10 +46,10 @@ void loop1() {
     // BOOT to SETUP
     if (software_state_num == 0) {
       increment_software_state();
-      Serial.println(software_state_num);
     }
 
     String command = Serial.readString();
+    command.trim();
 
     if (command == "telestart") {
 
@@ -59,7 +59,9 @@ void loop1() {
       send_telemetry = false;
     }
     if (command == "calibrate") {
+      send_telemetry = false;
       if (calibrate_sensors()) {
+        send_telemetry = true;
         // SETUP to LAUNCH
         if (software_state_num == 1) {
           increment_software_state();

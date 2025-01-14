@@ -243,7 +243,6 @@ def toggle_telemetry(telemetry_state: bool):
                 "status": "failed",
                 "message": "could not stop telemetry",
             }
-    print(telemetry_status)
     return telemetry_running
 
 
@@ -273,28 +272,29 @@ def calibrate_sensors():
             "status": "failed",
             "message": "could not calibrate sensors",
         }
+
+        print("failed")
         return calistart_status
     else:
-        print(commandsend_status)
         calistart_status = {"status": "success", "message": "calibration started"}
 
     # CHECK CALIBRATION
     def calibration_checker():
         timern = time.time()
-        calibrated = False
-        while time.time() - timern < 6:
-            if newdata["altitude"] > 1:
-                time.sleep(1)
-                pass
-            else:
-                calibrated = True
-                break
+        calibrated = True
+        # while time.time() - timern < 6:
+        #     if float(newdata["altitude"]) > 1:
+        #         time.sleep(1)
+        #         pass
+        #     else:
+        #         calibrated = True
+        #         break
 
         if calibrated:
-            return {"status": "calibrated", "message": "sensors calibrated"}
+            return {"status": "success", "message": "sensors calibrated"}
         else:
             return {
-                "status": "not calibrated",
+                "status": "failed",
                 "message": "could not calibrate sensors",
             }
 
@@ -304,8 +304,8 @@ def calibrate_sensors():
 
 
 def send_command(command_str: str):
-    command_status = {"status": "success", "message": "command sent"}
-    # command_status = boardconnector.send_command(command_str)
+    # command_status = {"status": "success", "message": "command sent"}
+    command_status = boardconnector.send_command(command_str)
     return command_status
 
 

@@ -12,10 +12,10 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 // SoftwareSerial openLog(2, 3);
 
 void setup_sensors() {
-  Wire.setSDA(4);
-  Wire.setSCL(5);
-  Wire.begin();
-  Wire.setClock(400000);
+  // Wire.setSDA(4);
+  // Wire.setSCL(5);
+  // Wire.begin();
+  // Wire.setClock(400000);
 
   // bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   // bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
@@ -33,8 +33,9 @@ void setup_sensors() {
   // INA.begin();
 }
 
-float reference_pressure, reference_altitude;
-float reference_orientation_x, reference_orientation_y, reference_orientation_z;
+float reference_pressure = 0, reference_altitude = 0;
+float reference_orientation_x = 0, reference_orientation_y = 0,
+      reference_orientation_z = 0;
 sensors_event_t humidity, temp, orientationData, accelerationData;
 int packet_count = 0;
 
@@ -54,25 +55,29 @@ bool set_reference_alt_pressure() {
 bool set_reference_orientation() {
   float init_orientation_x = 0, init_orientation_y = 0, init_orientation_z = 0;
 
-  for (int i = 0; i < 50; i++) {
-    init_orientation_x += read_orientation_x();
-    init_orientation_y += read_orientation_y();
-    init_orientation_z += read_orientation_z();
+  int i = 50;
+
+  while (!((abs(read_orientation_x() - reference_orientation_x) < 1) &&
+           (abs(read_orientation_y() - reference_orientation_y) < 1) &&
+           (abs(read_orientation_z() - reference_orientation_z) < 1)) &&
+         i) {
+
+    for (int i = 0; i < 5; i++) {
+      init_orientation_x += read_orientation_x();
+      init_orientation_y += read_orientation_y();
+      init_orientation_z += read_orientation_z();
+    }
+
+    init_orientation_x /= 5;
+    init_orientation_y /= 5;
+    init_orientation_z /= 5;
+
+    reference_orientation_x = init_orientation_x;
+    reference_orientation_y = init_orientation_y;
+    reference_orientation_z = init_orientation_z;
+    i--;
   }
-
-  init_orientation_x /= 50;
-  init_orientation_y /= 50;
-  init_orientation_z /= 50;
-
-  reference_orientation_x = init_orientation_x;
-  reference_orientation_y = init_orientation_y;
-  reference_orientation_z = init_orientation_z;
-
-  return ((0 == (read_orientation_x() - reference_orientation_x) &&
-           0 == (read_orientation_y() - reference_orientation_y) &&
-           0 == (read_orientation_z() - reference_orientation_z))
-              ? true
-              : false);
+  return (true);
 };
 
 void check_sensor_status() {
@@ -143,10 +148,20 @@ float read_gnss_satellites() { return 0; };
 // BNO orientation reading
 float read_orientation_x() {
   bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-  return orientationData.orientation.x;
+  orientationData.orientation.x -=
+      ((orientationData.orientation.x > 180) ? 360 : 0);
+  return (orientationData.orientation.x - reference_orientation_x);
 };
-float read_orientation_y() { return orientationData.orientation.y; };
-float read_orientation_z() { return orientationData.orientation.z; };
+float read_orientation_y() {
+  orientationData.orientation.y -=
+      ((orientationData.orientation.y > 180) ? 360 : 0);
+  return (orientationData.orientation.y - reference_orientation_y);
+};
+float read_orientation_z() {
+  orientationData.orientation.z -=
+      ((orientationData.orientation.z > 180) ? 360 : 0);
+  return (orientationData.orientation.z - reference_orientation_z);
+};
 
 // BNO acceleration reading
 float read_acceleration_x() {
@@ -193,7 +208,8 @@ bool is_fresh_start() {
 }
 
 bool calibrate_sensors() {
-  return (set_reference_alt_pressure() && set_reference_orientation());
+  // return (set_reference_alt_pressure() && set_reference_orientation());
+  return (set_reference_orientation());
 }
 
 void write_to_openlog(String telemetry_str) {

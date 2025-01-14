@@ -105,7 +105,7 @@ def get_baudrate():
 def send_command(command_str: str):
     command_status = {"status": "none", "message": "none"}
     try:
-        sumserial.write(command_str)
+        sumserial.write(command_str.encode())
 
         command_status = {"status": "success", "message": "command sent"}
     except OSError as err:
