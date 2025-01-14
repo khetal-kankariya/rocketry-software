@@ -1,6 +1,4 @@
-# Prerequisites:
-
-The Flight Software and GCS UI for InSpace Rocketry Competition 2025.
+# The Flight Software and GCS UI for InSpace Rocketry Competition 2025.
 
 ## Flight Software
 
