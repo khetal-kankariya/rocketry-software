@@ -34,20 +34,26 @@ baudRates = [9600, 115200]
 activeBaudRate = 9600
 
 prevdata = {
-    "teamID": "2024ASI-ROCKETRY-026",
+    "teamID": "",
     "timeStamp": 0,
     "packetCount": 0,
     "altitude": 0,
     "pressure": 0,
     "temperature": 0,
     "voltage": 0,
+    "gnss_time": 0,
+    "gnss_latitiude": 0,
+    "gnss_longitude": 0,
+    "gnss_altitude": 0,
+    "gnss_sats": 0,
+    "orientation_x": 0,
+    "orientation_y": 0,
+    "orientation_z": 0,
+    "accel_x": 0,
+    "accel_y": 0,
+    "accel_z": 0,
+    "softwareState": "BOOT",
     "gasConcn": 0,
-    "gnss": {"time": 0, "lat": 0, "lng": 0, "alt": 0, "sats": 0},
-    "accel": {"x": 0, "y": 0, "z": 0},
-    "orientation": {"x": 0, "y": 0, "z": 0},
-    "gyroSpinRate": {"roll": 0, "pitch": 0},
-    "softwareState": "boot",
-    "velocity": 0,
 }
 newdata = prevdata
 
@@ -104,41 +110,25 @@ def random_telemetry_data():
         "pressure": int(random.random() * 51),
         "temperature": int(random.random() * 51),
         "voltage": int(random.random() * 51),
-        "gasConcn": int(random.random() * 51),
-        "gnss": {
-            "time": int(random.random() * 51),
-            "lat": 23.1293,
-            "lng": 72.5417,
-            "alt": int(random.random() * 51),
-            "sats": int(random.random() * 51),
-        },
-        "accel": {
-            "x": int(random.random() * 51),
-            "y": int(random.random() * 51),
-            "z": int(random.random() * 51),
-        },
-        "orientation": {
-            "x": (
-                prevdata["orientation"]["x"] + 1
-                if prevdata["orientation"]["x"] < 359
-                else 0
-            ),
-            "y": (
-                prevdata["orientation"]["y"] + 1
-                if prevdata["orientation"]["y"] < 359
-                else 0
-            ),
-            "z": (
-                prevdata["orientation"]["z"] + 1
-                if prevdata["orientation"]["z"] < 359
-                else 0
-            ),
-        },
-        "gyroSpinRate": {
-            "roll": int(random.random() * 51),
-            "pitch": int(random.random() * 51),
-        },
+        "gnss_time": int(random.random() * 51),
+        "gnss_lat": 23.1293,
+        "gnss_lng": 72.5417,
+        "gnss_alt": int(random.random() * 51),
+        "gnss_sats": int(random.random() * 51),
+        "accel_x": int(random.random() * 51),
+        "accel_y": int(random.random() * 51),
+        "accel_z": int(random.random() * 51),
+        "orientation_x": (
+            prevdata["orientation_x"] + 1 if prevdata["orientation_x"] < 359 else 0
+        ),
+        "orientation_y": (
+            prevdata["orientation_y"] + 1 if prevdata["orientation_y"] < 359 else 0
+        ),
+        "orientation_z": (
+            prevdata["orientation_z"] + 1 if prevdata["orientation_z"] < 359 else 0
+        ),
         "softwareState": "boot",
+        "gasConcn": int(random.random() * 51),
         "velocity": 0,
     }
 
@@ -171,19 +161,19 @@ def write_csv_data(data: dict[str, any]):
         f"{newdata['pressure']},"
         f"{newdata['temperature']},"
         f"{newdata['voltage']},"
-        f"{newdata['gnss']['time']},"
-        f"{newdata['gnss']['lat']},"
-        f"{newdata['gnss']['lng']},"
-        f"{newdata['gnss']['alt']},"
-        f"{newdata['gnss']["sats"]},"
-        f"{newdata['accel']['x']},"
-        f"{newdata['accel']['y']},"
-        f"{newdata['accel']['z']},"
-        f"{newdata['orientation']['x']},"
-        f"{newdata['orientation']['y']},"
-        f"{newdata['orientation']['z']},"
-        f"{newdata['gyroSpinRate']['roll']},"
-        f"{newdata['gyroSpinRate']['pitch']},"
+        f"{newdata['gnss_time']},"
+        f"{newdata['gnss_lat']},"
+        f"{newdata['gnss_lng']},"
+        f"{newdata['gnss_alt']},"
+        f"{newdata["gnss_sats"]},"
+        f"{newdata['accel_x']},"
+        f"{newdata['accel_y']},"
+        f"{newdata['accel_z']},"
+        f"{newdata['orientation_x']},"
+        f"{newdata['orientation_y']},"
+        f"{newdata['orientation_z']},"
+        f"{newdata['gyroSpinRate_roll']},"
+        f"{newdata['gyroSpinRate_pitch']},"
         f"{newdata['gasConcn']},"
         f"{newdata['velocity']}\n"
     )
@@ -304,8 +294,8 @@ def calibrate_sensors():
 
 
 def send_command(command_str: str):
-    # command_status = {"status": "success", "message": "command sent"}
-    command_status = boardconnector.send_command(command_str)
+    command_status = {"status": "success", "message": "command sent"}
+    # command_status = boardconnector.send_command(command_str)
     return command_status
 
 
