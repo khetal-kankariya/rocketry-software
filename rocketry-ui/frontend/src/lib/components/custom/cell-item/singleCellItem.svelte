@@ -1,22 +1,23 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { activeTab, allDataEverything, allGraphPastDatas, readData } from '@src/store';
+	import {
+		activeTab,
+		allDataEverything,
+		allGraphDatatypes,
+		allGraphPastDatas,
+		readData
+	} from '@src/store';
 	import Chart from '$lib/components/custom/chart/chart.svelte';
 
 	let { datatype }: { datatype: TtelemetryDataField } = $props();
 
-	let unit =
-		datatype == 'gnss'
-			? $allDataEverything[datatype].subParams.alt.unit
-			: $allDataEverything[datatype].unit;
-	let sumdata = $derived(
-		$readData ? (datatype == 'gnss' ? $readData.gnss.alt : $readData[datatype]) : 0
-	);
+	let unit = $allDataEverything[datatype].unit;
+	let sumdata = $derived($readData ? $readData[datatype] : 0);
 </script>
 
 <li class="w-auto">
-	<a href={$allGraphPastDatas[datatype] ? `/view/single/${datatype}` : '#'}>
+	<a href={datatype in allGraphDatatypes ? `/view/single/${datatype}` : '#'}>
 		<Card.Root
 			class={`flex ${$activeTab == 'Overview' ? `h-[66px]` : `h-[214px]`} w-[336px] cursor-pointer flex-col justify-center gap-1 p-2 transition-all hover:scale-105`}
 		>

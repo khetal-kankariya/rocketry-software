@@ -11,28 +11,37 @@
 			gridDataNames = $allDataNames;
 		} else if ($activeTab == 'Graphs') {
 			gridDataNames = [
+				'timeStamp',
 				'altitude',
 				'pressure',
 				'temperature',
 				'voltage',
 				'gasConcn',
-				'gnss',
+				'gnss_altitude',
 				'velocity',
-				'accel',
-				'orientation'
+				'accel_x',
+				'accel_y',
+				'accel_z',
+				'orientation_x',
+				'orientation_y',
+				'orientation_z'
 			];
 		}
 	});
 </script>
 
 <ul class="datagrid grid w-full min-w-[1392px] grid-cols-4 gap-4 p-0">
-	{#each gridDataNames as datatype}
-		{#if datatype == 'gnss' && $activeTab == 'Overview'}
-			<FourCellItem {datatype}></FourCellItem>
-		{:else if datatype == 'orientation' || datatype == 'accel'}
-			<TwoCellItem {datatype}></TwoCellItem>
-		{:else if $allDataEverything[datatype].multiParameter == false}
-			<SingleCellItem {datatype}></SingleCellItem>
-		{/if}
-	{/each}
+	<SingleCellItem datatype="teamID"></SingleCellItem>
+	<SingleCellItem datatype="timeStamp"></SingleCellItem>
+	<SingleCellItem datatype="packetCount"></SingleCellItem>
+	<SingleCellItem datatype="softwareState"></SingleCellItem>
+	<SingleCellItem datatype="altitude"></SingleCellItem>
+	<SingleCellItem datatype="pressure"></SingleCellItem>
+	<SingleCellItem datatype="temperature"></SingleCellItem>
+	<SingleCellItem datatype="voltage"></SingleCellItem>
+	<FourCellItem></FourCellItem>
+	<TwoCellItem datatype="orientation"></TwoCellItem>
+	<TwoCellItem datatype="accel"></TwoCellItem>
+	<SingleCellItem datatype="gasConcn"></SingleCellItem>
+	<SingleCellItem datatype="velocity"></SingleCellItem>
 </ul>

@@ -4,9 +4,13 @@
 	import { activeTab, allDataEverything, readData } from '@src/store';
 	import Chart from '$lib/components/custom/chart/chart.svelte';
 
-	let { datatype }: { datatype: TtelemetryDataField } = $props();
-
-	let readDataTypeData = $derived($readData ? $readData[datatype] : {});
+	let subdatatypes: TgnssParams[] = [
+		'gnss_latitude',
+		'gnss_longitude',
+		'gnss_altitude',
+		'gnss_time',
+		'gnss_sats'
+	];
 </script>
 
 <div class="col-span-4 w-auto">
@@ -15,24 +19,24 @@
 	>
 		{#if $activeTab == 'Graphs'}
 			<div class="graph grid w-full grid-cols-4">
-				{#each Object.keys($allDataEverything[datatype].subParams) as actualDatatype}
+				{#each subdatatypes as datatype}
 					<div>
-						<Chart ratio={3} datatype={actualDatatype as TtelemetryDataField}></Chart>
+						<Chart ratio={3} {datatype}></Chart>
 					</div>
 				{/each}
 			</div>
 			<Separator orientation="horizontal" class="w-1/3"></Separator>
 		{/if}
 		<div class="flex items-center gap-[8rem]">
-			<span class="text-base uppercase">{$allDataEverything[datatype].displayName}:</span>
+			<span class="text-base uppercase">GNSS:</span>
 			<div class="flex w-full justify-between">
-				{#each Object.keys($allDataEverything[datatype].subParams) as actualDatatype}
+				{#each subdatatypes as subdatatype}
 					<div class="flex items-center gap-2">
 						<span class="text-base uppercase">
-							{$allDataEverything[datatype].subParams[actualDatatype].displayName}:
+							{$allDataEverything[subdatatype].displayName}:
 						</span>
 						<span class="text-3xl">
-							{readDataTypeData[actualDatatype] ? readDataTypeData[actualDatatype] : 0}
+							{$readData[subdatatype]}
 							<span class="text-sm">
 								<!-- {unit} -->
 							</span>

@@ -6,94 +6,77 @@ export const allDataNames: Readable<TtelemetryDataField[]> = readable([
 	'teamID',
 	'timeStamp',
 	'packetCount',
-	'softwareState',
 	'altitude',
 	'pressure',
 	'temperature',
 	'voltage',
-	'gnss',
-	'accel',
-	'orientation',
+	'gnss_time',
+	'gnss_latitude',
+	'gnss_longitude',
+	'gnss_altitude',
+	'gnss_sats',
+	'orientation_x',
+	'orientation_y',
+	'orientation_z',
+	'accel_x',
+	'accel_y',
+	'accel_z',
+	'softwareState',
 	'gasConcn',
 	'velocity'
 ]);
 
-export const allDataEverything = readable({
-	teamID: { graph: false, unit: '', displayName: 'Team ID', multiParameter: false },
+export const allDataEverything: Readable<{
+	[T in TtelemetryDataField]: {
+		graph: boolean;
+		unit: string;
+		displayName: string;
+	};
+}> = readable({
+	teamID: { graph: false, unit: '', displayName: 'Team ID' },
 	timeStamp: {
 		graph: false,
 		unit: 's',
-		displayName: 'Time Stamp',
-		multiParameter: false
+		displayName: 'Time Stamp'
 	},
 	packetCount: {
 		graph: false,
 		unit: '',
-		displayName: 'Packet Count',
-		multiParameter: false
+		displayName: 'Packet Count'
 	},
-	altitude: { graph: true, unit: 'm', displayName: 'Altitude', multiParameter: false },
-	pressure: { graph: true, unit: 'Pa', displayName: 'Pressure', multiParameter: false },
+	altitude: { graph: true, unit: 'm', displayName: 'Altitude' },
+	pressure: { graph: true, unit: 'Pa', displayName: 'Pressure' },
 	temperature: {
 		graph: true,
 		unit: '°C',
-		displayName: 'Temperature',
-		multiParameter: false
+		displayName: 'Temperature'
 	},
-	voltage: { graph: true, unit: 'V', displayName: 'Voltage', multiParameter: false },
+	voltage: { graph: true, unit: 'V', displayName: 'Voltage' },
 	gasConcn: {
 		graph: true,
 		unit: 'ppm',
-		displayName: 'Gas Concentration',
-		multiParameter: false
+		displayName: 'Gas Concentration'
 	},
-	gnss: {
-		subParams: {
-			time: { graph: false, unit: 's', displayName: 'Time', multiParameter: false },
-			lat: { graph: false, unit: '°N', displayName: 'Latitude', multiParameter: false },
-			lng: { graph: false, unit: '°E', displayName: 'Longitude', multiParameter: false },
-			alt: { graph: true, unit: 'm', displayName: 'Altitude', multiParameter: false },
-			sats: { graph: false, unit: '', displayName: 'Sats', multiParameter: false }
-		},
-		graph: true,
-		unit: '',
-		displayName: 'GNSS',
-		multiParameter: true
-	},
-	accel: {
-		subParams: {
-			x: { graph: true, unit: 'm/s2', displayName: 'X', multiParameter: false },
-			y: { graph: true, unit: 'm/s2', displayName: 'Y', multiParameter: false },
-			z: { graph: true, unit: 'm/s2', displayName: 'Z', multiParameter: false }
-		},
-		graph: true,
-		unit: '',
-		displayName: 'Acceleration',
-		multiParameter: true
-	},
-	orientation: {
-		subParams: {
-			x: { graph: true, unit: '°', displayName: 'X', multiParameter: false },
-			y: { graph: true, unit: '°', displayName: 'Y', multiParameter: false },
-			z: { graph: true, unit: '°', displayName: 'Z', multiParameter: false }
-		},
-		graph: true,
-		unit: '',
-		displayName: 'Orientation',
-		multiParameter: true
-	},
-
+	gnss_time: { graph: false, unit: 's', displayName: 'Time' },
+	gnss_latitude: { graph: false, unit: '°N', displayName: 'Latitude' },
+	gnss_longitude: { graph: false, unit: '°E', displayName: 'Longitude' },
+	gnss_altitude: { graph: true, unit: 'm', displayName: 'Altitude' },
+	gnss_sats: { graph: false, unit: '', displayName: 'Sats' },
+	accel_x: { graph: true, unit: 'm/s2', displayName: 'X' },
+	accel_y: { graph: true, unit: 'm/s2', displayName: 'Y' },
+	accel_z: { graph: true, unit: 'm/s2', displayName: 'Z' },
+	orientation_x: { graph: true, unit: '°', displayName: 'X' },
+	orientation_y: { graph: true, unit: '°', displayName: 'Y' },
+	orientation_z: { graph: true, unit: '°', displayName: 'Z' },
 	softwareState: {
 		graph: false,
 		unit: '',
-		displayName: 'Software State',
-		multiParameter: false
+		displayName: 'Software State'
 	},
 	velocity: {
 		graph: true,
 		unit: 'm/s',
-		displayName: 'Descent Velocity',
-		multiParameter: false
+		displayName: 'Descent Velocity'
 	}
 });
 
@@ -110,10 +93,18 @@ export const readData: Writable<TtelemetryData> = writable({
 	temperature: 0,
 	voltage: 0,
 	gasConcn: 0,
-	gnss: { time: 0, lat: 0, lng: 0, alt: 0, sats: 0 },
-	accel: { x: 0, y: 0, z: 0 },
-	orientation: { x: 0, y: 0, z: 0 },
-	softwareState: 'boot',
+	gnss_time: 0,
+	gnss_latitude: 0,
+	gnss_longitude: 0,
+	gnss_altitude: 0,
+	gnss_sats: 0,
+	accel_x: 0,
+	accel_y: 0,
+	accel_z: 0,
+	orientation_x: 0,
+	orientation_y: 0,
+	orientation_z: 0,
+	softwareState: 'BOOT',
 	velocity: 0
 });
 
@@ -133,52 +124,51 @@ export const activePort: Writable<string> = writable('');
 export const baudRates: Writable<number[]> = writable([]);
 export const activeBaudRate: Writable<number> = writable();
 
+export const allGraphDatatypes: TgraphDatatype[] = [
+	'altitude',
+	'pressure',
+	'temperature',
+	'voltage',
+	'gasConcn',
+	'gnss_altitude',
+	'velocity',
+	'accel_x',
+	'accel_y',
+	'accel_y',
+	'accel_z',
+	'orientation_x',
+	'orientation_y',
+	'orientation_z'
+];
+
 export const allGraphPastDatas: Writable<{
-	timeStamp: string[];
 	altitude: number[];
 	pressure: number[];
 	temperature: number[];
 	voltage: number[];
 	gasConcn: number[];
-	gnss: {
-		alt: number[];
-	};
+	gnss_altitude: number[];
 	velocity: number[];
-	accel: {
-		x: number[];
-		y: number[];
-		z: number[];
-	};
-	orientation: {
-		x: number[];
-		y: number[];
-		z: number[];
-	};
+	accel_x: number[];
+	accel_y: number[];
+	accel_z: number[];
+	orientation_x: number[];
+	orientation_y: number[];
+	orientation_z: number[];
 }> = writable({
-	timeStamp: [],
-	altitude: [],
-	pressure: [],
-	temperature: [],
-	voltage: [],
-	gasConcn: [],
-	gnss: {
-		alt: []
-	},
-	velocity: [],
-	accel: {
-		x: [],
-		y: [],
-		z: []
-	},
-	orientation: {
-		x: [],
-		y: [],
-		z: []
-	},
-	gyroSpinRate: {
-		roll: [],
-		pitch: []
-	}
+	altitude: [0],
+	pressure: [0],
+	temperature: [0],
+	voltage: [0],
+	gasConcn: [0],
+	gnss_altitude: [0],
+	velocity: [0],
+	accel_x: [0],
+	accel_y: [0],
+	accel_z: [0],
+	orientation_x: [0],
+	orientation_y: [0],
+	orientation_z: [0]
 });
 
 export const storecsvdata: Writable<string[]> = writable([]);

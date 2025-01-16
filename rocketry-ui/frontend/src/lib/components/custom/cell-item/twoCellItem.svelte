@@ -4,9 +4,14 @@
 	import { activeTab, allDataEverything, readData } from '@src/store';
 	import Chart from '@src/lib/components/custom/chart/chart.svelte';
 
-	let { datatype }: { datatype: TtelemetryDataField } = $props();
-	let actualDatatypes = Object.keys($allDataEverything[datatype].subParams);
-	let readaDataTypeData = $derived($readData[datatype]);
+	let { datatype }: { datatype: TmultiAxisParams } = $props();
+
+	let datatypes: TmultiAxisDatatypes[] =
+		datatype == 'accel'
+			? ['accel_x', 'accel_y', 'accel_z']
+			: datatype == 'orientation'
+				? ['orientation_x', 'orientation_y', 'orientation_z']
+				: [];
 </script>
 
 <div class="col-span-2 w-auto">
@@ -16,28 +21,28 @@
 		>
 			{#if $activeTab == 'Graphs'}
 				<div class="graph flex w-full justify-end gap-10">
-					{#each actualDatatypes as actualDatatype}
+					{#each datatypes as subdatatype}
 						<div class="h-[144px]">
-							<Chart ratio={1} {datatype} subdatatype={actualDatatype}></Chart>
+							<Chart ratio={1} datatype={subdatatype}></Chart>
 						</div>
 					{/each}
 				</div>
 				<Separator orientation="horizontal" class="w-1/3"></Separator>
 			{/if}
 			<div class="flex items-center justify-between gap-3">
-				<span class="items-center text-nowrap text-base uppercase"
-					>{$allDataEverything[datatype].displayName}:</span
-				>
+				<span class="items-center text-nowrap text-base uppercase">
+					{datatype}:
+				</span>
 				<div
-					class={`flex w-full ${actualDatatypes.length == 2 ? 'justify-end' : 'justify-center'} gap-32`}
+					class={`flex w-full ${datatypes.length == 2 ? 'justify-end' : 'justify-center'} gap-32`}
 				>
-					{#each actualDatatypes as actualDatatype, i}
+					{#each datatypes as subdatatype, i}
 						<div class={`flex items-center gap-2`}>
 							<span class="text-base uppercase">
-								{$allDataEverything[datatype].subParams[actualDatatype].displayName}:
+								{$allDataEverything[subdatatype].displayName}:
 							</span>
 							<span class="text-3xl">
-								{readaDataTypeData[actualDatatype] | 0}
+								{$readData[subdatatype] | 0}
 							</span>
 						</div>
 					{/each}

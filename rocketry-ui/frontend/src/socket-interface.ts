@@ -94,7 +94,7 @@ const get_data = () => {
 				return newData;
 			}
 		});
-		add_coords([newData.gnss.lat, newData.gnss.lng]);
+		add_coords([newData.gnss_latitude, newData.gnss_longitude]);
 	});
 };
 get_data();

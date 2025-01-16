@@ -3,11 +3,7 @@
 	import { Chart, type ChartItem } from 'chart.js/auto';
 	import { onDestroy, onMount } from 'svelte';
 
-	let {
-		datatype,
-		subdatatype,
-		ratio
-	}: { datatype: keyof typeof $allGraphPastDatas; ratio?: number; subdatatype?: string } = $props();
+	let { datatype, ratio }: { datatype: keyof TtelemetryData; ratio?: number } = $props();
 
 	let values = $state([0]);
 
@@ -68,10 +64,6 @@
 			);
 		});
 	});
-
-	// onDestroy(() => {
-	// 	chart.destroy();
-	// });
 
 	function addData(dataVar: number) {
 		if (chart.data.labels?.length == 20) {

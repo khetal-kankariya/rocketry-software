@@ -12,7 +12,7 @@
 
 	$effect(() => {
 		incomingTelemetry = $readData
-			? `${$readData.teamID}, ${$readData.timeStamp}, ${$readData.packetCount}, ${$readData.altitude},  ${$readData.pressure}, ${$readData.temperature}, ${$readData.voltage}, ${$readData.gnss.time}, ${$readData.gnss.alt}, ${$readData.gnss.lat}, ${$readData.gnss.lng}, ${$readData.gnss.sats}, ${$readData.orientation.x}, ${$readData.orientation.y}, ${$readData.orientation.z}, ${$readData.accel.x}, ${$readData.accel.y}, ${$readData.accel.z}, ${$readData.softwareState}, ${$readData.gasConcn}`
+			? `${$readData.teamID}, ${$readData.timeStamp}, ${$readData.packetCount}, ${$readData.altitude},  ${$readData.pressure}, ${$readData.temperature}, ${$readData.voltage}, ${$readData.gnss_time}, ${$readData.gnss_altitude}, ${$readData.gnss_latitude}, ${$readData.gnss_longitude}, ${$readData.gnss_sats}, ${$readData.orientation_x}, ${$readData.orientation_y}, ${$readData.orientation_z}, ${$readData.accel_x}, ${$readData.accel_y}, ${$readData.accel_z}, ${$readData.softwareState}, ${$readData.gasConcn}`
 			: '<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>';
 	});
 </script>
