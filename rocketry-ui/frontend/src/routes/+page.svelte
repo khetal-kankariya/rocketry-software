@@ -3,12 +3,8 @@
 	import Button from '@src/lib/components/ui/button/button.svelte';
 
 	let startGCS = (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
-		// e.currentTarget.parentElement?.classList.add('starting');
-		// e.currentTarget.style.transition = 'all 1000ms linear';
-		// e.currentTarget.style.background = '#0a0a0a';
-		// setTimeout(() => {
+		
 		goto('/overview');
-		// }, 1000);
 	};
 </script>
 

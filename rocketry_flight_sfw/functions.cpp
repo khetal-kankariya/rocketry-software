@@ -2,60 +2,79 @@
 #include "calculated_data.h"
 #include "previous_data.h"
 
+#define SEALEVELPRESSURE_HPA (1013.25)
+
+bool bmpstatus = true;
+
 // Adafruit_AHTX0 aht;
-// Adafruit_BMP3XX bmp;
-Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
+Adafruit_BMP3XX bmp;
+// Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 // TinyGPSPlus gps;
-// RTC_DS3231 rtc;
+RTC_DS3231 rtc;
 // DFRobot_MICS_I2C mics(&Wire, MICS_I2C_ADDRESS);
 // INA226 INA(0x40);
-// SoftwareSerial openLog(2, 3);
+SoftwareSerial openLog(2, 3);
 
 void setup_sensors() {
   // Wire.setSDA(4);
   // Wire.setSCL(5);
   // Wire.begin();
-  // Wire.setClock(400000);
+  // Wire.setClock(4000000);
 
-  // bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  // bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  // bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-  // bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
   // pinMode(burnwire_pin, OUTPUT);
   // pinMode(buzzer_pin, OUTPUT);
 
   // aht.begin();
-  // bmp.begin_I2C();
-  bno.begin();
-  // rtc.begin();
+  bmp.begin_I2C();
+  // bno.begin();
+  rtc.begin();
   // mics.begin();
   // INA.begin();
+  openLog.begin(115200);
+
+  // set_reference_alt_pressure();
+  // set_reference_orientation();
+
+  rtc.adjust(DateTime(2025,1,1,0,0,0));
 }
 
-float reference_pressure = 0, reference_altitude = 0;
+float reference_pressure = SEALEVELPRESSURE_HPA, reference_altitude = 0;
 float reference_orientation_x = 0, reference_orientation_y = 0,
       reference_orientation_z = 0;
 sensors_event_t humidity, temp, orientationData, accelerationData;
 int packet_count = 0;
 
 bool set_reference_alt_pressure() {
-  float init_pressure = 0;
-  for (int i = 0; i < 50; i++) {
-    init_pressure += read_pressure();
-  }
-  init_pressure /= 50;
-  reference_pressure = init_pressure;
-  reference_altitude = read_altitude(init_pressure);
+  reference_pressure = 0;
+  for (int i = 0; i < 5; i++) {
+    float readalt = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+    while (readalt > 100) {
+      readalt = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+    }
+    reference_altitude += readalt;
 
-  return (0 == (read_altitude(read_pressure()) - reference_altitude) ? true
-                                                                     : false);
+    float readpressure = bmp.pressure / 100.0;
+    while (readpressure < 100) {
+      readpressure = bmp.pressure;
+    }
+    reference_pressure += readpressure;
+  }
+
+  reference_pressure /= 5;
+  reference_altitude /= 5;
+
+  return (true);
 }
 
 bool set_reference_orientation() {
   float init_orientation_x = 0, init_orientation_y = 0, init_orientation_z = 0;
 
-  int i = 50;
+  int i = 5;
 
   while (!((abs(read_orientation_x() - reference_orientation_x) < 1) &&
            (abs(read_orientation_y() - reference_orientation_y) < 1) &&
@@ -91,30 +110,37 @@ void check_sensor_status() {
 
 // RTC reading
 String read_time() {
+  DateTime now = rtc.now();
 
-  // unsigned long totalTime = millis() / 1000.0;
-  // DateTime now = rtc.now();
+  String time_string = time_formatting(now.hour()) + ":" +
+                       time_formatting(now.minute()) + ":" +
+                       time_formatting(now.second());
 
-  // String time_string = String(now.hour(), DEC) + ": " +
-  //                      String(now.minute(), DEC) + ": " +
-  //                      String(now.second(), DEC);
-
-  String time_string = String(00) + ": " + String(00) + ": " + String(00);
+  // String time_string = String("00") + ": " + String("00") + ": " +
+  // String("00");
 
   return time_string;
 };
+
+String time_formatting(int raw_time) {
+  if (raw_time < 10) {
+    return ("0" + String(raw_time));
+  } else {
+    return String(raw_time, DEC);
+  }
+}
 
 // Packet Count
 int read_packet_count() { return packet_count += 1; }
 
 // BMP reading
-float read_altitude(float pressure) {
-  // return bmp.readAltitude(reference_altitude), 1;
-  return 0;
+float read_altitude() {
+  return bmp.readAltitude(reference_pressure);
+  // return 0;
 };
 float read_pressure() {
-  // return bmp.pressure;
-  return 0;
+  return bmp.pressure / 100;
+  // return 0;
 };
 
 //!
@@ -147,29 +173,41 @@ float read_gnss_satellites() { return 0; };
 
 // BNO orientation reading
 float read_orientation_x() {
-  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-  orientationData.orientation.x -=
-      ((orientationData.orientation.x > 180) ? 360 : 0);
-  return (orientationData.orientation.x - reference_orientation_x);
+  // bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+  // orientationData.orientation.x -=
+  //     ((orientationData.orientation.x > 180) ? 360 : 0);
+  return 0;
+  // return (orientationData.orientation.x - reference_orientation_x);
 };
 float read_orientation_y() {
-  orientationData.orientation.y -=
-      ((orientationData.orientation.y > 180) ? 360 : 0);
-  return (orientationData.orientation.y - reference_orientation_y);
+  // orientationData.orientation.y -=
+  //     ((orientationData.orientation.y > 180) ? 360 : 0);
+  return 0;
+
+  // return (orientationData.orientation.y - reference_orientation_y);
 };
 float read_orientation_z() {
-  orientationData.orientation.z -=
-      ((orientationData.orientation.z > 180) ? 360 : 0);
-  return (orientationData.orientation.z - reference_orientation_z);
+  // orientationData.orientation.z -=
+  //     ((orientationData.orientation.z > 180) ? 360 : 0);
+  return 0;
+  // return (orientationData.orientation.z - reference_orientation_z);
 };
 
 // BNO acceleration reading
 float read_acceleration_x() {
-  bno.getEvent(&accelerationData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-  return accelerationData.acceleration.x;
+  // bno.getEvent(&accelerationData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  return 0;
+  // return accelerationData.acceleration.x;
 };
-float read_acceleration_y() { return accelerationData.acceleration.y; };
-float read_acceleration_z() { return accelerationData.acceleration.z; };
+float read_acceleration_y() {
+  return 0;
+
+  // return accelerationData.acceleration.y;
+};
+float read_acceleration_z() {
+  return 0;
+  // return accelerationData.acceleration.z;
+};
 
 //! not sure if we implement this
 // Gyro Rate reading
@@ -209,7 +247,8 @@ bool is_fresh_start() {
 
 bool calibrate_sensors() {
   // return (set_reference_alt_pressure() && set_reference_orientation());
-  return (set_reference_orientation());
+  return (set_reference_alt_pressure());
+  // return (set_reference_orientation());
 }
 
 void write_to_openlog(String telemetry_str) {

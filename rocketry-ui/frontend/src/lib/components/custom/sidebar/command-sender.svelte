@@ -4,7 +4,7 @@
 
 	import * as Card from '$lib/components/ui/card';
 	import { calibrate_sensors, socket_connected, toggle_telemetry } from '@src/socket-interface';
-	import { telemetry_running } from '@src/store';
+	import { sensor_calibrated, telemetry_running } from '@src/store';
 
 	let toggleTelemetry = () => {
 		$telemetry_running = toggle_telemetry($telemetry_running);
@@ -37,15 +37,15 @@
 	</Card.Root>
 	<Card.Root class="flex w-full flex-col gap-2 p-2 text-center">
 		<span>CALIBRATION</span>
-		{#if calibrationState == 'no'}
+		{#if calibrationState == 'process'}
+			<Button disabled>
+				<LoaderCircle class="animate-spin">In Process</LoaderCircle></Button
+			>
+		{:else if !$sensor_calibrated}
 			<Button
 				variant="destructive"
 				class="w-full text-sm hover:bg-red-500"
 				onclick={startCalibration}>PENDING</Button
-			>
-		{:else if calibrationState == 'process'}
-			<Button disabled>
-				<LoaderCircle class="animate-spin">In Process</LoaderCircle></Button
 			>
 		{:else}
 			<Button variant="default" class="w-full bg-green-400 text-sm hover:bg-green-200">DONE</Button>

@@ -173,5 +173,5 @@ export const allGraphPastDatas: Writable<{
 
 export const storecsvdata: Writable<string[]> = writable([]);
 
-export const simulation_mode = writable(false);
+export const simulation_mode = writable(true);
 export const travelled_coords: Writable<LatLngExpression[]> = writable([]);

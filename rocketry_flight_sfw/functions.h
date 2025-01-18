@@ -12,7 +12,7 @@
 #define buzzer_pin 5
 
 #include <Adafruit_AHTX0.h>
-#include <Adafruit_BMP3XX.h>
+#include "Adafruit_BMP3XX.h"
 #include <Adafruit_BNO055.h>
 #include <Adafruit_Sensor.h>
 #include <DFRobot_MICS.h>
@@ -43,8 +43,9 @@ bool set_reference_alt_pressure();
 bool set_reference_orientation();
 
 String read_time();
+String time_formatting(int raw_time);
 int read_packet_count();
-float read_altitude(float pressure);
+float read_altitude();
 float read_pressure();
 float read_temperature();
 float read_voltage();

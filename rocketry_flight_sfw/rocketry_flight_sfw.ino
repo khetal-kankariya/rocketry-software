@@ -20,8 +20,8 @@ float bmp_altitude, bmp_pressure, aht_temperature, ina_voltage, l89_time,
 bool send_telemetry = false;
 
 void setup() {
-  setup_sensors();
   Serial.begin(115200);
+  setup_sensors();
 }
 
 void loop() {
@@ -34,7 +34,7 @@ void loop() {
 
     Serial.println(telemetry_string);
 
-    delay(500);
+    delay(1000);
   }
 }
 
@@ -59,13 +59,13 @@ void loop1() {
       send_telemetry = false;
     }
     if (command == "calibrate") {
-      send_telemetry = false;
-      if (calibrate_sensors()) {
-        send_telemetry = true;
-        // SETUP to LAUNCH
-        if (software_state_num == 1) {
-          increment_software_state();
-        }
+      while (!calibrate_sensors()) {
+        send_telemetry = false;
+      }
+      send_telemetry = true;
+      // SETUP to LAUNCH
+      if (software_state_num == 1) {
+        increment_software_state();
       }
     }
   } else {
@@ -100,6 +100,4 @@ void loop1() {
   default:
     break;
   }
-
-  delay(100);
 }

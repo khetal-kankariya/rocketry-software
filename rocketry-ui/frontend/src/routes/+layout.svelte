@@ -1,32 +1,16 @@
 <script lang="ts">
 	import '@src/app.css';
 	import Button from '@src/lib/components/ui/button/button.svelte';
-	import { activeTab, readData, timeElapsed } from '@src/store';
+	import { activeTab } from '@src/store';
 	import Sidebar from '@src/lib/components/custom/sidebar/sidebar.svelte';
-	import { onMount } from 'svelte';
-	import { get_startupdata, save_startupdata } from '@src/socket-interface';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-
-	onMount(() => {
-		import('@src/dataupdater');
-		get_startupdata();
-		save_startupdata();
-		import('@src/socket-interface');
-
-		if (window) {
-			let latest_data = JSON.parse(window.sessionStorage.getItem('latest-data') || '{}');
-			if (Object.keys(latest_data).length > 0) {
-				readData.set(latest_data);
-			}
-		}
-	});
 
 	let { children } = $props();
 </script>
 
 <Toaster></Toaster>
 
-<div class="dark flex h-screen w-screen gap-4 overflow-hidden bg-background p-8">
+<div class="bg-background dark flex h-screen w-screen gap-4 overflow-hidden p-8">
 	<div class="flex flex-col gap-3">
 		<nav>
 			<ul class="flex gap-4">

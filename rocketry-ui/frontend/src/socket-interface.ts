@@ -32,10 +32,11 @@ connect_socket();
 const socket_status_toaster = () => {
 	socket.on('connect', () => {
 		toast.success('Server Connected!');
+		get_telemetry_status();
+		get_calibration_status();
 	});
 	socket.on('connect_error', () => {
 		server_disconnected_toast();
-		get_telemetry_status();
 	});
 };
 socket_status_toaster();
@@ -52,6 +53,13 @@ const get_telemetry_status = () => {
 	});
 };
 get_telemetry_status();
+
+const get_calibration_status = () => {
+	socket.emit('get-calibration-state', (res: boolean) => {
+		sensor_calibrated.set(res);
+	});
+};
+get_calibration_status();
 
 let startupdata: Tstartupdata;
 

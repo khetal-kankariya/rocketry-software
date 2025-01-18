@@ -60,6 +60,7 @@ newdata = prevdata
 csv_write_format = "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
 
 telemetry_running = False
+calibration_done = False
 
 mission_progress = 0
 
@@ -144,7 +145,7 @@ def send_telemetry_data():
         new_data = new_telemetry_data()
         if telemetry_running:
             socketio.emit("datasent", new_data)
-        time.sleep(1)
+        time.sleep(0.1)
 
 
 # WRITING CSV DATA
@@ -242,6 +243,12 @@ def get_telemetry_state():
     return telemetry_running
 
 
+@socketio.on("get-calibration-state")
+def get_calibration_state():
+    global calibration_done
+    return calibration_done
+
+
 @socketio.on("get-mission-progress")
 def get_mission_progress():
     return mission_progress
@@ -272,13 +279,13 @@ def calibrate_sensors():
     def calibration_checker():
         timern = time.time()
         calibrated = True
-        # while time.time() - timern < 6:
-        #     if float(newdata["altitude"]) > 1:
-        #         time.sleep(1)
-        #         pass
-        #     else:
-        #         calibrated = True
-        #         break
+        while time.time() - timern < 6:
+            if float(newdata["altitude"]) > 1:
+                time.sleep(1)
+                pass
+            else:
+                calibrated = True
+                break
 
         if calibrated:
             return {"status": "success", "message": "sensors calibrated"}
@@ -289,13 +296,14 @@ def calibrate_sensors():
             }
 
     calibration_status = calibration_checker()
-
+    global calibration_done
+    calibration_done = True
     return calibration_status
 
 
 def send_command(command_str: str):
-    command_status = {"status": "success", "message": "command sent"}
-    # command_status = boardconnector.send_command(command_str)
+    # command_status = {"status": "success", "message": "command sent"}
+    command_status = boardconnector.send_command(command_str)
     return command_status
 
 

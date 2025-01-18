@@ -73,13 +73,11 @@ teleData: dict[teleDataTypes,] = {
     "gasConcn": 0,
 }
 
-serialReadData = ""
-
 
 def read_new_telemetry_data():
 
-    global serialReadData
     serialReadData = sumserial.readline().decode().removesuffix("\r\n")
+    new_data_read = len(serialReadData)
 
     (
         teleData["teamID"],
