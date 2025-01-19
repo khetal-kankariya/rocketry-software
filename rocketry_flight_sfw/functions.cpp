@@ -40,7 +40,7 @@ void setup_sensors() {
   // set_reference_alt_pressure();
   // set_reference_orientation();
 
-  rtc.adjust(DateTime(2025,1,1,0,0,0));
+  rtc.adjust(DateTime(2025, 1, 1, 0, 0, 0));
 }
 
 float reference_pressure = SEALEVELPRESSURE_HPA, reference_altitude = 0;
@@ -110,14 +110,13 @@ void check_sensor_status() {
 
 // RTC reading
 String read_time() {
-  DateTime now = rtc.now();
+  // DateTime now = rtc.now();
 
-  String time_string = time_formatting(now.hour()) + ":" +
-                       time_formatting(now.minute()) + ":" +
-                       time_formatting(now.second());
+  // String time_string = time_formatting(now.hour()) + ":" +
+  //                      time_formatting(now.minute()) + ":" +
+  //                      time_formatting(now.second());
 
-  // String time_string = String("00") + ": " + String("00") + ": " +
-  // String("00");
+  String time_string = String("00") + ": " + String("00") + ": " + String("00");
 
   return time_string;
 };
@@ -135,12 +134,12 @@ int read_packet_count() { return packet_count += 1; }
 
 // BMP reading
 float read_altitude() {
-  return bmp.readAltitude(reference_pressure);
-  // return 0;
+  // return bmp.readAltitude(reference_pressure);
+  return 0;
 };
 float read_pressure() {
-  return bmp.pressure / 100;
-  // return 0;
+  // return bmp.pressure / 100;
+  return 0;
 };
 
 //!

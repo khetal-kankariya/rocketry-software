@@ -3,6 +3,7 @@ import {
 	activeBaudRate,
 	activePort,
 	initTime,
+	last_command,
 	missionProgress,
 	readData,
 	sensor_calibrated,
@@ -13,25 +14,21 @@ import {
 import { io } from 'socket.io-client';
 import type { LatLngExpression } from 'leaflet';
 
-var socket = io('http://localhost:5000');
+var socket = io('http://localhost:5000', {
+	autoConnect: false
+});
 
-export const socket_connected = () => {
-	return socket.connected;
+export const connect_socket = () => {
+	socket.connect();
 };
 
-const connect_socket = () => {
-	if (!socket_connected()) {
-		setTimeout(() => {
-			socket.connect;
-			connect_socket();
-		}, 1000);
-	}
+export const disconnect_socket = () => {
+	socket.disconnect();
 };
-connect_socket();
 
 const socket_status_toaster = () => {
 	socket.on('connect', () => {
-		toast.success('Server Connected!');
+		server_connected_toast();
 		get_telemetry_status();
 		get_calibration_status();
 	});
@@ -41,6 +38,11 @@ const socket_status_toaster = () => {
 };
 socket_status_toaster();
 
+const server_connected_toast = () => {
+	toast.success('Server Connected!', {
+		duration: 1500
+	});
+};
 const server_disconnected_toast = () => {
 	toast.error('Server disconnected!', {
 		duration: 1500
@@ -124,15 +126,17 @@ export const get_csv_data = () => {
 
 export const toggle_telemetry = (pres_telemetry_running: boolean) => {
 	let response: boolean = false;
-	if (socket_connected() == true) {
+	if (socket.connected == true) {
 		socket.emit('toggle-telemetry', pres_telemetry_running, (res: boolean) => {
 			telemetry_running.set(res);
 			response = res;
 			if (res) {
+				last_command.set('telestart');
 				toast.success('Telemetry Started', {
 					duration: 1500
 				});
 			} else {
+				last_command.set('telestop');
 				toast.success('Telemetry Stopped', {
 					duration: 1500
 				});
@@ -146,7 +150,8 @@ export const toggle_telemetry = (pres_telemetry_running: boolean) => {
 
 export const calibrate_sensors = async () => {
 	let response = false;
-	if (socket_connected()) {
+	if (socket.connected) {
+		last_command.set('calibrate');
 		let calibration_status: { status: string; message: string } = await new Promise((resolve) => {
 			socket.emit('calibrate-sensors', (res: { status: string; message: string }) => {
 				resolve(res);
@@ -170,6 +175,8 @@ export const calibrate_sensors = async () => {
 			console.log(calibration_status);
 			response = false;
 		}
+	} else {
+		server_disconnected_toast();
 	}
 
 	return response;

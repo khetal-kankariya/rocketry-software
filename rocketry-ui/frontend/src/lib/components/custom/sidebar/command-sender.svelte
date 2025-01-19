@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { LoaderCircle } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-
 	import * as Card from '$lib/components/ui/card';
-	import { calibrate_sensors, socket_connected, toggle_telemetry } from '@src/socket-interface';
-	import { sensor_calibrated, telemetry_running } from '@src/store';
+	import { calibrate_sensors, toggle_telemetry } from '@src/socket-interface';
+	import { sensor_calibrated, telemetry_running, server_connected } from '@src/store';
 
 	let toggleTelemetry = () => {
 		$telemetry_running = toggle_telemetry($telemetry_running);
@@ -24,13 +23,13 @@
 		{#if !$telemetry_running}
 			<Button
 				variant="destructive"
-				class="w-full text-sm hover:bg-red-500"
+				class="w-full text-sm hover:bg-red-800"
 				onclick={toggleTelemetry}>STOPPED</Button
 			>
 		{:else}
 			<Button
 				variant="default"
-				class="w-40full bg-green-400 text-sm hover:bg-green-200"
+				class="w-40full bg-green-600 text-sm hover:bg-green-200"
 				onclick={toggleTelemetry}>RUNNING</Button
 			>
 		{/if}
@@ -44,11 +43,11 @@
 		{:else if !$sensor_calibrated}
 			<Button
 				variant="destructive"
-				class="w-full text-sm hover:bg-red-500"
+				class="w-full text-sm hover:bg-red-800"
 				onclick={startCalibration}>PENDING</Button
 			>
 		{:else}
-			<Button variant="default" class="w-full bg-green-400 text-sm hover:bg-green-200">DONE</Button>
+			<Button variant="default" class="w-full bg-green-600 text-sm hover:bg-green-200">DONE</Button>
 		{/if}
 	</Card.Root>
 </div>

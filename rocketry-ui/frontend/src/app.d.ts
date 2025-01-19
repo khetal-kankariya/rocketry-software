@@ -40,13 +40,15 @@ declare global {
 		| 'gnss_longitude'
 		| 'gnss_altitude'
 		| 'gnss_sats';
-	export type TmultiAxisDatatypes =
+	export type TmultiAxisDatatypes = (
 		| 'orientation_x'
 		| 'orientation_y'
 		| 'orientation_z'
 		| 'accel_x'
 		| 'accel_y'
-		| ('accel_z' & Partial<TtelemetryDataField>);
+		| 'accel_z'
+	) &
+		Partial<TtelemetryDataField>;
 	export type TmultiAxisParams = 'orientation' | 'accel';
 
 	export type TtabName = 'Overview' | 'Graphs' | 'CSV';
@@ -84,7 +86,8 @@ declare global {
 		gasConcn: number;
 	};
 
-	export type TgraphDatatype = (
+	export type TgraphDatatype = Pick<
+		TtelemetryDataField,
 		| 'altitude'
 		| 'pressure'
 		| 'temperature'
@@ -98,8 +101,7 @@ declare global {
 		| 'orientation_x'
 		| 'orientation_y'
 		| 'orientation_z'
-	) &
-		Partial<TtelemetryDataField>;
+	>;
 }
 
 export {};

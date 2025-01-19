@@ -142,19 +142,7 @@ export const allGraphDatatypes: TgraphDatatype[] = [
 ];
 
 export const allGraphPastDatas: Writable<{
-	altitude: number[];
-	pressure: number[];
-	temperature: number[];
-	voltage: number[];
-	gasConcn: number[];
-	gnss_altitude: number[];
-	velocity: number[];
-	accel_x: number[];
-	accel_y: number[];
-	accel_z: number[];
-	orientation_x: number[];
-	orientation_y: number[];
-	orientation_z: number[];
+	[k in TgraphDatatype]: number[];
 }> = writable({
 	altitude: [0],
 	pressure: [0],
@@ -175,3 +163,6 @@ export const storecsvdata: Writable<string[]> = writable([]);
 
 export const simulation_mode = writable(true);
 export const travelled_coords: Writable<LatLngExpression[]> = writable([]);
+export const GCS_started = writable(false);
+export const server_connected = writable(false);
+export const last_command: Writable<null | 'telestart' | 'telestop' | 'calibrate'> = writable(null);

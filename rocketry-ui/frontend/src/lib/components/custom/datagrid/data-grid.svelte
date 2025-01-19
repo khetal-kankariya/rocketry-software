@@ -31,10 +31,12 @@
 </script>
 
 <ul class="datagrid grid w-full min-w-[1392px] grid-cols-4 gap-4 p-0">
-	<SingleCellItem datatype="teamID"></SingleCellItem>
-	<SingleCellItem datatype="timeStamp"></SingleCellItem>
-	<SingleCellItem datatype="packetCount"></SingleCellItem>
-	<SingleCellItem datatype="softwareState"></SingleCellItem>
+	{#if $activeTab != 'Graphs'}
+		<SingleCellItem datatype="teamID"></SingleCellItem>
+		<SingleCellItem datatype="timeStamp"></SingleCellItem>
+		<SingleCellItem datatype="packetCount"></SingleCellItem>
+		<SingleCellItem datatype="softwareState"></SingleCellItem>
+	{/if}
 	<SingleCellItem datatype="altitude"></SingleCellItem>
 	<SingleCellItem datatype="pressure"></SingleCellItem>
 	<SingleCellItem datatype="temperature"></SingleCellItem>

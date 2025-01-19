@@ -1,16 +1,24 @@
 <script lang="ts">
 	import '@src/app.css';
 	import Button from '@src/lib/components/ui/button/button.svelte';
-	import { activeTab } from '@src/store';
+	import { activeTab, GCS_started, server_connected } from '@src/store';
 	import Sidebar from '@src/lib/components/custom/sidebar/sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import { connect_socket, disconnect_socket } from '@src/socket-interface';
 
 	let { children } = $props();
+
+	const connect_server = () => {
+		connect_socket();
+	};
+	const disconnect_server = () => {
+		disconnect_socket();
+	};
 </script>
 
 <Toaster></Toaster>
 
-<div class="bg-background dark flex h-screen w-screen gap-4 overflow-hidden p-8">
+<div class="bg-background dark flex h-screen w-screen gap-4 p-8">
 	<div class="flex flex-col gap-3">
 		<nav>
 			<ul class="flex gap-4">
@@ -31,6 +39,23 @@
 						>CSV</Button
 					>
 				</li>
+
+				<li>
+					<span>Server: </span>
+					{#if !$server_connected}
+						<Button onclick={connect_server} variant="destructive" class="text-sm hover:bg-red-800"
+							>Not Connected</Button
+						>
+					{:else}
+						<Button
+							onclick={disconnect_server}
+							variant="default"
+							class="bg-green-400 text-sm hover:bg-green-200"
+						>
+							Connected
+						</Button>
+					{/if}
+				</li>
 			</ul>
 		</nav>
 
@@ -39,7 +64,7 @@
 		</div>
 	</div>
 
-	{#if $activeTab != 'CSV'}
+	{#if $activeTab != 'CSV' && GCS_started}
 		<Sidebar></Sidebar>
 	{/if}
 </div>
