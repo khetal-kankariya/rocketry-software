@@ -70,7 +70,7 @@ declare global {
 		pressure: number;
 		temperature: number;
 		voltage: number;
-		gnss_time: number;
+		gnss_time: string;
 		gnss_latitude: number;
 		gnss_longitude: number;
 		gnss_altitude: number;
@@ -101,7 +101,8 @@ declare global {
 		| 'orientation_x'
 		| 'orientation_y'
 		| 'orientation_z'
-	>;
+	> &
+		Partial<TtelemetryDataField>;
 }
 
 export {};

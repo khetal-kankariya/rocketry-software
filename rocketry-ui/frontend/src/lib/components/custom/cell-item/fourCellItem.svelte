@@ -11,12 +11,7 @@
 		'gnss_time',
 		'gnss_sats'
 	];
-	let graph_subdatatypes: TgnssParams[] = [
-		'gnss_latitude',
-		'gnss_longitude',
-		'gnss_altitude',
-		'gnss_time'
-	];
+	let graph_subdatatypes: TgnssParams[] = ['gnss_altitude'];
 </script>
 
 <div class="col-span-4 w-auto">
@@ -37,7 +32,7 @@
 			<span class="text-base uppercase">GNSS:</span>
 			<div class="flex w-full justify-between">
 				{#each subdatatypes as subdatatype}
-					{#if subdatatype != 'gnss_time' || $activeTab != 'Graphs'}
+					{#if subdatatype in graph_subdatatypes || $activeTab != 'Graphs'}
 						<div class="flex items-center gap-2">
 							<span class="text-base uppercase">
 								{$allDataEverything[subdatatype].displayName}:

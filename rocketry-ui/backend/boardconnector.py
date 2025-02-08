@@ -1,7 +1,7 @@
 import serial
 import serial.tools.list_ports
 
-sumserial = serial.Serial(port="COM6", baudrate=115200)
+sumserial = serial.Serial(port="COM13", baudrate=115200)
 
 serialPorts = serial.tools.list_ports.comports()
 
@@ -35,7 +35,7 @@ class teleDataTypes:
         "temperature",
         "voltage",
         "gnss_time",
-        "gnss_latitiude",
+        "gnss_latitude",
         "gnss_longitude",
         "gnss_altitude",
         "gnss_sats",
@@ -52,14 +52,14 @@ class teleDataTypes:
 
 teleData: dict[teleDataTypes,] = {
     "teamID": "",
-    "timeStamp": 0,
+    "timeStamp": "",
     "packetCount": 0,
     "altitude": 0,
     "pressure": 0,
     "temperature": 0,
     "voltage": 0,
-    "gnss_time": 0,
-    "gnss_latitiude": 0,
+    "gnss_time": "",
+    "gnss_latitude": 0,
     "gnss_longitude": 0,
     "gnss_altitude": 0,
     "gnss_sats": 0,

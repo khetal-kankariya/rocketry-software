@@ -36,7 +36,7 @@ export const allDataEverything: Readable<{
 	teamID: { graph: false, unit: '', displayName: 'Team ID' },
 	timeStamp: {
 		graph: false,
-		unit: 's',
+		unit: '',
 		displayName: 'Time Stamp'
 	},
 	packetCount: {
@@ -57,7 +57,7 @@ export const allDataEverything: Readable<{
 		unit: 'ppm',
 		displayName: 'Gas Concentration'
 	},
-	gnss_time: { graph: false, unit: 's', displayName: 'Time' },
+	gnss_time: { graph: false, unit: '', displayName: 'Time' },
 	gnss_latitude: { graph: false, unit: '°N', displayName: 'Latitude' },
 	gnss_longitude: { graph: false, unit: '°E', displayName: 'Longitude' },
 	gnss_altitude: { graph: true, unit: 'm', displayName: 'Altitude' },
@@ -93,7 +93,7 @@ export const readData: Writable<TtelemetryData> = writable({
 	temperature: 0,
 	voltage: 0,
 	gasConcn: 0,
-	gnss_time: 0,
+	gnss_time: '00:00:00',
 	gnss_latitude: 0,
 	gnss_longitude: 0,
 	gnss_altitude: 0,
@@ -117,7 +117,7 @@ export const initTime = writable(0);
 export const nowTime = writable(Date.now());
 export const upTime = writable('00:00:00');
 export const telemetry_running = writable(false);
-export const sensor_calibrated = writable(false);
+export const sensors_calibrated = writable(false);
 
 export const ports: Writable<string[]> = writable([]);
 export const activePort: Writable<string> = writable('');

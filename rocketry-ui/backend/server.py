@@ -42,7 +42,7 @@ prevdata = {
     "temperature": 0,
     "voltage": 0,
     "gnss_time": 0,
-    "gnss_latitiude": 0,
+    "gnss_latitude": 0,
     "gnss_longitude": 0,
     "gnss_altitude": 0,
     "gnss_sats": 0,
@@ -56,6 +56,9 @@ prevdata = {
     "gasConcn": 0,
 }
 newdata = prevdata
+
+
+all_previous_data = []
 
 csv_write_format = "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
 
@@ -95,6 +98,8 @@ def new_telemetry_data():
     # newdata = random_telemetry_data()
     newdata = boardconnector.read_new_telemetry_data()
     prevdata = newdata
+    global all_previous_data
+    all_previous_data.append(newdata)
 
     # write_csv_data(newdata)
     return newdata
@@ -197,6 +202,12 @@ def get_csv_data():
         csv_readdata.append(line)
 
     return {"data": csv_readdata}
+
+
+@socketio.on("get-all-prevdata")
+def get_all_prevdata():
+    global all_previous_data
+    return {data: all_previous_data}
 
 
 @socketio.on("get-startupdata")

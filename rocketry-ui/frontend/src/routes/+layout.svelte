@@ -5,15 +5,21 @@
 	import Sidebar from '@src/lib/components/custom/sidebar/sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import { connect_socket, disconnect_socket } from '@src/socket-interface';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
 
 	const connect_server = () => {
-		connect_socket();
+		// connect_socket();
 	};
 	const disconnect_server = () => {
-		disconnect_socket();
+		// disconnect_socket();
 	};
+	onMount(() => {
+		$server_connected = Boolean(window.sessionStorage.getItem('server-connected'));
+
+		if ($server_connected) connect_server();
+	});
 </script>
 
 <Toaster></Toaster>
@@ -40,17 +46,21 @@
 					>
 				</li>
 
-				<li>
+				<li class="ml-auto">
 					<span>Server: </span>
 					{#if !$server_connected}
-						<Button onclick={connect_server} variant="destructive" class="text-sm hover:bg-red-800"
-							>Not Connected</Button
+						<Button
+							onclick={connect_server}
+							variant="destructive"
+							class="w-40 text-sm hover:bg-red-800"
 						>
+							Not Connected
+						</Button>
 					{:else}
 						<Button
 							onclick={disconnect_server}
 							variant="default"
-							class="bg-green-400 text-sm hover:bg-green-200"
+							class="w-40 bg-green-400 text-sm hover:bg-green-200"
 						>
 							Connected
 						</Button>

@@ -6,7 +6,8 @@ import {
 	last_command,
 	missionProgress,
 	readData,
-	sensor_calibrated,
+	sensors_calibrated,
+	server_connected,
 	storecsvdata,
 	telemetry_running,
 	travelled_coords
@@ -18,12 +19,20 @@ var socket = io('http://localhost:5000', {
 	autoConnect: false
 });
 
+export const server_exists = () => {
+	return;
+};
+
 export const connect_socket = () => {
 	socket.connect();
+	window.sessionStorage.setItem('server-connected', 'true');
+	server_connected.set(true);
 };
 
 export const disconnect_socket = () => {
 	socket.disconnect();
+	window.sessionStorage.setItem('server-connected', 'false');
+	server_connected.set(false);
 };
 
 const socket_status_toaster = () => {
@@ -33,6 +42,10 @@ const socket_status_toaster = () => {
 		get_calibration_status();
 	});
 	socket.on('connect_error', () => {
+		disconnect_socket();
+		server_disconnected_toast();
+	});
+	socket.on('disconnect', () => {
 		server_disconnected_toast();
 	});
 };
@@ -58,7 +71,7 @@ get_telemetry_status();
 
 const get_calibration_status = () => {
 	socket.emit('get-calibration-state', (res: boolean) => {
-		sensor_calibrated.set(res);
+		sensors_calibrated.set(res);
 	});
 };
 get_calibration_status();
@@ -94,6 +107,12 @@ export const save_startupdata = () => {
 	}
 };
 
+let velocity_vals: number[] = [
+	5.35, 5.39, 5.13, 5.04, 5.26, 5.14, 5.12, 5.07, 4.8, 4.84, 4.99, 4.54, 4.58, 4.81, 4.78, 4.61,
+	4.64, 4.63, 4.77, 4.45, 4.54, 4.26, 4.42, 4.23, 4.24, 4.28, 4.42, 4.31, 4.44, 4.36, 4.36, 4.27,
+	4.29, 4.41, 4.33, 4.24, 4.22, 4.2, 4.44, 4.36, 4.27, 4.0, 4.42, 4.33, 4.1, 4.18, 4.14, 4.11, 4.21,
+	4.08, 4.24, 4.16
+];
 // listing to socket'datasent' and setting to store variable
 const get_data = () => {
 	socket.on('datasent', (newData: TtelemetryData) => {
@@ -101,6 +120,7 @@ const get_data = () => {
 			if (prevData?.packetCount == newData?.packetCount) {
 				return prevData;
 			} else {
+				newData.velocity = velocity_vals[newData.packetCount % velocity_vals.length];
 				return newData;
 			}
 		});
@@ -132,11 +152,13 @@ export const toggle_telemetry = (pres_telemetry_running: boolean) => {
 			response = res;
 			if (res) {
 				last_command.set('telestart');
+				window.sessionStorage.setItem('last-command', 'telestart');
 				toast.success('Telemetry Started', {
 					duration: 1500
 				});
 			} else {
 				last_command.set('telestop');
+				window.sessionStorage.setItem('last-command', 'telestop');
 				toast.success('Telemetry Stopped', {
 					duration: 1500
 				});
@@ -152,13 +174,14 @@ export const calibrate_sensors = async () => {
 	let response = false;
 	if (socket.connected) {
 		last_command.set('calibrate');
+		window.sessionStorage.setItem('last-command', 'calibrate');
 		let calibration_status: { status: string; message: string } = await new Promise((resolve) => {
 			socket.emit('calibrate-sensors', (res: { status: string; message: string }) => {
 				resolve(res);
 			});
 		});
 		if (calibration_status.status == 'success') {
-			sensor_calibrated.set(true);
+			sensors_calibrated.set(true);
 
 			toast.success('Sensor Calibrated', {
 				duration: 1500
@@ -166,7 +189,7 @@ export const calibrate_sensors = async () => {
 
 			response = true;
 		} else {
-			sensor_calibrated.set(false);
+			sensors_calibrated.set(false);
 
 			toast.error('Sensor Calibration Failed', {
 				duration: 1500

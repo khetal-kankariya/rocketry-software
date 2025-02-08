@@ -41,7 +41,9 @@
 	<SingleCellItem datatype="pressure"></SingleCellItem>
 	<SingleCellItem datatype="temperature"></SingleCellItem>
 	<SingleCellItem datatype="voltage"></SingleCellItem>
-	<FourCellItem></FourCellItem>
+	{#if $activeTab == 'Overview'}
+		<FourCellItem></FourCellItem>
+	{/if}
 	<TwoCellItem datatype="orientation"></TwoCellItem>
 	<TwoCellItem datatype="accel"></TwoCellItem>
 	<SingleCellItem datatype="gasConcn"></SingleCellItem>

@@ -2,10 +2,11 @@
 	import { activeBaudRate, activePort, last_command } from '@src/store';
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import { onMount } from 'svelte';
 
-	let selectedPort: string = $state($activePort || 'COM 3');
-
-	let selectedBaudRate: string = $state($activeBaudRate?.toString() || '9600');
+	onMount(() => {
+		$last_command = window.sessionStorage.getItem('last-command') as typeof $last_command;
+	});
 </script>
 
 <Card.Root class="actions flex w-full items-center gap-2 px-4 py-2">

@@ -21,7 +21,7 @@ typedef struct {
   float pressure;
   float temperature;
   float voltage;
-  int gnss_time;
+  String gnss_time;
   float gnss_latitude;
   float gnss_longitude;
   float gnss_altitude;

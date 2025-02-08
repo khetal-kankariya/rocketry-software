@@ -3,7 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { calibrate_sensors, toggle_telemetry } from '@src/socket-interface';
-	import { sensor_calibrated, telemetry_running, server_connected } from '@src/store';
+	import { sensors_calibrated, telemetry_running, server_connected } from '@src/store';
 
 	let toggleTelemetry = () => {
 		$telemetry_running = toggle_telemetry($telemetry_running);
@@ -40,7 +40,7 @@
 			<Button disabled>
 				<LoaderCircle class="animate-spin">In Process</LoaderCircle></Button
 			>
-		{:else if !$sensor_calibrated}
+		{:else if !$sensors_calibrated}
 			<Button
 				variant="destructive"
 				class="w-full text-sm hover:bg-red-800"

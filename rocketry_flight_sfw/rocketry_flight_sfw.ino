@@ -25,6 +25,7 @@ void setup() {
 }
 
 void loop() {
+  fsw();
 
   if (send_telemetry) {
     check_sensor_status();
@@ -38,9 +39,7 @@ void loop() {
   }
 }
 
-void setup1() { Serial.begin(115200); }
-
-void loop1() {
+void fsw() {
   if (is_fresh_start()) {
 
     // BOOT to SETUP
