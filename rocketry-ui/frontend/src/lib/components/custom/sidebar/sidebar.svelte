@@ -1,10 +1,12 @@
 <script lang="ts">
 	import * as Card from '@src/lib/components/ui/card';
-	import PortBaudrate from './port-baudrate.svelte';
+	import LastCommandDisplay from './last-command-display.svelte';
 	import CommandSender from './command-sender.svelte';
 	import Logos from './logos.svelte';
 	import MissionProgress from './mission-progress.svelte';
 	import { upTime } from '@src/store';
+	import { connect_socket, disconnect_socket } from '@src/socket-interface';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	let timeIST = $state();
 	let dateToday = $state(new Date().toLocaleDateString());
@@ -13,10 +15,10 @@
 	}, 1000);
 </script>
 
-<div class="sidebar flex h-[988px] w-full flex-col gap-4">
+<div class="sidebar flex w-full flex-col gap-4">
 	<Logos></Logos>
 
-	<PortBaudrate></PortBaudrate>
+	<LastCommandDisplay></LastCommandDisplay>
 
 	<CommandSender></CommandSender>
 

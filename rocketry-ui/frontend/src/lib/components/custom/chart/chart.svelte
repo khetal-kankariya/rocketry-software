@@ -3,11 +3,7 @@
 	import { Chart, type ChartItem } from 'chart.js/auto';
 	import { onDestroy, onMount } from 'svelte';
 
-	let {
-		datatype,
-		subdatatype,
-		ratio
-	}: { datatype: keyof typeof $allGraphPastDatas; ratio?: number; subdatatype?: string } = $props();
+	let { datatype, ratio }: { datatype: keyof TgraphDatatype; ratio?: number } = $props();
 
 	let values = $state([0]);
 
@@ -59,19 +55,10 @@
 
 		Array(20).forEach((_, i) => {
 			addData(
-				Array.isArray($allGraphPastDatas[datatype]) &&
-					$allDataEverything[datatype].multiParameter == false
-					? $allGraphPastDatas[datatype].at(20 - i)
-					: subdatatype && subdatatype in $allGraphPastDatas[datatype]
-						? $allGraphPastDatas[datatype][subdatatype].at(20 - i)
-						: null
+				Array.isArray($allGraphPastDatas[datatype]) ? $allGraphPastDatas[datatype].at(20 - i) : null
 			);
 		});
 	});
-
-	// onDestroy(() => {
-	// 	chart.destroy();
-	// });
 
 	function addData(dataVar: number) {
 		if (chart.data.labels?.length == 20) {
@@ -93,12 +80,7 @@
 	$effect(() => {
 		if (datatype in $allGraphPastDatas) {
 			addData(
-				Array.isArray($allGraphPastDatas[datatype]) &&
-					$allDataEverything[datatype].multiParameter == false
-					? $allGraphPastDatas[datatype].at(0)
-					: subdatatype && subdatatype in $allGraphPastDatas[datatype]
-						? $allGraphPastDatas[datatype][subdatatype].at(0)
-						: null
+				Array.isArray($allGraphPastDatas[datatype]) ? $allGraphPastDatas[datatype].at(20 - i) : null
 			);
 		}
 	});

@@ -10,7 +10,7 @@ void make_telemetry_data() {
   telemetry_data.time = read_time();
   telemetry_data.packet_count = read_packet_count();
   telemetry_data.pressure = read_pressure();
-  telemetry_data.altitude = read_altitude(telemetry_data.pressure);
+  telemetry_data.altitude = read_altitude();
   telemetry_data.temperature = read_temperature();
   telemetry_data.voltage = read_voltage();
   telemetry_data.gnss_time = read_gnss_time();

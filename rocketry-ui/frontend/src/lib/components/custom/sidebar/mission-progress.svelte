@@ -1,6 +1,5 @@
 <script>
 	import { missionProgress } from '@src/store';
-	import * as Card from '$lib/components/ui/card';
 	import { Progress } from '$lib/components/ui/progress';
 </script>
 

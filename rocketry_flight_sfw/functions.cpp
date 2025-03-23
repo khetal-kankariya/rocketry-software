@@ -1,154 +1,230 @@
 #include "functions.h"
+#include "SoftwareSerial.h"
 #include "calculated_data.h"
 #include "previous_data.h"
+
+#define SEALEVELPRESSURE_HPA (1013.25)
+
+bool bmpstatus = true;
 
 Adafruit_AHTX0 aht;
 Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 TinyGPSPlus gps;
+SoftwareSerial gps_serial(6, 7);
 RTC_DS3231 rtc;
-DFRobot_MICS_I2C mics(&Wire, MICS_I2C_ADDRESS);
+Adafruit_CCS811 ccs;
 INA226 INA(0x40);
-SoftwareSerial openLog(2, 3);
+SoftwareSerial openLog(8, 9);
+SoftwareSerial xbee(12, 13);
 
 void setup_sensors() {
+  // AHT pins
+  Wire.setSDA(0);
+  Wire.setSCL(1);
+
+  // BNO pins
   Wire.setSDA(4);
   Wire.setSCL(5);
+
+  // BMP pins
+  Wire.setSDA(2);
+  Wire.setSCL(3);
+
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(4000000);
 
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
-  pinMode(burnwire_pin, OUTPUT);
-  pinMode(buzzer_pin, OUTPUT);
+  // pinMode(burnwire_pin, OUTPUT);
+  // pinMode(buzzer_pin, OUTPUT);
+
+  aht.begin();
+  bmp.begin_I2C();
+  bno.begin();
+  gps_serial.begin(115200);
+  rtc.begin();
+  ccs.begin();
+  INA.begin();
+  openLog.begin(115200);
+  xbee.begin(115200);
+
+  set_reference_alt_pressure();
+  set_reference_orientation();
+
+  rtc.adjust(DateTime(2025, 1, 1, 0, 0, 0));
 }
 
-float reference_pressure, reference_altitude;
-float reference_orientation_x, reference_orientation_y, reference_orientation_z;
+float reference_pressure = SEALEVELPRESSURE_HPA, reference_altitude = 0;
+float reference_orientation_x = 0, reference_orientation_y = 0,
+      reference_orientation_z = 0;
 sensors_event_t humidity, temp, orientationData, accelerationData;
 int packet_count = 0;
 
 bool set_reference_alt_pressure() {
-  float init_pressure = 0;
-  for (int i = 0; i < 50; i++) {
-    init_pressure += read_pressure();
+  reference_pressure = 0;
+  for (int i = 0; i < 5; i++) {
+    float readpressure = bmp.pressure / 100.0;
+    while (readpressure < 100) {
+      readpressure = bmp.pressure;
+    }
+    reference_pressure += readpressure;
   }
-  init_pressure /= 50;
-  reference_pressure = init_pressure;
-  reference_altitude = read_altitude(init_pressure);
 
-  return (0 == (read_altitude(read_pressure()) - reference_altitude) ? true
-                                                                     : false);
+  reference_pressure /= 5;
+
+  return (true);
 }
 
 bool set_reference_orientation() {
   float init_orientation_x = 0, init_orientation_y = 0, init_orientation_z = 0;
+  int i = 5;
 
-  for (int i = 0; i < 50; i++) {
-    init_orientation_x += read_orientation_x();
-    init_orientation_y += read_orientation_y();
-    init_orientation_z += read_orientation_z();
+  while (!((abs(read_orientation_x() - reference_orientation_x) < 1) &&
+           (abs(read_orientation_y() - reference_orientation_y) < 1) &&
+           (abs(read_orientation_z() - reference_orientation_z) < 1)) &&
+         i) {
+
+    for (int i = 0; i < 5; i++) {
+      init_orientation_x += read_orientation_x();
+      init_orientation_y += read_orientation_y();
+      init_orientation_z += read_orientation_z();
+    }
+
+    init_orientation_x /= 5;
+    init_orientation_y /= 5;
+    init_orientation_z /= 5;
+
+    reference_orientation_x = init_orientation_x;
+    reference_orientation_y = init_orientation_y;
+    reference_orientation_z = init_orientation_z;
+    i--;
   }
-
-  init_orientation_x /= 50;
-  init_orientation_y /= 50;
-  init_orientation_z /= 50;
-
-  reference_orientation_x = init_orientation_x;
-  reference_orientation_y = init_orientation_y;
-  reference_orientation_z = init_orientation_z;
-
-  return ((0 == (read_orientation_x() - reference_orientation_x) &&
-           0 == (read_orientation_y() - reference_orientation_y) &&
-           0 == (read_orientation_z() - reference_orientation_z))
-              ? true
-              : false);
+  return (true);
 };
-
-void check_sensor_status() {
-  bool rtc_working = true, bno_wokring = true, bmp_wokring = true,
-       aht_wokring = true, gnss_working = true, ina_wokring = true;
-
-  //! check sensor status
-
-  // return
-}
 
 // RTC reading
 String read_time() {
-
-  unsigned long totalTime = millis() / 1000.0;
   DateTime now = rtc.now();
 
-  String time_string = String(now.hour(), DEC) + ": " +
-                       String(now.minute(), DEC) + ": " +
-                       String(now.second(), DEC);
-
+  String time_string = time_formatting(now.hour()) + ":" +
+                       time_formatting(now.minute()) + ":" +
+                       time_formatting(now.second());
   return time_string;
 };
 
+String time_formatting(int raw_time) {
+  if (raw_time < 10) {
+    return ("0" + String(raw_time));
+  } else {
+    return String(raw_time, DEC);
+  }
+}
+
 // Packet Count
-int read_packet_count() { return packet_count += 1; }
+int read_packet_count() { return packet_count++; }
 
 // BMP reading
-float read_altitude(float pressure) {
-  return bmp.readAltitude(reference_altitude), 1;
+float read_altitude() {
+  return bmp.readAltitude(reference_pressure);
+  // return 0;
 };
-float read_pressure() { return bmp.pressure; };
+float read_pressure() {
+  return bmp.pressure / 100;
+  // return 0;
+};
 
-//!
 // AHT reading
 float read_temperature() {
   aht.getEvent(&humidity, &temp);
   return temp.temperature;
+
+  // return 0;
 };
 
 // INA reading
-float read_voltage() { return INA.getBusVoltage(); };
+float read_voltage() {
+  return INA.getBusVoltage();
+  // return 0;
+};
 
 // velocity reading
-float read_velocity() {
-  // return (telemetry_data.altitude - prev_telemetry_data.altitude);
-  return get_velocity();
-}
+float read_velocity() { return get_velocity(); }
 
 // GNSS reading
-int read_gnss_time() { return 0; };
-float read_gnss_altitude() { return 0; };
-float read_gnss_latitude() { return 0; };
-float read_gnss_longitude() { return 0; };
-float read_gnss_satellites() { return 0; };
+String read_gnss_time() {
+  gps.encode(gps_serial.read());
+  String time_string = (time_formatting(gps.time.hour()) + ":" +
+                        time_formatting(gps.time.minute()) + ":" +
+                        time_formatting(gps.time.second()));
+  return time_string;
+};
+float read_gnss_altitude() {
+  return gps.altitude.meters();
+  // return 0;
+};
+float read_gnss_latitude() {
+  return gps.location.lat();
+  // return 0;
+};
+float read_gnss_longitude() {
+  return gps.location.lng();
+  // return 0;
+};
+int read_gnss_satellites() {
+  return gps.satellites.value();
+  // return 0;
+};
 
 // BNO orientation reading
 float read_orientation_x() {
   bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-  return orientationData.orientation.x;
+  orientationData.orientation.x -=
+      ((orientationData.orientation.x > 180) ? 360 : 0);
+  // return 0;
+  return (orientationData.orientation.x - reference_orientation_x);
 };
-float read_orientation_y() { return orientationData.orientation.y; };
-float read_orientation_z() { return orientationData.orientation.z; };
+float read_orientation_y() {
+  orientationData.orientation.y -=
+      ((orientationData.orientation.y > 180) ? 360 : 0);
+  // return 0;
+
+  return (orientationData.orientation.y - reference_orientation_y);
+};
+float read_orientation_z() {
+  orientationData.orientation.z -=
+      ((orientationData.orientation.z > 180) ? 360 : 0);
+  // return 0;
+  return (orientationData.orientation.z - reference_orientation_z);
+};
 
 // BNO acceleration reading
 float read_acceleration_x() {
   bno.getEvent(&accelerationData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  // return 0;
   return accelerationData.acceleration.x;
 };
-float read_acceleration_y() { return accelerationData.acceleration.y; };
-float read_acceleration_z() { return accelerationData.acceleration.z; };
 
-//! not sure if we implement this
-// Gyro Rate reading
-float read_gyro_spin_rate() { return 0; };
+float read_acceleration_y() {
+  // return 0;
+
+  return accelerationData.acceleration.y;
+};
+float read_acceleration_z() {
+  // return 0;
+  return accelerationData.acceleration.z;
+};
 
 // Software State Reading
 String read_software_state() { return get_software_state_string(); };
 
 // MiCS reading (CO/CH4/C2H5OH/H2/NH3)
 float read_gas_concentration() {
-  // return mics.getGasData(CO);
-  return 0;
+  return ccs.geteCO2();
+  // return 0;
 };
 
 void trigger_burnwire() {
@@ -169,16 +245,24 @@ void sound_buzzer() {
   delay(500);
 }
 
-bool is_fresh_start() {
-  // TODO check previous logs and return true if fresh start
-  return (get_last_openlog_log().length() > 0);
+bool sfw3_ready() {
+  return (telemetry_data.velocity > 0 && telemetry_data.altitude > 0 &&
+          telemetry_data.gnss_altitude > 0);
 }
+bool sfw4_ready() {
+  return (telemetry_data.altitude >= 1000 || telemetry_data.velocity <= 0);
+}
+bool sfw5_ready() { return (velocity == 0 || bmp_altitude == 0); }
+
+bool is_fresh_start() { return (get_last_openlog_log().length() == 0); }
 
 bool calibrate_sensors() {
   return (set_reference_alt_pressure() && set_reference_orientation());
 }
 
 void write_to_openlog(String telemetry_str) { openLog.println(telemetry_str); }
+
+void send_thru_xbee(String telemetry_str) { xbee.print(telemetry_str); }
 
 String get_last_openlog_log() {
   String result = "";
@@ -208,7 +292,7 @@ String get_last_openlog_log() {
 String get_last_state_string() {
   String last_log = get_last_openlog_log();
 
-  String last_state_string;
+  String last_state_string = state_numToString(software_state_num);
   int startIndex = 0;
   int endIndex = 0;
 
