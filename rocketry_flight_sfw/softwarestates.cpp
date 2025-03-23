@@ -24,7 +24,6 @@ String state_numToString(int num) {
   }
 }
 
-// !TODO try with ascii of initials
 int state_stringToNum(String str) {
   if (str == "BOOT")
     return 0;

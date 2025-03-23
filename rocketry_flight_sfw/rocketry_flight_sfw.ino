@@ -17,7 +17,7 @@ float bmp_altitude, bmp_pressure, aht_temperature, ina_voltage, l89_time,
     bno_acceleration_x, bno_acceleration_y, bno_acceleration_z, gyro_spin_rate,
     mics_gas_concentration;
 
-bool send_telemetry = false;
+bool send_telemetry_flag = false;
 
 void setup() {
   Serial.begin(115200);
@@ -27,11 +27,13 @@ void setup() {
 void loop() {
   fsw();
 
-  if (send_telemetry) {
-    check_sensor_status();
+  if (send_telemetry_flag) {
 
     make_telemetry_data();
     save_prev_data(telemetry_data);
+
+    write_to_openlog(telemetry_string);
+    send_thru_xbee(telemetry_string);
 
     Serial.println(telemetry_string);
 
@@ -52,23 +54,22 @@ void fsw() {
 
     if (command == "telestart") {
 
-      send_telemetry = true;
+      send_telemetry_flag = true;
     }
     if (command == "telestop") {
-      send_telemetry = false;
+      send_telemetry_flag = false;
     }
     if (command == "calibrate") {
       while (!calibrate_sensors()) {
-        send_telemetry = false;
+        send_telemetry_flag = false;
       }
-      send_telemetry = true;
+      send_telemetry_flag = true;
       // SETUP to LAUNCH
       if (software_state_num == 1) {
         increment_software_state();
       }
     }
   } else {
-    // TODO how to check latest software state
     int latest_software_state_num = get_last_state_num();
 
     set_software_state(latest_software_state_num);
@@ -76,23 +77,28 @@ void fsw() {
 
   switch (software_state_num) {
   case 2:
-    if (velocity > 0 && bmp_altitude > 0 && l89_altitude > 0) {
+    // LAUNCH to ASCENT
+    if (sfw3_ready()) {
       increment_software_state();
     }
     break;
   case 3:
-    if (bmp_altitude >= 1000 || velocity <= 0) {
+    // ASCENT to PAYLOAD_SEP
+    if (sfw4_ready()) {
       increment_software_state();
     }
     break;
   case 4:
     trigger_burnwire();
+    // PAYLOAD_SEP to DESCENT
     increment_software_state();
     break;
   case 5:
-    if (velocity == 0 || bmp_altitude == 0) {
+    // DESCENT to IMPACT
+    if (sfw6_ready()) {
       increment_software_state();
     }
+    break;
   case 6:
     sound_buzzer();
     break;

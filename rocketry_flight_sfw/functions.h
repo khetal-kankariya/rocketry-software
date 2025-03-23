@@ -11,8 +11,8 @@
 #define burnwire_pin 3
 #define buzzer_pin 5
 
-#include "Adafruit_BMP3XX.h"
 #include <Adafruit_AHTX0.h>
+#include <Adafruit_BMP3XX.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_CCS811.h>
 #include <Adafruit_Sensor.h>
@@ -29,7 +29,6 @@ extern Adafruit_BNO055 bno;
 extern TinyGPSPlus gps;
 extern SoftwareSerial gps_serial;
 extern RTC_DS3231 rtc;
-extern DFRobot_MICS_I2C mics;
 extern INA226 INA;
 extern SoftwareSerial openLog;
 
@@ -39,7 +38,6 @@ extern float reference_pressure, reference_altitude;
 extern float reference_orientation_x, reference_orientation_y,
     reference_orientation_z;
 
-void check_sensor_status();
 bool set_reference_alt_pressure();
 bool set_reference_orientation();
 
@@ -69,11 +67,18 @@ bool is_fresh_start();
 bool calibrate_sensors();
 
 void write_to_openlog(String telemetry_string);
+void send_thru_xbee(String telemetry_string);
 String get_last_openlog_log();
 String get_last_state_string();
 int get_last_state_num();
 
 void trigger_burnwire();
 void sound_buzzer();
+
+bool sfw2_ready();
+bool sfw3_ready();
+bool sfw4_ready();
+bool sfw5_ready();
+bool sfw6_ready();
 
 #endif

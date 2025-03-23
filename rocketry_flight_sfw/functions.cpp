@@ -15,13 +15,24 @@ SoftwareSerial gps_serial(6, 7);
 RTC_DS3231 rtc;
 Adafruit_CCS811 ccs;
 INA226 INA(0x40);
-SoftwareSerial openLog(2, 3);
+SoftwareSerial openLog(8, 9);
+SoftwareSerial xbee(12, 13);
 
 void setup_sensors() {
-  // Wire.setSDA(4);
-  // Wire.setSCL(5);
-  // Wire.begin();
-  // Wire.setClock(4000000);
+  // AHT pins
+  Wire.setSDA(0);
+  Wire.setSCL(1);
+
+  // BNO pins
+  Wire.setSDA(4);
+  Wire.setSCL(5);
+
+  // BMP pins
+  Wire.setSDA(2);
+  Wire.setSCL(3);
+
+  Wire.begin();
+  Wire.setClock(4000000);
 
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
@@ -39,9 +50,10 @@ void setup_sensors() {
   ccs.begin();
   INA.begin();
   openLog.begin(115200);
+  xbee.begin(115200);
 
-  // set_reference_alt_pressure();
-  // set_reference_orientation();
+  set_reference_alt_pressure();
+  set_reference_orientation();
 
   rtc.adjust(DateTime(2025, 1, 1, 0, 0, 0));
 }
@@ -55,12 +67,6 @@ int packet_count = 0;
 bool set_reference_alt_pressure() {
   reference_pressure = 0;
   for (int i = 0; i < 5; i++) {
-    float readalt = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-    while (readalt > 100) {
-      readalt = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-    }
-    reference_altitude += readalt;
-
     float readpressure = bmp.pressure / 100.0;
     while (readpressure < 100) {
       readpressure = bmp.pressure;
@@ -69,7 +75,6 @@ bool set_reference_alt_pressure() {
   }
 
   reference_pressure /= 5;
-  reference_altitude /= 5;
 
   return (true);
 }
@@ -101,15 +106,6 @@ bool set_reference_orientation() {
   return (true);
 };
 
-void check_sensor_status() {
-  bool rtc_working = true, bno_wokring = true, bmp_wokring = true,
-       aht_wokring = true, gnss_working = true, ina_wokring = true;
-
-  //! check sensor status
-
-  // return
-}
-
 // RTC reading
 String read_time() {
   DateTime now = rtc.now();
@@ -117,9 +113,6 @@ String read_time() {
   String time_string = time_formatting(now.hour()) + ":" +
                        time_formatting(now.minute()) + ":" +
                        time_formatting(now.second());
-
-  // String time_string = String("00") + ": " + String("00") + ": " + String("00");
-
   return time_string;
 };
 
@@ -144,7 +137,6 @@ float read_pressure() {
   // return 0;
 };
 
-//!
 // AHT reading
 float read_temperature() {
   aht.getEvent(&humidity, &temp);
@@ -160,17 +152,14 @@ float read_voltage() {
 };
 
 // velocity reading
-float read_velocity() {
-  return get_velocity();
-}
+float read_velocity() { return get_velocity(); }
 
 // GNSS reading
 String read_gnss_time() {
   gps.encode(gps_serial.read());
-  String time_string= (time_formatting(gps.time.hour()) +
-  ":"+time_formatting(gps.time.minute()) +
-  ":"+time_formatting(gps.time.second()));
-  // String time_string = String("00") + ": " + String("00") + ": " + String("00");
+  String time_string = (time_formatting(gps.time.hour()) + ":" +
+                        time_formatting(gps.time.minute()) + ":" +
+                        time_formatting(gps.time.second()));
   return time_string;
 };
 float read_gnss_altitude() {
@@ -186,7 +175,7 @@ float read_gnss_longitude() {
   // return 0;
 };
 int read_gnss_satellites() {
-  return gps.satellites.value()
+  return gps.satellites.value();
   // return 0;
 };
 
@@ -256,23 +245,27 @@ void sound_buzzer() {
   delay(500);
 }
 
-bool is_fresh_start() {
-  // TODO check previous logs and return true if fresh start
-  return (get_last_openlog_log().length() > 0);
+bool sfw3_ready() {
+  return (telemetry_data.velocity > 0 && telemetry_data.altitude > 0 &&
+          telemetry_data.gnss_altitude > 0);
 }
+bool sfw4_ready() {
+  return (telemetry_data.altitude >= 1000 || telemetry_data.velocity <= 0);
+}
+bool sfw5_ready() { return (velocity == 0 || bmp_altitude == 0); }
+
+bool is_fresh_start() { return (get_last_openlog_log().length() == 0); }
 
 bool calibrate_sensors() {
   return (set_reference_alt_pressure() && set_reference_orientation());
-  // return (set_reference_alt_pressure());
-  // return (set_reference_orientation());
 }
 
-void write_to_openlog(String telemetry_str) {
-  openLog.println(telemetry_str);
-}
+void write_to_openlog(String telemetry_str) { openLog.println(telemetry_str); }
+
+void send_thru_xbee(String telemetry_str) { xbee.print(telemetry_str); }
 
 String get_last_openlog_log() {
-  String result = " ";
+  String result = "";
   String all_logs = openLog.readString();
   all_logs.trim();
 
