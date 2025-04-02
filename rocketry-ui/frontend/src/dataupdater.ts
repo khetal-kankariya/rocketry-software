@@ -44,7 +44,7 @@ readData.subscribe((presentData) => {
 });
 
 setInterval(() => {
-	nowTime.set(Math.floor(Date.now() / 1000));
+	nowTime.set(Math.floor(Date.now()));
 }, 1000);
 
 initTime.subscribe((initVal) => {
@@ -52,9 +52,9 @@ initTime.subscribe((initVal) => {
 		let uptime = Math.floor(val - initVal);
 
 		// Setting time elapsed
-		let hoursElapsed = Math.floor(uptime / 3600);
-		let minutesElapsed = Math.floor((uptime - 3600 * hoursElapsed) / 60);
-		let secondsElapsed = uptime - 3600 * hoursElapsed - 60 * minutesElapsed;
+		let hoursElapsed = Math.floor(uptime / 3600000);
+		let minutesElapsed = Math.floor((uptime - 3600000 * hoursElapsed) / 60000);
+		let secondsElapsed = uptime - 3600000 * hoursElapsed - 60000 * minutesElapsed;
 		upTime.set(
 			`${hoursElapsed < 10 ? `0${hoursElapsed}` : hoursElapsed}:${minutesElapsed < 10 ? `0${minutesElapsed}` : minutesElapsed}:${secondsElapsed < 10 ? `0${secondsElapsed}` : secondsElapsed}`
 		);

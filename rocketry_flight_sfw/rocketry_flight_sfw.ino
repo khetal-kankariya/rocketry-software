@@ -13,9 +13,9 @@ int millis_time_init;
 int rtc_time;
 
 float bmp_altitude, bmp_pressure, aht_temperature, ina_voltage, l89_time,
-    l89_altitude, l89_latitude, l89_longitude, l89_satellites,
-    bno_acceleration_x, bno_acceleration_y, bno_acceleration_z, gyro_spin_rate,
-    mics_gas_concentration;
+  l89_altitude, l89_latitude, l89_longitude, l89_satellites,
+  bno_acceleration_x, bno_acceleration_y, bno_acceleration_z, gyro_spin_rate,
+  mics_gas_concentration;
 
 bool send_telemetry_flag = false;
 
@@ -76,33 +76,33 @@ void fsw() {
   }
 
   switch (software_state_num) {
-  case 2:
-    // LAUNCH to ASCENT
-    if (sfw3_ready()) {
+    case 2:
+      // LAUNCH to ASCENT
+      if (sfw3_ready()) {
+        increment_software_state();
+      }
+      break;
+    case 3:
+      // ASCENT to PAYLOAD_SEP
+      if (sfw4_ready()) {
+        increment_software_state();
+      }
+      break;
+    case 4:
+      trigger_burnwire();
+      // PAYLOAD_SEP to DESCENT
       increment_software_state();
-    }
-    break;
-  case 3:
-    // ASCENT to PAYLOAD_SEP
-    if (sfw4_ready()) {
-      increment_software_state();
-    }
-    break;
-  case 4:
-    trigger_burnwire();
-    // PAYLOAD_SEP to DESCENT
-    increment_software_state();
-    break;
-  case 5:
-    // DESCENT to IMPACT
-    if (sfw6_ready()) {
-      increment_software_state();
-    }
-    break;
-  case 6:
-    sound_buzzer();
-    break;
-  default:
-    break;
+      break;
+    case 5:
+      // DESCENT to IMPACT
+      if (sfw6_ready()) {
+        increment_software_state();
+      }
+      break;
+    case 6:
+      sound_buzzer();
+      break;
+    default:
+      break;
   }
 }

@@ -32,8 +32,7 @@
 	});
 </script>
 
-<Button class="relative right-0 w-min" onclick={get_csv_data}>Refresh</Button>
-<div class="h-screen w-screen overflow-scroll pr-8">
+<div class="h-full w-full overflow-scroll pr-8">
 	<table class="m-0 text-sm" cellpadding="10" cellspacing="10">
 		<tbody>
 			<tr class="border-y border-white">

@@ -7,7 +7,7 @@ import threading
 import csv
 import logging
 
-import boardconnector
+# import boardconnector
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -25,13 +25,6 @@ logging.basicConfig(
 
 starttime = time.time()
 nowtime = 0
-
-
-ports = ["COM 3", "COM 4"]
-activePort = "COM 3"
-
-baudRates = [9600, 115200]
-activeBaudRate = 9600
 
 prevdata = {
     "teamID": "",
@@ -60,7 +53,12 @@ newdata = prevdata
 
 all_previous_data = []
 
-csv_write_format = "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
+csv_write_format = (
+    "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>,"
+    "<PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>,"
+    "<GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>,"
+    "<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
+)
 
 telemetry_running = False
 calibration_done = False
@@ -95,8 +93,8 @@ def new_telemetry_data():
 
     global nowtime, newdata, prevdata
     nowtime = time.time()
-    # newdata = random_telemetry_data()
-    newdata = boardconnector.read_new_telemetry_data()
+    newdata = random_telemetry_data()
+    # newdata = boardconnector.read_new_telemetry_data()
     prevdata = newdata
     global all_previous_data
     all_previous_data.append(newdata)
@@ -178,8 +176,6 @@ def write_csv_data(data: dict[str, any]):
         f"{newdata['orientation_x']},"
         f"{newdata['orientation_y']},"
         f"{newdata['orientation_z']},"
-        f"{newdata['gyroSpinRate_roll']},"
-        f"{newdata['gyroSpinRate_pitch']},"
         f"{newdata['gasConcn']},"
         f"{newdata['velocity']}\n"
     )
@@ -313,8 +309,8 @@ def calibrate_sensors():
 
 
 def send_command(command_str: str):
-    # command_status = {"status": "success", "message": "command sent"}
-    command_status = boardconnector.send_command(command_str)
+    command_status = {"status": "success", "message": "command sent"}
+    # command_status = boardconnector.send_command(command_str)
     return command_status
 
 

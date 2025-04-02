@@ -4,16 +4,16 @@
 	import { activeTab, GCS_started, server_connected } from '@src/store';
 	import Sidebar from '@src/lib/components/custom/sidebar/sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-	import { connect_socket, disconnect_socket } from '@src/socket-interface';
+	import { connect_socket, disconnect_socket, get_csv_data } from '@src/socket-interface';
 	import { onMount } from 'svelte';
 
 	let { children } = $props();
 
 	const connect_server = () => {
-		// connect_socket();
+		connect_socket();
 	};
 	const disconnect_server = () => {
-		// disconnect_socket();
+		disconnect_socket();
 	};
 	onMount(() => {
 		$server_connected = Boolean(window.sessionStorage.getItem('server-connected'));
@@ -66,6 +66,12 @@
 						</Button>
 					{/if}
 				</li>
+
+				{#if $activeTab == 'CSV'}
+					<li class="">
+						<Button class="ml-auto w-min" onclick={get_csv_data}>Refresh</Button>
+					</li>
+				{/if}
 			</ul>
 		</nav>
 

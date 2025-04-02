@@ -6,6 +6,7 @@
 #include "telemetry.h"
 #include <Arduino.h>
 
+
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define MICS_I2C_ADDRESS MICS_ADDRESS_0 // 0x75
 #define burnwire_pin 3
@@ -78,7 +79,6 @@ void sound_buzzer();
 bool sfw2_ready();
 bool sfw3_ready();
 bool sfw4_ready();
-bool sfw5_ready();
 bool sfw6_ready();
 
 #endif

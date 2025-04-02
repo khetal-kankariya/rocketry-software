@@ -86,4 +86,4 @@
 	});
 </script>
 
-<canvas class="h-full" bind:this={chartCanvas} id={datatype}></canvas>
+<canvas class="h-full" bind:this={chartCanvas} id={String(datatype)}></canvas>

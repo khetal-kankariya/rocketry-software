@@ -36,7 +36,4 @@
 </div>
 
 <style lang="scss">
-	::-webkit-scrollbar {
-		display: none;
-	}
 </style>

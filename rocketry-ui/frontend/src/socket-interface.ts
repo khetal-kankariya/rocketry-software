@@ -175,7 +175,7 @@ export const calibrate_sensors = async () => {
 	if (socket.connected) {
 		last_command.set('calibrate');
 		window.sessionStorage.setItem('last-command', 'calibrate');
-		let calibration_status: { status: string; message: string } = await new Promise((resolve) => {
+		const calibration_status: { status: string; message: string } = await new Promise((resolve) => {
 			socket.emit('calibrate-sensors', (res: { status: string; message: string }) => {
 				resolve(res);
 			});
