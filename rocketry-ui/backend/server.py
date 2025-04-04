@@ -7,7 +7,7 @@ import threading
 import csv
 import logging
 
-# import boardconnector
+import boardconnector
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -93,8 +93,8 @@ def new_telemetry_data():
 
     global nowtime, newdata, prevdata
     nowtime = time.time()
-    newdata = random_telemetry_data()
-    # newdata = boardconnector.read_new_telemetry_data()
+    # newdata = random_telemetry_data()
+    newdata = boardconnector.read_new_telemetry_data()
     prevdata = newdata
     global all_previous_data
     all_previous_data.append(newdata)
@@ -211,8 +211,6 @@ def get_startupdata():
     return {
         "startupdata": {
             "startTime": int(starttime),
-            "selectedPort": activePort,
-            "baudRateList": baudRates,
         },
     }
 

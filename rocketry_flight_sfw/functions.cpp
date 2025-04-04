@@ -9,14 +9,14 @@ bool bmpstatus = true;
 
 Adafruit_AHTX0 aht;
 Adafruit_BMP3XX bmp;
-Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
 TinyGPSPlus gps;
-SoftwareSerial gps_serial(6, 7);
+SoftwareSerial gps_serial(9, 8);
 RTC_DS3231 rtc;
 Adafruit_CCS811 ccs;
 INA226 INA(0x40);
-SoftwareSerial openLog(8, 9);
-SoftwareSerial xbee(12, 13);
+SoftwareSerial openLog(1, 0);
+SoftwareSerial xbee(13, 12);
 
 void setup_sensors() {
   Wire.setSDA(4);
@@ -67,14 +67,17 @@ bool set_reference_alt_pressure() {
 
   reference_pressure /= 5;
 
-  return (true);
+  return true;
 }
 
 bool set_reference_orientation() {
   float init_orientation_x = 0, init_orientation_y = 0, init_orientation_z = 0;
   int i = 5;
 
-  while (!((abs(read_orientation_x() - reference_orientation_x) < 1) && (abs(read_orientation_y() - reference_orientation_y) < 1) && (abs(read_orientation_z() - reference_orientation_z) < 1)) && i) {
+  while (!((abs(read_orientation_x() - reference_orientation_x) < 1) &&
+           (abs(read_orientation_y() - reference_orientation_y) < 1) &&
+           (abs(read_orientation_z() - reference_orientation_z) < 1)) &&
+         i) {
 
     for (int i = 0; i < 5; i++) {
       init_orientation_x += read_orientation_x();
@@ -82,13 +85,18 @@ bool set_reference_orientation() {
       init_orientation_z += read_orientation_z();
     }
 
+    adafruit_bno055_offsets_t bnoOffsets;
+
     init_orientation_x /= 5;
     init_orientation_y /= 5;
     init_orientation_z /= 5;
 
-    reference_orientation_x = init_orientation_x;
-    reference_orientation_y = init_orientation_y;
-    reference_orientation_z = init_orientation_z;
+    bnoOffsets.gyro_offset_x = init_orientation_x;
+    bnoOffsets.gyro_offset_y = init_orientation_y;
+    bnoOffsets.gyro_offset_z = init_orientation_z;
+
+    bno.setSensorOffsets(bnoOffsets);
+
     i--;
   }
   return (true);
@@ -98,7 +106,9 @@ bool set_reference_orientation() {
 String read_time() {
   DateTime now = rtc.now();
 
-  String time_string = time_formatting(now.hour()) + ":" + time_formatting(now.minute()) + ":" + time_formatting(now.second());
+  String time_string = time_formatting(now.hour()) + ":" +
+                       time_formatting(now.minute()) + ":" +
+                       time_formatting(now.second());
   return time_string;
 };
 
@@ -111,9 +121,7 @@ String time_formatting(int raw_time) {
 }
 
 // Packet Count
-int read_packet_count() {
-  return packet_count++;
-}
+int read_packet_count() { return packet_count++; }
 
 // BMP reading
 float read_altitude() {
@@ -140,14 +148,14 @@ float read_voltage() {
 };
 
 // velocity reading
-float read_velocity() {
-  return get_velocity();
-}
+float read_velocity() { return get_velocity(); }
 
 // GNSS reading
 String read_gnss_time() {
   gps.encode(gps_serial.read());
-  String time_string = (time_formatting(gps.time.hour()) + ":" + time_formatting(gps.time.minute()) + ":" + time_formatting(gps.time.second()));
+  String time_string = (time_formatting(gps.time.hour()) + ":" +
+                        time_formatting(gps.time.minute()) + ":" +
+                        time_formatting(gps.time.second()));
   return time_string;
 };
 float read_gnss_altitude() {
@@ -171,22 +179,22 @@ int read_gnss_satellites() {
 float read_orientation_x() {
   bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
   orientationData.orientation.x -=
-    ((orientationData.orientation.x > 180) ? 360 : 0);
+      ((orientationData.orientation.x > 180) ? 360 : 0);
   // return 0;
-  return (orientationData.orientation.x - reference_orientation_x);
+  return (orientationData.orientation.x);
 };
 float read_orientation_y() {
   orientationData.orientation.y -=
-    ((orientationData.orientation.y > 180) ? 360 : 0);
+      ((orientationData.orientation.y > 180) ? 360 : 0);
   // return 0;
 
-  return (orientationData.orientation.y - reference_orientation_y);
+  return (orientationData.orientation.y);
 };
 float read_orientation_z() {
   orientationData.orientation.z -=
-    ((orientationData.orientation.z > 180) ? 360 : 0);
+      ((orientationData.orientation.z > 180) ? 360 : 0);
   // return 0;
-  return (orientationData.orientation.z - reference_orientation_z);
+  return (orientationData.orientation.z);
 };
 
 // BNO acceleration reading
@@ -207,9 +215,7 @@ float read_acceleration_z() {
 };
 
 // Software State Reading
-String read_software_state() {
-  return get_software_state_string();
-};
+String read_software_state() { return get_software_state_string(); };
 
 // MiCS reading (CO/CH4/C2H5OH/H2/NH3)
 float read_gas_concentration() {
@@ -218,7 +224,6 @@ float read_gas_concentration() {
 };
 
 void trigger_burnwire() {
-
   int i = 10;
 
   while (i--) {
@@ -242,29 +247,30 @@ void sound_buzzer() {
 }
 
 bool sfw3_ready() {
-  return (telemetry_data.velocity > 0 && telemetry_data.altitude > 0 && telemetry_data.gnss_altitude > 0);
+  return (telemetry_data.velocity > 0 && telemetry_data.altitude > 0 &&
+          telemetry_data.gnss_altitude > 0);
 }
 bool sfw4_ready() {
   return (telemetry_data.altitude >= 1000 || telemetry_data.velocity <= 0);
 }
 bool sfw6_ready() {
-  return (velocity == 0 || bmp_altitude == 0);
+  return (velocity == 0 || (int)((telemetry_data.altitude) / 1) == 0);
 }
 
-bool is_fresh_start() {
-  return (get_last_openlog_log().length() == 0);
-}
+bool is_fresh_start() { return (get_last_openlog_log().length() == 0); }
 
 bool calibrate_sensors() {
   return (set_reference_alt_pressure() && set_reference_orientation());
 }
 
-void write_to_openlog(String telemetry_str) {
-  openLog.println(telemetry_str);
-}
+void write_to_openlog(String telemetry_str) { openLog.println(telemetry_str); }
 
-void send_thru_xbee(String telemetry_str) {
-  xbee.print(telemetry_str);
+void send_thru_xbee(String telemetry_str) { xbee.print(telemetry_str); }
+
+String read_from_xbee() {
+  String readString = xbee.readString();
+  readString.trim();
+  return readString;
 }
 
 String get_last_openlog_log() {

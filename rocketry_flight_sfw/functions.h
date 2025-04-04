@@ -6,10 +6,9 @@
 #include "telemetry.h"
 #include <Arduino.h>
 
-
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define MICS_I2C_ADDRESS MICS_ADDRESS_0 // 0x75
-#define burnwire_pin 3
+#define burnwire_pin 15
 #define buzzer_pin 5
 
 #include <Adafruit_AHTX0.h>
@@ -69,6 +68,7 @@ bool calibrate_sensors();
 
 void write_to_openlog(String telemetry_string);
 void send_thru_xbee(String telemetry_string);
+String read_from_xbee();
 String get_last_openlog_log();
 String get_last_state_string();
 int get_last_state_num();
