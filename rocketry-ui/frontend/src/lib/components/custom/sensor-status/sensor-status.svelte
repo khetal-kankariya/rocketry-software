@@ -5,7 +5,7 @@
 	import { allGraphPastDatas, batteryLeft, readData, timeElapsed } from '@src/store';
 
 	let sensor_lists = [
-		['rtc', 'imu', 'pressure', 'temp_humid'],
+		['rtc', 'imu', 'pressure', 'temp'],
 		['gnss', 'gas', 'logger', 'voltage']
 	];
 
@@ -13,19 +13,19 @@
 		rtc: 'RTC',
 		imu: 'IMU',
 		pressure: 'Pressure',
-		temp_humid: 'TEMPERATURE & HUMIDITY',
+		temp: 'TEMPERATURE',
 		gnss: 'GNSS',
 		gas: 'GAS SENSOR',
-		logger: 'DATA LOGGER',
-		voltage: 'VOLTAGE SENSOR'
+		logger: 'LOGGER',
+		voltage: 'VOLTAGE'
 	};
 
 	let sensor_fields = {
 		rtc: 'timeStamp',
 		imu: 'orientation',
 		pressure: 'pressure',
-		temp_humid: 'temperature',
-		gnss: 'gnss',
+		temp: 'temperature',
+		gnss: 'gnss_altitude',
 		gas: 'gasConcn',
 		voltage: 'voltage'
 	};
@@ -36,14 +36,9 @@
 	]);
 
 	const sensor_status = (
-		sensor_name: 'rtc' | 'imu' | 'pressure' | 'temp_humid' | 'gnss' | 'logger' | 'gas' | 'voltage'
+		sensor_name: 'rtc' | 'imu' | 'pressure' | 'temp' | 'gnss' | 'logger' | 'gas' | 'voltage'
 	) => {
-		if (sensor_name == 'logger') return true;
-		if (allGraphPastDatas) {
-			let past_datas = [];
-			let sensor_field: TtelemetryDataField = sensor_fields[sensor_name];
-			$allGraphPastDatas[sensor_field];
-		}
+		if ($readData[sensor_fields[sensor_name] as TtelemetryDataField]) return true;
 	};
 
 	let parachute_released = $state(false);
@@ -57,7 +52,7 @@
 				<div class="flex flex-col gap-2">
 					{#each sensor_list as sensor, j}
 						<div class="flex w-[142px] justify-between gap-2 px-2">
-							<span class="text text-sm uppercase">{sensor}</span>
+							<span class="text text-sm uppercase">{sensor_names[sensor]}</span>
 							<Checkbox class="pointer-events-none" checked={sensor_working[i][j]}></Checkbox>
 						</div>
 					{/each}

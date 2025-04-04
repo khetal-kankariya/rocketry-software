@@ -3,8 +3,24 @@
 	import SensorStatus from '@src/lib/components/custom/sensor-status/sensor-status.svelte';
 	import OrientationVis from '@src/lib/components/custom/orientation-vis/orientation-vis.svelte';
 	import DataGrid from '@src/lib/components/custom/datagrid/data-grid.svelte';
-	import { activeTab } from '@src/store';
+	import { activeTab, readData } from '@src/store';
 	import Map from '@src/lib/components/custom/map/map.svelte';
+	import { onMount } from 'svelte';
+	import { get_startupdata, save_startupdata } from '@src/socket-interface';
+
+	onMount(() => {
+		import('@src/dataupdater');
+		get_startupdata();
+		save_startupdata();
+		import('@src/socket-interface');
+
+		if (window) {
+			let latest_data = JSON.parse(window.sessionStorage.getItem('latest-data') || '{}');
+			if (Object.keys(latest_data).length > 0) {
+				readData.set(latest_data);
+			}
+		}
+	});
 
 	$effect(() => {
 		$activeTab = 'Overview';
@@ -20,7 +36,4 @@
 </div>
 
 <style lang="scss">
-	::-webkit-scrollbar {
-		display: none;
-	}
 </style>

@@ -2,17 +2,13 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import { activeTab, allDataEverything, allGraphPastDatas, readData } from '@src/store';
 
-	let { data } = $props();
+	let { datatype }: { datatype: TtelemetryDataField } = $props();
 
-	let { field_name } = data;
-
-	let values = $state([$allGraphPastDatas[field_name]]);
+	let values = $state([$allGraphPastDatas[datatype]]);
 
 	import { Chart, type ChartItem } from 'chart.js/auto';
 	import { onMount } from 'svelte';
 	import 'chartjs-adapter-luxon';
-	import { nonpassive } from 'svelte/legacy';
-	import Button from '@src/lib/components/ui/button/button.svelte';
 
 	let i = 0;
 
@@ -36,14 +32,13 @@
 				}
 			},
 			data: {
-				labels: $allGraphPastDatas.timeStamp,
-				datasets: [{ data: $allGraphPastDatas[field_name], borderColor: 'rgb(255,255, 255)' }]
+				datasets: [{ data: $allGraphPastDatas[datatype], borderColor: 'rgb(255,255, 255)' }]
 			}
 		});
 	});
 
 	function addData(dataVar: number) {
-		chart.data.labels?.push($allGraphPastDatas.timeStamp.at(0));
+		chart.data.labels?.push(0);
 		chart.data.datasets.forEach((dataset) => {
 			dataset.data.push(dataVar);
 		});
@@ -51,7 +46,7 @@
 	}
 
 	$effect(() => {
-		addData($allGraphPastDatas[field_name].at(0));
+		addData($allGraphPastDatas[datatype].at(0));
 	});
 
 	$effect(() => {
@@ -61,11 +56,11 @@
 
 <div class="flex h-full w-[1396px] flex-col gap-8 p-4">
 	<div class="flex items-center justify-between">
-		<span class="text-2xl uppercase">{field_name}</span>
-		<span class="w-20 text-end text-lg"
-			>{$readData[field_name]}
+		<span class="text-2xl uppercase">{datatype}</span>
+		<span class="w-20 text-end text-lg">
+			{$readData[datatype]}
 			<span>
-				{$allDataEverything[field_name].unit}
+				{$allDataEverything[datatype].unit}
 			</span>
 		</span>
 	</div>

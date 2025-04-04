@@ -4,8 +4,6 @@
 #include <Arduino.h>
 
 #include "header.h"
-// #include "softwarestates.h"
-// #include "structs.h"
 
 extern telemetry_data_struct telemetry_data;
 extern String telemetry_string;

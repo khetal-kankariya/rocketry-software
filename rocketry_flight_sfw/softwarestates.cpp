@@ -24,16 +24,33 @@ String state_numToString(int num) {
   }
 }
 
-String read_software_state() { return get_software_state(); };
+int state_stringToNum(String str) {
+  if (str == "BOOT")
+    return 0;
+  else if (str == "SETUP")
+    return 1;
+  else if (str == "LAUNCH")
+    return 2;
+  else if (str == "ASCENT")
+    return 3;
+  else if (str == "PAYLOAD_SEP")
+    return 4;
+  else if (str == "DESCENT")
+    return 5;
+  else if (str == "IMPACT")
+    return 6;
+  else
+    return 99;
+}
 
 void increment_software_state() {
   software_state_num += 1;
-  state_numToString(software_state_num);
+  software_state_string = state_numToString(software_state_num);
 }
 
 void set_software_state(int new_software_state) {
   software_state_num = new_software_state;
-  state_numToString(software_state_num);
+  software_state_string = state_numToString(software_state_num);
 }
 
-String get_software_state() { return "BOOT"; }
+String get_software_state_string() { return software_state_string; }

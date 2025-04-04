@@ -3,16 +3,11 @@
 	import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import * as Card from '@src/lib/components/ui/card';
-	import { allGraphPastDatas, readData } from '@src/store';
+	import { readData } from '@src/store';
 	import { Button } from '../../ui/button';
-	import { Easing, Tween } from '@tweenjs/tween.js';
+	import gsap from 'gsap';
 
-	const filePath = 'src/lib/Model_rocket01.STL'; // Update with your STL file path
-	let rotateAngles = $derived([
-		($allGraphPastDatas.orientation.x[0] - $allGraphPastDatas.orientation.x[1]) | 0,
-		($allGraphPastDatas.orientation.y[0] - $allGraphPastDatas.orientation.y[1]) | 0,
-		($allGraphPastDatas.orientation.z[0] - $allGraphPastDatas.orientation.z[1]) | 0
-	]);
+	const filePath = '/rocket.STL'; // Update with your STL file path
 	let scene = new THREE.Scene();
 	let camera = new THREE.PerspectiveCamera();
 	let renderer = new THREE.WebGLRenderer();
@@ -34,18 +29,11 @@
 	};
 
 	let resetPosition = () => {
-		mesh.setRotationFromAxisAngle(
-			new THREE.Vector3(1, 0, 0),
-			($allGraphPastDatas.orientation.x[0] * Math.PI) / 180
-		);
-		mesh.setRotationFromAxisAngle(
-			new THREE.Vector3(0, 1, 0),
-			($allGraphPastDatas.orientation.y[0] * Math.PI) / 180
-		);
-		mesh.setRotationFromAxisAngle(
-			new THREE.Vector3(0, 0, 1),
-			($allGraphPastDatas.orientation.z[0] * Math.PI) / 180
-		);
+		gsap.to(mesh.rotation, {
+			x: ($readData.orientation_x * Math.PI) / 180,
+			y: ($readData.orientation_y * Math.PI) / 180,
+			z: ($readData.orientation_z * Math.PI) / 180
+		});
 	};
 
 	$effect(() => {
@@ -78,18 +66,18 @@
 					geometry.center();
 					scene.add(mesh);
 
-					mesh.setRotationFromAxisAngle(
-						new THREE.Vector3(1, 0, 0),
-						($allGraphPastDatas.orientation.x[0] || 0 * Math.PI) / 180
-					);
-					mesh.setRotationFromAxisAngle(
-						new THREE.Vector3(0, 1, 0),
-						($allGraphPastDatas.orientation.y[0] || 0 * Math.PI) / 180
-					);
-					mesh.setRotationFromAxisAngle(
-						new THREE.Vector3(0, 0, 1),
-						($allGraphPastDatas.orientation.z[0] || 0 * Math.PI) / 180
-					);
+					// mesh.setRotationFromAxisAngle(
+					// 	new THREE.Vector3(1, 0, 0),
+					// 	-($allGraphPastDatas.orientation_x[0] || 0 * Math.PI) / 180
+					// );
+					// mesh.setRotationFromAxisAngle(
+					// 	new THREE.Vector3(0, 1, 0),
+					// 	-($allGraphPastDatas.orientation_y[0] || 0 * Math.PI) / 180
+					// );
+					// mesh.setRotationFromAxisAngle(
+					// 	new THREE.Vector3(0, 0, 1),
+					// 	-($allGraphPastDatas.orientation_z[0] || 0 * Math.PI) / 180
+					// );
 
 					const axesHelper = new THREE.AxesHelper(1000);
 					scene.add(axesHelper);
@@ -158,7 +146,7 @@
 	});
 </script>
 
-<Card.Root class="relative h-[444px] w-[336px] bg-background p-2 text-gray-600">
+<Card.Root class="bg-background relative h-[444px] w-[336px] p-2 text-gray-600">
 	<canvas class="orientation-canvas aspect-square h-full w-full rounded-lg border"></canvas>
 	<Button variant="default" class="absolute bottom-4 right-4" onclick={resetView}>refresh</Button>
 </Card.Root>

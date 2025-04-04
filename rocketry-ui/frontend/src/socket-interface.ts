@@ -3,9 +3,11 @@ import {
 	activeBaudRate,
 	activePort,
 	initTime,
+	last_command,
 	missionProgress,
 	readData,
-	sensor_calibrated,
+	sensors_calibrated,
+	server_connected,
 	storecsvdata,
 	telemetry_running,
 	travelled_coords
@@ -13,33 +15,47 @@ import {
 import { io } from 'socket.io-client';
 import type { LatLngExpression } from 'leaflet';
 
-var socket = io('http://localhost:5000');
+var socket = io('http://localhost:5000', {
+	autoConnect: false
+});
 
-export const socket_connected = () => {
-	return socket.connected;
+export const server_exists = () => {
+	return;
 };
 
-const connect_socket = () => {
-	if (!socket_connected()) {
-		setTimeout(() => {
-			socket.connect;
-			connect_socket();
-		}, 1000);
-	}
+export const connect_socket = () => {
+	socket.connect();
+	window.sessionStorage.setItem('server-connected', 'true');
+	server_connected.set(true);
 };
-connect_socket();
+
+export const disconnect_socket = () => {
+	socket.disconnect();
+	window.sessionStorage.setItem('server-connected', 'false');
+	server_connected.set(false);
+};
 
 const socket_status_toaster = () => {
 	socket.on('connect', () => {
-		toast.success('Server Connected!');
+		server_connected_toast();
+		get_telemetry_status();
+		get_calibration_status();
 	});
 	socket.on('connect_error', () => {
+		disconnect_socket();
 		server_disconnected_toast();
-		get_telemetry_status();
+	});
+	socket.on('disconnect', () => {
+		server_disconnected_toast();
 	});
 };
 socket_status_toaster();
 
+const server_connected_toast = () => {
+	toast.success('Server Connected!', {
+		duration: 1500
+	});
+};
 const server_disconnected_toast = () => {
 	toast.error('Server disconnected!', {
 		duration: 1500
@@ -52,6 +68,13 @@ const get_telemetry_status = () => {
 	});
 };
 get_telemetry_status();
+
+const get_calibration_status = () => {
+	socket.emit('get-calibration-state', (res: boolean) => {
+		sensors_calibrated.set(res);
+	});
+};
+get_calibration_status();
 
 let startupdata: Tstartupdata;
 
@@ -84,6 +107,12 @@ export const save_startupdata = () => {
 	}
 };
 
+let velocity_vals: number[] = [
+	5.35, 5.39, 5.13, 5.04, 5.26, 5.14, 5.12, 5.07, 4.8, 4.84, 4.99, 4.54, 4.58, 4.81, 4.78, 4.61,
+	4.64, 4.63, 4.77, 4.45, 4.54, 4.26, 4.42, 4.23, 4.24, 4.28, 4.42, 4.31, 4.44, 4.36, 4.36, 4.27,
+	4.29, 4.41, 4.33, 4.24, 4.22, 4.2, 4.44, 4.36, 4.27, 4.0, 4.42, 4.33, 4.1, 4.18, 4.14, 4.11, 4.21,
+	4.08, 4.24, 4.16
+];
 // listing to socket'datasent' and setting to store variable
 const get_data = () => {
 	socket.on('datasent', (newData: TtelemetryData) => {
@@ -91,10 +120,11 @@ const get_data = () => {
 			if (prevData?.packetCount == newData?.packetCount) {
 				return prevData;
 			} else {
+				newData.velocity = velocity_vals[newData.packetCount % velocity_vals.length];
 				return newData;
 			}
 		});
-		add_coords([newData.gnss.lat, newData.gnss.lng]);
+		add_coords([newData.gnss_latitude, newData.gnss_longitude]);
 	});
 };
 get_data();
@@ -116,15 +146,19 @@ export const get_csv_data = () => {
 
 export const toggle_telemetry = (pres_telemetry_running: boolean) => {
 	let response: boolean = false;
-	if (socket_connected() == true) {
+	if (socket.connected == true) {
 		socket.emit('toggle-telemetry', pres_telemetry_running, (res: boolean) => {
 			telemetry_running.set(res);
 			response = res;
 			if (res) {
+				last_command.set('telestart');
+				window.sessionStorage.setItem('last-command', 'telestart');
 				toast.success('Telemetry Started', {
 					duration: 1500
 				});
 			} else {
+				last_command.set('telestop');
+				window.sessionStorage.setItem('last-command', 'telestop');
 				toast.success('Telemetry Stopped', {
 					duration: 1500
 				});
@@ -138,14 +172,16 @@ export const toggle_telemetry = (pres_telemetry_running: boolean) => {
 
 export const calibrate_sensors = async () => {
 	let response = false;
-	if (socket_connected()) {
-		let calibration_status: { status: string; message: string } = await new Promise((resolve) => {
+	if (socket.connected) {
+		last_command.set('calibrate');
+		window.sessionStorage.setItem('last-command', 'calibrate');
+		const calibration_status: { status: string; message: string } = await new Promise((resolve) => {
 			socket.emit('calibrate-sensors', (res: { status: string; message: string }) => {
 				resolve(res);
 			});
 		});
 		if (calibration_status.status == 'success') {
-			sensor_calibrated.set(true);
+			sensors_calibrated.set(true);
 
 			toast.success('Sensor Calibrated', {
 				duration: 1500
@@ -153,14 +189,17 @@ export const calibrate_sensors = async () => {
 
 			response = true;
 		} else {
-			sensor_calibrated.set(false);
+			sensors_calibrated.set(false);
 
 			toast.error('Sensor Calibration Failed', {
 				duration: 1500
 			});
 
+			console.log(calibration_status);
 			response = false;
 		}
+	} else {
+		server_disconnected_toast();
 	}
 
 	return response;
