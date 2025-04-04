@@ -1,0 +1,26 @@
+{
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "*.css": "css",
+    "*.html": "html",
+    "*.js": "javascript",
+    "*.module.css": "css",
+    "*.module.scss": "scss",
+    "*.py": "python",
+    "*.scss": "scss",
+    "array": "cpp",
+    "chrono": "cpp",
+    "deque": "cpp",
+    "format": "cpp",
+    "forward_list": "cpp",
+    "initializer_list": "cpp",
+    "list": "cpp",
+    "span": "cpp",
+    "vector": "cpp",
+    "xhash": "cpp",
+    "xstring": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp",
+    "ostream": "cpp"
+  }
+}

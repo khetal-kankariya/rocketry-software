@@ -26,34 +26,42 @@ logging.basicConfig(
 starttime = time.time()
 nowtime = 0
 
-
-ports = ["COM 3", "COM 4"]
-activePort = "COM 3"
-
-baudRates = [9600, 115200]
-activeBaudRate = 9600
-
 prevdata = {
-    "teamID": "2024ASI-ROCKETRY-026",
+    "teamID": "",
     "timeStamp": 0,
     "packetCount": 0,
     "altitude": 0,
     "pressure": 0,
     "temperature": 0,
     "voltage": 0,
+    "gnss_time": 0,
+    "gnss_latitude": 0,
+    "gnss_longitude": 0,
+    "gnss_altitude": 0,
+    "gnss_sats": 0,
+    "orientation_x": 0,
+    "orientation_y": 0,
+    "orientation_z": 0,
+    "accel_x": 0,
+    "accel_y": 0,
+    "accel_z": 0,
+    "softwareState": "BOOT",
     "gasConcn": 0,
-    "gnss": {"time": 0, "lat": 0, "lng": 0, "alt": 0, "sats": 0},
-    "accel": {"x": 0, "y": 0, "z": 0},
-    "orientation": {"x": 0, "y": 0, "z": 0},
-    "gyroSpinRate": {"roll": 0, "pitch": 0},
-    "softwareState": "boot",
-    "velocity": 0,
 }
 newdata = prevdata
 
-csv_write_format = "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
+
+all_previous_data = []
+
+csv_write_format = (
+    "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>,"
+    "<PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>,"
+    "<GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>,"
+    "<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
+)
 
 telemetry_running = False
+calibration_done = False
 
 mission_progress = 0
 
@@ -88,6 +96,8 @@ def new_telemetry_data():
     # newdata = random_telemetry_data()
     newdata = boardconnector.read_new_telemetry_data()
     prevdata = newdata
+    global all_previous_data
+    all_previous_data.append(newdata)
 
     # write_csv_data(newdata)
     return newdata
@@ -104,41 +114,25 @@ def random_telemetry_data():
         "pressure": int(random.random() * 51),
         "temperature": int(random.random() * 51),
         "voltage": int(random.random() * 51),
-        "gasConcn": int(random.random() * 51),
-        "gnss": {
-            "time": int(random.random() * 51),
-            "lat": 23.1293,
-            "lng": 72.5417,
-            "alt": int(random.random() * 51),
-            "sats": int(random.random() * 51),
-        },
-        "accel": {
-            "x": int(random.random() * 51),
-            "y": int(random.random() * 51),
-            "z": int(random.random() * 51),
-        },
-        "orientation": {
-            "x": (
-                prevdata["orientation"]["x"] + 1
-                if prevdata["orientation"]["x"] < 359
-                else 0
-            ),
-            "y": (
-                prevdata["orientation"]["y"] + 1
-                if prevdata["orientation"]["y"] < 359
-                else 0
-            ),
-            "z": (
-                prevdata["orientation"]["z"] + 1
-                if prevdata["orientation"]["z"] < 359
-                else 0
-            ),
-        },
-        "gyroSpinRate": {
-            "roll": int(random.random() * 51),
-            "pitch": int(random.random() * 51),
-        },
+        "gnss_time": int(random.random() * 51),
+        "gnss_lat": 23.1293,
+        "gnss_lng": 72.5417,
+        "gnss_alt": int(random.random() * 51),
+        "gnss_sats": int(random.random() * 51),
+        "accel_x": int(random.random() * 51),
+        "accel_y": int(random.random() * 51),
+        "accel_z": int(random.random() * 51),
+        "orientation_x": (
+            prevdata["orientation_x"] + 1 if prevdata["orientation_x"] < 359 else 0
+        ),
+        "orientation_y": (
+            prevdata["orientation_y"] + 1 if prevdata["orientation_y"] < 359 else 0
+        ),
+        "orientation_z": (
+            prevdata["orientation_z"] + 1 if prevdata["orientation_z"] < 359 else 0
+        ),
         "softwareState": "boot",
+        "gasConcn": int(random.random() * 51),
         "velocity": 0,
     }
 
@@ -154,7 +148,7 @@ def send_telemetry_data():
         new_data = new_telemetry_data()
         if telemetry_running:
             socketio.emit("datasent", new_data)
-        time.sleep(1)
+        time.sleep(0.1)
 
 
 # WRITING CSV DATA
@@ -171,19 +165,17 @@ def write_csv_data(data: dict[str, any]):
         f"{newdata['pressure']},"
         f"{newdata['temperature']},"
         f"{newdata['voltage']},"
-        f"{newdata['gnss']['time']},"
-        f"{newdata['gnss']['lat']},"
-        f"{newdata['gnss']['lng']},"
-        f"{newdata['gnss']['alt']},"
-        f"{newdata['gnss']["sats"]},"
-        f"{newdata['accel']['x']},"
-        f"{newdata['accel']['y']},"
-        f"{newdata['accel']['z']},"
-        f"{newdata['orientation']['x']},"
-        f"{newdata['orientation']['y']},"
-        f"{newdata['orientation']['z']},"
-        f"{newdata['gyroSpinRate']['roll']},"
-        f"{newdata['gyroSpinRate']['pitch']},"
+        f"{newdata['gnss_time']},"
+        f"{newdata['gnss_lat']},"
+        f"{newdata['gnss_lng']},"
+        f"{newdata['gnss_alt']},"
+        f"{newdata["gnss_sats"]},"
+        f"{newdata['accel_x']},"
+        f"{newdata['accel_y']},"
+        f"{newdata['accel_z']},"
+        f"{newdata['orientation_x']},"
+        f"{newdata['orientation_y']},"
+        f"{newdata['orientation_z']},"
         f"{newdata['gasConcn']},"
         f"{newdata['velocity']}\n"
     )
@@ -208,13 +200,17 @@ def get_csv_data():
     return {"data": csv_readdata}
 
 
+@socketio.on("get-all-prevdata")
+def get_all_prevdata():
+    global all_previous_data
+    return {data: all_previous_data}
+
+
 @socketio.on("get-startupdata")
 def get_startupdata():
     return {
         "startupdata": {
             "startTime": int(starttime),
-            "selectedPort": activePort,
-            "baudRateList": baudRates,
         },
     }
 
@@ -243,7 +239,6 @@ def toggle_telemetry(telemetry_state: bool):
                 "status": "failed",
                 "message": "could not stop telemetry",
             }
-    print(telemetry_status)
     return telemetry_running
 
 
@@ -251,6 +246,12 @@ def toggle_telemetry(telemetry_state: bool):
 def get_telemetry_state():
     global telemetry_running
     return telemetry_running
+
+
+@socketio.on("get-calibration-state")
+def get_calibration_state():
+    global calibration_done
+    return calibration_done
 
 
 @socketio.on("get-mission-progress")
@@ -273,17 +274,18 @@ def calibrate_sensors():
             "status": "failed",
             "message": "could not calibrate sensors",
         }
+
+        print("failed")
         return calistart_status
     else:
-        print(commandsend_status)
         calistart_status = {"status": "success", "message": "calibration started"}
 
     # CHECK CALIBRATION
     def calibration_checker():
         timern = time.time()
-        calibrated = False
+        calibrated = True
         while time.time() - timern < 6:
-            if newdata["altitude"] > 1:
+            if float(newdata["altitude"]) > 1:
                 time.sleep(1)
                 pass
             else:
@@ -291,15 +293,16 @@ def calibrate_sensors():
                 break
 
         if calibrated:
-            return {"status": "calibrated", "message": "sensors calibrated"}
+            return {"status": "success", "message": "sensors calibrated"}
         else:
             return {
-                "status": "not calibrated",
+                "status": "failed",
                 "message": "could not calibrate sensors",
             }
 
     calibration_status = calibration_checker()
-
+    global calibration_done
+    calibration_done = True
     return calibration_status
 
 

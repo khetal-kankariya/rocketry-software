@@ -1,6 +1,7 @@
-import serial, serial.tools.list_ports
+import serial
+import serial.tools.list_ports
 
-sumserial = serial.Serial(port="/dev/ttyACM0", baudrate=115200)
+sumserial = serial.Serial(port="COM13", baudrate=115200)
 
 serialPorts = serial.tools.list_ports.comports()
 
@@ -33,9 +34,17 @@ class teleDataTypes:
         "pressure",
         "temperature",
         "voltage",
-        "gnss",
-        "orientation",
-        "accel",
+        "gnss_time",
+        "gnss_latitude",
+        "gnss_longitude",
+        "gnss_altitude",
+        "gnss_sats",
+        "orientation_x",
+        "orientation_y",
+        "orientation_z",
+        "accel_x",
+        "accel_y",
+        "accel_z",
         "softwareState",
         "gasConcn",
     ]
@@ -43,26 +52,32 @@ class teleDataTypes:
 
 teleData: dict[teleDataTypes,] = {
     "teamID": "",
-    "timeStamp": 0,
+    "timeStamp": "",
     "packetCount": 0,
     "altitude": 0,
     "pressure": 0,
     "temperature": 0,
     "voltage": 0,
-    "gnss": {"time": 0, "latitiude": 0, "longitude": 0, "altitude": 0, "sats": 0},
-    "orientation": {"x": 0, "y": 0, "z": 0},
-    "accel": {"x": 0, "y": 0, "z": 0},
+    "gnss_time": "",
+    "gnss_latitude": 0,
+    "gnss_longitude": 0,
+    "gnss_altitude": 0,
+    "gnss_sats": 0,
+    "orientation_x": 0,
+    "orientation_y": 0,
+    "orientation_z": 0,
+    "accel_x": 0,
+    "accel_y": 0,
+    "accel_z": 0,
     "softwareState": "BOOT",
     "gasConcn": 0,
 }
 
-serialReadData = ""
-
 
 def read_new_telemetry_data():
 
-    global serialReadData
     serialReadData = sumserial.readline().decode().removesuffix("\r\n")
+    new_data_read = len(serialReadData)
 
     (
         teleData["teamID"],
@@ -72,17 +87,17 @@ def read_new_telemetry_data():
         teleData["pressure"],
         teleData["temperature"],
         teleData["voltage"],
-        teleData["gnss"]["time"],
-        teleData["gnss"]["alt"],
-        teleData["gnss"]["lat"],
-        teleData["gnss"]["lng"],
-        teleData["gnss"]["sats"],
-        teleData["orientation"]["x"],
-        teleData["orientation"]["y"],
-        teleData["orientation"]["z"],
-        teleData["accel"]["x"],
-        teleData["accel"]["y"],
-        teleData["accel"]["z"],
+        teleData["gnss_time"],
+        teleData["gnss_alt"],
+        teleData["gnss_lat"],
+        teleData["gnss_lng"],
+        teleData["gnss_sats"],
+        teleData["orientation_x"],
+        teleData["orientation_y"],
+        teleData["orientation_z"],
+        teleData["accel_x"],
+        teleData["accel_y"],
+        teleData["accel_z"],
         teleData["softwareState"],
         teleData["gasConcn"],
     ) = serialReadData.split(",")
@@ -105,7 +120,7 @@ def get_baudrate():
 def send_command(command_str: str):
     command_status = {"status": "none", "message": "none"}
     try:
-        sumserial.write(command_str)
+        sumserial.write(command_str.encode())
 
         command_status = {"status": "success", "message": "command sent"}
     except OSError as err:
