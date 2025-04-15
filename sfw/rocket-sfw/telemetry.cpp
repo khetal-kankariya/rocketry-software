@@ -1,7 +1,5 @@
 #include "telemetry.h"
 
-#include <Arduino.h>
-
 telemetry_data_struct telemetry_data;
 String telemetry_string;
 
@@ -27,6 +25,28 @@ void make_telemetry_data() {
   telemetry_data.software_state = read_software_state();
   telemetry_data.gas_concentration = read_gas_concentration();
   telemetry_data.velocity = read_velocity();
+
+  // telemetry_data.teamID = "2024ASI-ROCKETRY-026";
+  // telemetry_data.time = "00:00:00";
+  // telemetry_data.packet_count = 0;
+  // telemetry_data.pressure = 0;
+  // telemetry_data.altitude = 0;
+  // telemetry_data.temperature = 0;
+  // telemetry_data.voltage = 0;
+  // telemetry_data.gnss_time = "00:00:00";
+  // telemetry_data.gnss_latitude = 0;
+  // telemetry_data.gnss_altitude = 0;
+  // telemetry_data.gnss_longitude = 0;
+  // telemetry_data.gnss_satellites = 0;
+  // telemetry_data.orientation_x = 0;
+  // telemetry_data.orientation_y = 0;
+  // telemetry_data.orientation_z = 0;
+  // telemetry_data.acceleration_x = 0;
+  // telemetry_data.acceleration_y = 0;
+  // telemetry_data.acceleration_z = 0;
+  // telemetry_data.software_state = "BOOT";
+  // telemetry_data.gas_concentration = 0;
+  // telemetry_data.velocity = 0;
 
   make_telemetry_data_string();
 }

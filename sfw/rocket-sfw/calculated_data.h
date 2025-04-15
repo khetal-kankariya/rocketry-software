@@ -1,10 +1,7 @@
 #ifndef CALCULATED_DATA_H
 #define CALCULATED_DATA_H
 
-#include <Arduino.h>
-
-#include "structs.h"
-#include "telemetry.h"
+#include "header.h"
 
 extern float velocity;
 

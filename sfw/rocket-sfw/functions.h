@@ -1,23 +1,20 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include "calculated_data.h"
-#include "previous_data.h"
-#include "telemetry.h"
-#include <Arduino.h>
+#include "header.h"
+#include <cmath>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-#define MICS_I2C_ADDRESS MICS_ADDRESS_0 // 0x75
 #define burnwire_pin 15
 #define buzzer_pin 5
 
 #include <Adafruit_AHTX0.h>
 #include <Adafruit_BMP3XX.h>
 #include <Adafruit_BNO055.h>
-#include <Adafruit_CCS811.h>
+// #include <Adafruit_CCS811.h>
 #include <Adafruit_Sensor.h>
 #include <INA226.h>
-#include <RTClib.h>
+// #include <RTClib.h>
 #include <SoftwareSerial.h>
 #include <TinyGPS++.h>
 #include <Wire.h>
@@ -28,7 +25,8 @@ extern Adafruit_BMP3XX bmp;
 extern Adafruit_BNO055 bno;
 extern TinyGPSPlus gps;
 extern SoftwareSerial gps_serial;
-extern RTC_DS3231 rtc;
+// extern RTC_DS3231 rtc;
+// Adafruit_CCS811 ccs;
 extern INA226 INA;
 extern SoftwareSerial openLog;
 
@@ -80,5 +78,9 @@ bool sfw2_ready();
 bool sfw3_ready();
 bool sfw4_ready();
 bool sfw6_ready();
+
+void start_telemetry();
+void stop_telemetry();
+bool telemetry_state();
 
 #endif

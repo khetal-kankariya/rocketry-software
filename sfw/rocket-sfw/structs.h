@@ -4,16 +4,6 @@
 #include <Arduino.h>
 
 typedef struct {
-  int ds3231 = 1;
-  int bmp390 = 1;
-  int aht21 = 1;
-  int mics = 1;
-  int l89 = 1;
-  int bno055 = 1;
-  int ina226 = 1;
-} sensor_status_struct;
-
-typedef struct {
   String teamID = "2024ASI-ROCKETRY-026";
   String time;
   int packet_count;

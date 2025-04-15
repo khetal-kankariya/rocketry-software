@@ -1,7 +1,9 @@
+#include <SoftwareSerial.h>
+#include <Arduino.h>
+
+#include "structs.h"
+#include "telemetry.h"
 #include "calculated_data.h"
-#include "data_manager.h"
 #include "functions.h"
 #include "previous_data.h"
 #include "softwarestates.h"
-#include "structs.h"
-#include "telemetry.h"
