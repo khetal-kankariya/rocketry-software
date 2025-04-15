@@ -1,11 +1,17 @@
 <script lang="ts">
 	import '@src/app.css';
 	import Button from '@src/lib/components/ui/button/button.svelte';
-	import { activeTab, GCS_started, server_connected } from '@src/store';
+	import { activeTab, GCS_started, server_connected, server_connecting } from '@src/store';
 	import Sidebar from '@src/lib/components/custom/sidebar/sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-	import { connect_socket, disconnect_socket, get_csv_data } from '@src/socket-interface';
+	import {
+		connect_socket,
+		disconnect_socket,
+		get_csv_data,
+		socket_init
+	} from '@src/socket-interface';
 	import { onMount } from 'svelte';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	let { children } = $props();
 
@@ -15,12 +21,18 @@
 	const disconnect_server = () => {
 		disconnect_socket();
 	};
+
 	onMount(() => {
 		$server_connected = Boolean(window.sessionStorage.getItem('server-connected'));
 
 		if ($server_connected) connect_server();
 	});
 </script>
+
+<svelte:head>
+	<title>ssss</title>
+	<link rel="icon" href="/logo_dyaus.png" />
+</svelte:head>
 
 <Toaster></Toaster>
 
@@ -48,21 +60,25 @@
 
 				<li class="ml-auto">
 					<span>Server: </span>
-					{#if !$server_connected}
-						<Button
-							onclick={connect_server}
-							variant="destructive"
-							class="w-40 text-sm hover:bg-red-800"
-						>
-							Not Connected
+					{#if $server_connecting}
+						<Button disabled>
+							<LoaderCircle class="animate-spin">In Process</LoaderCircle>
 						</Button>
-					{:else}
+					{:else if $server_connected}
 						<Button
 							onclick={disconnect_server}
 							variant="default"
 							class="w-40 bg-green-400 text-sm hover:bg-green-200"
 						>
 							Connected
+						</Button>
+					{:else}
+						<Button
+							onclick={connect_server}
+							variant="destructive"
+							class="w-40 text-sm hover:bg-red-800"
+						>
+							Not Connected
 						</Button>
 					{/if}
 				</li>

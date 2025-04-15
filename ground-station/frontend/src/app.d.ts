@@ -101,6 +101,8 @@ declare global {
 		| 'orientation_x'
 		| 'orientation_y'
 		| 'orientation_z';
+
+	export type Tcommand_from_gcs = null | 'telestart' | 'telestop' | 'calibrate';
 }
 
 export {};

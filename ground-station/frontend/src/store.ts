@@ -119,11 +119,6 @@ export const upTime = writable('00:00:00');
 export const telemetry_running = writable(false);
 export const sensors_calibrated = writable(false);
 
-export const ports: Writable<string[]> = writable([]);
-export const activePort: Writable<string> = writable('');
-export const baudRates: Writable<number[]> = writable([]);
-export const activeBaudRate: Writable<number> = writable();
-
 export const allGraphDatatypes: TgraphDatatype[] = [
 	'altitude',
 	'pressure',
@@ -165,4 +160,5 @@ export const simulation_mode = writable(true);
 export const travelled_coords: Writable<LatLngExpression[]> = writable([]);
 export const GCS_started = writable(false);
 export const server_connected = writable(false);
-export const last_command: Writable<null | 'telestart' | 'telestop' | 'calibrate'> = writable(null);
+export const server_connecting = writable(false);
+export const last_command: Writable<Tcommand_from_gcs> = writable(null);

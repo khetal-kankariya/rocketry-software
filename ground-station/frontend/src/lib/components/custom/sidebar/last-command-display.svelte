@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { activeBaudRate, activePort, last_command } from '@src/store';
+	import { last_command } from '@src/store';
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { onMount } from 'svelte';
