@@ -5,7 +5,13 @@
 go into this dir and upload code to the rp2040zero
 
 ```zsh
-cd rocketry_flight_sfw
+cd sfw
+```
+```zsh
+cd rocket-sfw #for rocket flight software
+```
+```zsh
+cd payload-sfw #for payload flight software
 ```
 
 ### Installing
@@ -14,35 +20,41 @@ cd rocketry_flight_sfw
 
 ### Frontend
 
-```zsh
-cd rocketry-ui/frontend
-```
-
 #### Installing javascript dependencies
 
-bun is preferred
+Step 1. Install Nodejs from https://nodejs.org/en
 
+Step 2. 
 ```zsh
-#bun
-bun install
+cd gcs/frontened
 
-#pnpm
-pnpm install
-
-#npm
 npm install
-```
-
-##### Installing bun
-
-```zsh
-powershell -c "irm bun.sh/install.ps1|iex"
 ```
 
 ### Backend
 
 ```zsh
-cd rocketry-ui/backend
+cd gcs/backend
+```
+
+### Setup virtual environment
+
+```zsh
+python -m venv .venv
+```
+
+### Activating virtual environment
+
+For Windows:
+
+```zsh
+.venv\Scripts\Activate
+```
+
+For Linux/WSL:
+
+```zsh
+source venv/bin/activate
 ```
 
 #### Installing python dependencies
