@@ -1,11 +1,12 @@
 #ifndef SOFTWARESTATES_H
 #define SOFTWARESTATES_H
 
-#include <Arduino.h>
+#include "header.h"
 
 extern String software_state_string;
 extern int software_state_num;
 
+void software_state_manager();
 String state_numToString(int num);
 int state_stringToNum(String str);
 String get_software_state_string();

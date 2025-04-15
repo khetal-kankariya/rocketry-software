@@ -1,9 +1,7 @@
 #ifndef PREVIOUS_DATA_H
 #define PREVIOUS_DATA_H
 
-#include <Arduino.h>
-
-#include "telemetry.h"
+#include "header.h"
 
 extern telemetry_data_struct prev_telemetry_data;
 
