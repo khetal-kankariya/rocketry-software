@@ -1,0 +1,945 @@
+[
+    {
+        "label": "serial",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "serial",
+        "description": "serial",
+        "detail": "serial",
+        "documentation": {}
+    },
+    {
+        "label": "serial.serialutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "serial.serialutil",
+        "description": "serial.serialutil",
+        "detail": "serial.serialutil",
+        "documentation": {}
+    },
+    {
+        "label": "csv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "csv",
+        "description": "csv",
+        "detail": "csv",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "serial.tools.list_ports",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "serial.tools.list_ports",
+        "description": "serial.tools.list_ports",
+        "detail": "serial.tools.list_ports",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "SocketIO",
+        "importPath": "flask_socketio",
+        "description": "flask_socketio",
+        "isExtraImport": true,
+        "detail": "flask_socketio",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "boardconnector",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "boardconnector",
+        "description": "boardconnector",
+        "detail": "boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "sim_mode",
+        "importPath": "boardconnector",
+        "description": "boardconnector",
+        "isExtraImport": true,
+        "detail": "boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "teleDataTypes",
+        "importPath": "boardconnector",
+        "description": "boardconnector",
+        "isExtraImport": true,
+        "detail": "boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "importPath": "flatted",
+        "description": "flatted",
+        "isExtraImport": true,
+        "detail": "flatted",
+        "documentation": {}
+    },
+    {
+        "label": "teleDataTypes",
+        "kind": 6,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "class teleDataTypes:\n    [\n        \"teamID\",\n        \"timeStamp\",\n        \"packet_count\",\n        \"altitude\",\n        \"pressure\",\n        \"temperature\",\n        \"voltage\",\n        \"gnss_time\",",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "read_new_telemetry_data",
+        "kind": 2,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "def read_new_telemetry_data():\n    try:\n        serialReadData = rocket_serial.readline().decode().removesuffix(\"\\r\\n\")\n        new_data_read = len(serialReadData)\n        (\n            teleData[\"teamID\"],\n            teleData[\"timeStamp\"],\n            teleData[\"packetCount\"],\n            teleData[\"altitude\"],\n            teleData[\"pressure\"],",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "send_command",
+        "kind": 2,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "def send_command(command_str: str):\n    command_status = {\"status\": \"none\", \"message\": \"none\"}\n    try:\n        rocket_serial.write(command_str.encode())\n        command_status = {\"status\": \"success\", \"message\": \"command sent\"}\n    except OSError as err:\n        print(err)\n        command_status = {\"status\": \"error\", \"message\": err}\n    return command_status",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "sim_mode",
+        "kind": 5,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "sim_mode = False\nrocket_serial = serial.Serial()\npayload_serial = serial.Serial()\ntry:\n    rocket_serial = serial.Serial(port=\"COM13\", baudrate=115200)\n    payload_serial = serial.Serial(port=\"COM13\", baudrate=115200)\nexcept Exception as err:\n    sim_mode = True\nteleFormat = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>,\"",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "rocket_serial",
+        "kind": 5,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "rocket_serial = serial.Serial()\npayload_serial = serial.Serial()\ntry:\n    rocket_serial = serial.Serial(port=\"COM13\", baudrate=115200)\n    payload_serial = serial.Serial(port=\"COM13\", baudrate=115200)\nexcept Exception as err:\n    sim_mode = True\nteleFormat = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>,\"\n    \" <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, \"",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "payload_serial",
+        "kind": 5,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "payload_serial = serial.Serial()\ntry:\n    rocket_serial = serial.Serial(port=\"COM13\", baudrate=115200)\n    payload_serial = serial.Serial(port=\"COM13\", baudrate=115200)\nexcept Exception as err:\n    sim_mode = True\nteleFormat = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>,\"\n    \" <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, \"\n    \"<GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, \"",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "teleFormat",
+        "kind": 5,
+        "importPath": "backend.boardconnector",
+        "description": "backend.boardconnector",
+        "peekOfCode": "teleFormat = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>,\"\n    \" <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, \"\n    \"<GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <GYRO SPIN RATE>, \"\n    \"<FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>\"\n)\nclass teleDataTypes:\n    [\n        \"teamID\",\n        \"timeStamp\",",
+        "detail": "backend.boardconnector",
+        "documentation": {}
+    },
+    {
+        "label": "OrientationDisplayWidget",
+        "kind": 6,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "class OrientationDisplayWidget(QWidget):\n    def __init__(self, parent=None):\n        super(OrientationDisplayWidget, self).__init__(parent)\n        # Create a VTK widget\n        self.vtk_widget = QVTKRenderWindowInteractor(self)\n        self.setLayout(QVBoxLayout())  # Set layout for the widget\n        self.layout().addWidget(self.vtk_widget)\n        # Create a renderer, render window, and interactor\n        self.renderer = vtk.vtkRenderer()\n        self.render_window = self.vtk_widget.GetRenderWindow()",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "GuiWindow",
+        "kind": 6,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "class GuiWindow(QMainWindow):\n    map_threshold = 5\n    map_threshold_time = 0\n    def __init__(self):\n        QMainWindow.__init__(self)\n        self.Map_File_Watcher = self.CSV_File_Watcher = self.timer = self.ser = (\n            self.CsvData\n        ) = self.table = self.CsvHeader = self.progress_calculation = None\n        check_directory()\n        self.progress_state = 0",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "Communication",
+        "kind": 6,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "class Communication:\n    dummy_Mode = False\n    ser = serial.Serial()\n    def __init__(self, portname, baudrate=9600):\n        self.stateName = \"IDLE\"\n        self.baudrate = baudrate\n        self.portname = portname\n        if self.portname in [\"Dummy Port 1\", \"Dummy Port 2\", \"Dummy Port 3\"]:\n            self.dummyPlug = True\n        else:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "check_directory",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def check_directory():\n    if not os.path.exists(\"Flight_050_Data_Files\"):\n        try:\n            os.mkdir(\"Flight_050_Data_Files\")\n        except Exception as e:\n            print(e)\n            print(\"--->  Error creating directory while initializing gui.\")\n    if not os.path.exists(\"Flight_050_Data_Files/flight_050.csv\"):\n        try:\n            with open(\"Flight_050_Data_Files/flight_050.csv\", \"w\") as csv_file:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "writeCsv",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def writeCsv(data, filename=\"Flight_050_Data_Files/flight_050.csv\"):\n    try:\n        with open(filename, \"a\", newline=\"\") as f:\n            writer = csv.writer(f, delimiter=\",\")\n            writer.writerow(data)\n    except Exception as e:\n        print(e)\n        print(\"----> Error Writing data into csv.\")\ndef availablePorts():\n    return [\"Dummy Port 1\", \"Dummy Port 2\", \"Dummy Port 3\"]",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "availablePorts",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def availablePorts():\n    return [\"Dummy Port 1\", \"Dummy Port 2\", \"Dummy Port 3\"]\ndef backup_html():\n    file_path = Path(\"Flight_050_Data_Files/flight_050.html\")\n    if not file_path.exists():\n        print(\"File does not exist. Skipping backup.\")\n        return\n    backup_folder = Path(\"Flight_050_Data_Files/Backup HTMl Files\")\n    if not backup_folder.exists():\n        try:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "backup_html",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def backup_html():\n    file_path = Path(\"Flight_050_Data_Files/flight_050.html\")\n    if not file_path.exists():\n        print(\"File does not exist. Skipping backup.\")\n        return\n    backup_folder = Path(\"Flight_050_Data_Files/Backup HTMl Files\")\n    if not backup_folder.exists():\n        try:\n            backup_folder.mkdir(parents=True)\n        except Exception as e:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "backup_csv",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def backup_csv():\n    file_path = Path(\"Flight_050_Data_Files/flight_050.csv\")\n    if not file_path.exists():\n        print(\"File does not exist. Skipping backup.\")\n        return\n    backup_folder = Path(\"Flight_050_Data_Files/Backup CSV Files\")\n    if not backup_folder.exists():\n        try:\n            backup_folder.mkdir(parents=True)\n        except Exception as e:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "readCsv",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def readCsv():\n    try:\n        with open(\"Flight_050_Data_Files/flight_050.csv\", \"r\", newline=\"\") as f:\n            reader = csv.reader(f)\n            last_row = None\n            for row in reader:\n                last_row = row\n            if last_row is not None:\n                return last_row\n    except Exception as e:",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "updateMapPoints",
+        "kind": 2,
+        "importPath": "backend.jayd_cansat",
+        "description": "backend.jayd_cansat",
+        "peekOfCode": "def updateMapPoints(points):\n    MAP_TILE_URL = \"MAPBOX_TILE_URL or OPENMAP_TILE_URL\"\n    map_data = folium.Map(\n        tiles=MAP_TILE_URL,\n        zoom_start=19,\n        location=points[-1],\n        attr=\" \",\n        max_zoom=100,\n    )\n    folium.PolyLine(points, color=\"blue\", weight=2.5, opacity=1).add_to(map_data)",
+        "detail": "backend.jayd_cansat",
+        "documentation": {}
+    },
+    {
+        "label": "new_telemetry_data",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def new_telemetry_data():\n    if telemetry_running:\n        global prevdata\n        if sim_mode:\n            newdata = random_telemetry_data()\n            newdata[\"velocity\"] = newdata[\"altitude\"] - prevdata[\"altitude\"]\n        else:\n            newdata = boardconnector.read_new_telemetry_data()\n        prevdata = newdata\n        global all_previous_data",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "random_telemetry_data",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def random_telemetry_data():\n    newdata = {\n        \"teamID\": \"2024-ASI-ROCKETRY-026\",\n        \"timeStamp\": 0,\n        \"packetCount\": (\n            prevdata[\"packetCount\"] + 1 if prevdata[\"packetCount\"] < 255 else 0\n        ),\n        \"altitude\": int(random.random() * 51),\n        \"pressure\": int(random.random() * 51),\n        \"temperature\": int(random.random() * 51),",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "send_telemetry_data",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def send_telemetry_data():\n    while True:\n        new_data = new_telemetry_data()\n        if telemetry_running:\n            socketio.emit(\"datasent\", new_data, callback=datasent_callback)\n        time.sleep(1)\ndef datasent_callback():\n    print(\"data sent!\")\n# WRITING CSV DATA\ndef write_csv_data(data: dict[str, any]):",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "datasent_callback",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def datasent_callback():\n    print(\"data sent!\")\n# WRITING CSV DATA\ndef write_csv_data(data: dict[str, any]):\n    csv_write_file = open(\n        newline=\"\\n\", file=\"../files/2024ASI-ROCKETRY-026.csv\", mode=\"a+\"\n    )\n    csv_write_file.write(\n        f\"{newdata['teamID']},\"\n        f\"{newdata['timeStamp']},\"",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "write_csv_data",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def write_csv_data(data: dict[str, any]):\n    csv_write_file = open(\n        newline=\"\\n\", file=\"../files/2024ASI-ROCKETRY-026.csv\", mode=\"a+\"\n    )\n    csv_write_file.write(\n        f\"{newdata['teamID']},\"\n        f\"{newdata['timeStamp']},\"\n        f\"{newdata['packetCount']},\"\n        f\"{newdata['softwareState']},\"\n        f\"{newdata['altitude']},\"",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_csv_data",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_csv_data():\n    csv_readdata = []\n    csv_read_file = open(\n        newline=\"\\n\", file=\"../files/2024ASI-ROCKETRY-026.csv\", mode=\"r\"\n    )\n    for line in csv.reader(csv_read_file):\n        csv_readdata.append(line)\n    return {\"data\": csv_readdata}\n@socketio.on(\"get-all-prevdata\")\ndef get_all_prevdata():",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_all_prevdata",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_all_prevdata():\n    global all_previous_data\n    return {\"data\": all_previous_data}\n@socketio.on(\"get-startupdata\")\ndef get_startupdata():\n    return {\n        \"startupdata\": {\n            \"startTime\": int(starttime),\n        },\n    }",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_startupdata",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_startupdata():\n    return {\n        \"startupdata\": {\n            \"startTime\": int(starttime),\n        },\n    }\n@socketio.on(\"toggle-telemetry\")\ndef toggle_telemetry(telemetry_state: bool):\n    command_status = {\n        \"status\": \"yet to send\",",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "toggle_telemetry",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def toggle_telemetry(telemetry_state: bool):\n    command_status = {\n        \"status\": \"yet to send\",\n        \"telemetry_running\": False,\n        \"message\": \"none\",\n    }\n    global telemetry_running\n    if telemetry_state == False:\n        telemetry_running = True\n        commandsend_status = send_command(\"telestart\")",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_telemetry_state",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_telemetry_state():\n    global telemetry_running\n    return telemetry_running\n@socketio.on(\"get-calibration-state\")\ndef get_calibration_state():\n    global calibration_done\n    return calibration_done\n@socketio.on(\"get-mission-progress\")\ndef get_mission_progress():\n    return mission_progress",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_calibration_state",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_calibration_state():\n    global calibration_done\n    return calibration_done\n@socketio.on(\"get-mission-progress\")\ndef get_mission_progress():\n    return mission_progress\n@socketio.on(\"calibrate-sensors\")\ndef calibrate_sensors():\n    calistart_status = {\"status\": \"yet to send\", \"message\": \"none\"}\n    calibration_status = {",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_mission_progress",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def get_mission_progress():\n    return mission_progress\n@socketio.on(\"calibrate-sensors\")\ndef calibrate_sensors():\n    calistart_status = {\"status\": \"yet to send\", \"message\": \"none\"}\n    calibration_status = {\n        \"status\": \"not calibrated\",\n        \"message\": \"calibration command yet not sent\",\n    }\n    commandsend_status = send_command(\"calibrate\")",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "calibrate_sensors",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def calibrate_sensors():\n    calistart_status = {\"status\": \"yet to send\", \"message\": \"none\"}\n    calibration_status = {\n        \"status\": \"not calibrated\",\n        \"message\": \"calibration command yet not sent\",\n    }\n    commandsend_status = send_command(\"calibrate\")\n    if commandsend_status[\"status\"] != \"success\":\n        calistart_status = {\n            \"status\": \"failure\",",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "send_command",
+        "kind": 2,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "def send_command(command_str: str):\n    if sim_mode:\n        command_status = {\"status\": \"success\", \"message\": \"command sent\"}\n    else:\n        command_status = boardconnector.send_command(command_str)\n    return command_status\nif __name__ == \"__main__\":\n    logging.log(logging.INFO, \"Server started\")\n    socketio.run(app, port=5000)",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "app = Flask(__name__)\nsocketio = SocketIO(app, cors_allowed_origins=\"*\")\nCORS(app)\nlogging.basicConfig(\n    filename=\"server-log.log\",\n    encoding=\"utf-8\",\n    filemode=\"a\",\n    format=\"{asctime} - {levelname} - {message}\",\n    style=\"{\",\n    datefmt=\"%Y-%m-%d %H:%M\",",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "socketio",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "socketio = SocketIO(app, cors_allowed_origins=\"*\")\nCORS(app)\nlogging.basicConfig(\n    filename=\"server-log.log\",\n    encoding=\"utf-8\",\n    filemode=\"a\",\n    format=\"{asctime} - {levelname} - {message}\",\n    style=\"{\",\n    datefmt=\"%Y-%m-%d %H:%M\",\n)",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "starttime",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "starttime = time.time()\nprevdata = {\n    \"teamID\": \"2024-ASI-ROCKETRY-026\",\n    \"timeStamp\": 0,\n    \"packetCount\": 0,\n    \"altitude\": 0,\n    \"pressure\": 0,\n    \"temperature\": 0,\n    \"voltage\": 0,\n    \"gnss_time\": 0,",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "prevdata",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "prevdata = {\n    \"teamID\": \"2024-ASI-ROCKETRY-026\",\n    \"timeStamp\": 0,\n    \"packetCount\": 0,\n    \"altitude\": 0,\n    \"pressure\": 0,\n    \"temperature\": 0,\n    \"voltage\": 0,\n    \"gnss_time\": 0,\n    \"gnss_latitude\": 0,",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "newdata",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "newdata = prevdata\nall_previous_data = []\ncsv_write_format = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>,\"\n    \"<PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>,\"\n    \"<GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>,\"\n    \"<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>\"\n)\ntelemetry_running = False\ncalibration_done = False",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "all_previous_data",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "all_previous_data = []\ncsv_write_format = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>,\"\n    \"<PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>,\"\n    \"<GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>,\"\n    \"<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>\"\n)\ntelemetry_running = False\ncalibration_done = False\nmission_progress = 0",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "csv_write_format",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "csv_write_format = (\n    \"<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>,\"\n    \"<PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>,\"\n    \"<GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>,\"\n    \"<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>\"\n)\ntelemetry_running = False\ncalibration_done = False\nmission_progress = 0\nsensor_status = {",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "telemetry_running",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "telemetry_running = False\ncalibration_done = False\nmission_progress = 0\nsensor_status = {\n    \"rtc\": True,\n    \"gnss\": True,\n    \"imu\": True,\n    \"gas\": True,\n    \"pressure\": True,\n    \"logger\": True,",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "calibration_done",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "calibration_done = False\nmission_progress = 0\nsensor_status = {\n    \"rtc\": True,\n    \"gnss\": True,\n    \"imu\": True,\n    \"gas\": True,\n    \"pressure\": True,\n    \"logger\": True,\n    \"temp_humid\": True,",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "mission_progress",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "mission_progress = 0\nsensor_status = {\n    \"rtc\": True,\n    \"gnss\": True,\n    \"imu\": True,\n    \"gas\": True,\n    \"pressure\": True,\n    \"logger\": True,\n    \"temp_humid\": True,\n    \"voltage\": True,",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "sensor_status",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "sensor_status = {\n    \"rtc\": True,\n    \"gnss\": True,\n    \"imu\": True,\n    \"gas\": True,\n    \"pressure\": True,\n    \"logger\": True,\n    \"temp_humid\": True,\n    \"voltage\": True,\n}",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "sensor_field",
+        "kind": 5,
+        "importPath": "backend.server",
+        "description": "backend.server",
+        "peekOfCode": "sensor_field = {\n    \"rtc\": \"timeStamp\",\n    \"gnss\": \"gnss\",\n    \"imu\": \"orientation\",\n    \"gas\": \"gasConcn\",\n    \"pressure\": \"pressure\",\n    \"logger\": None,\n    \"temp_humid\": \"temperature\",\n    \"voltage\": \"voltage\",\n}",
+        "detail": "backend.server",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0\n    for _ in value:\n        keys.append(i)\n        i += 1\n    return keys",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "def stringify(value):\n    return _stringify(value, separators=(',', ':'))\nassert stringify([None, None]) == '[[null,null]]'\na = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "a = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['o']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "b",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "b = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['one']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['two']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['three']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['a']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['test']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['array']",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a2",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "a2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o2",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "str",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "str = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "oo",
+        "kind": 5,
+        "importPath": "frontend.node_modules.flatted.python.test",
+        "description": "frontend.node_modules.flatted.python.test",
+        "peekOfCode": "oo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "payload-frontend.node_modules.flatted.python.flatted",
+        "description": "payload-frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0",
+        "detail": "payload-frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "payload-frontend.node_modules.flatted.python.flatted",
+        "description": "payload-frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0\n    for _ in value:\n        keys.append(i)\n        i += 1\n    return keys",
+        "detail": "payload-frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "payload-frontend.node_modules.flatted.python.flatted",
+        "description": "payload-frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "payload-frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "payload-frontend.node_modules.flatted.python.flatted",
+        "description": "payload-frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "payload-frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "def stringify(value):\n    return _stringify(value, separators=(',', ':'))\nassert stringify([None, None]) == '[[null,null]]'\na = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "a = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['o']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "b",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "b = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['one']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['two']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['three']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['a']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['test']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o['array']",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "a2",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "a2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "o2",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "o2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "str",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "str = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    },
+    {
+        "label": "oo",
+        "kind": 5,
+        "importPath": "payload-frontend.node_modules.flatted.python.test",
+        "description": "payload-frontend.node_modules.flatted.python.test",
+        "peekOfCode": "oo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
+        "detail": "payload-frontend.node_modules.flatted.python.test",
+        "documentation": {}
+    }
+]

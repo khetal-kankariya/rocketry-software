@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { data }: { data: TtelemetryData } = $props();
+	let { data }: { data: TrocketData } = $props();
 </script>
 
 <tr>

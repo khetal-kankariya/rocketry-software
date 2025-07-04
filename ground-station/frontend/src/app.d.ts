@@ -11,7 +11,9 @@ declare global {
 		selectedBaudRate: number;
 	};
 
-	export type TtelemetryDataField =
+	export type TdataField = TrocketField | TpayloadField;
+
+	export type TrocketField =
 		| 'teamID'
 		| 'timeStamp'
 		| 'packetCount'
@@ -19,20 +21,21 @@ declare global {
 		| 'pressure'
 		| 'temperature'
 		| 'voltage'
-		| 'gnss_time'
-		| 'gnss_latitude'
-		| 'gnss_longitude'
-		| 'gnss_altitude'
-		| 'gnss_sats'
-		| 'orientation_x'
-		| 'orientation_y'
-		| 'orientation_z'
-		| 'accel_x'
-		| 'accel_y'
-		| 'accel_z'
+		| TgnssParams
+		| TmultiAxisDatatypes
 		| 'softwareState'
 		| 'gasConcn'
 		| 'velocity';
+
+	export type TpayloadField =
+		| 'teamID'
+		| 'packetCount'
+		| 'altitude'
+		| 'pressure'
+		| 'temperature'
+		| TmultiAxisDatatypes
+		| 'velocity'
+		| 'gasConcn';
 
 	export type TgnssParams =
 		| 'gnss_time'
@@ -41,15 +44,14 @@ declare global {
 		| 'gnss_altitude'
 		| 'gnss_sats';
 
-	export type TmultiAxisDatatypes = (
+	export type TmultiAxisDatatypes =
 		| 'orientation_x'
 		| 'orientation_y'
 		| 'orientation_z'
 		| 'accel_x'
 		| 'accel_y'
-		| 'accel_z'
-	) &
-		Partial<TtelemetryDataField>;
+		| 'accel_z';
+
 	export type TmultiAxisParams = 'orientation' | 'accel';
 
 	export type TtabName = 'Overview' | 'Graphs' | 'CSV';
@@ -63,7 +65,7 @@ declare global {
 		| 'DESCENT'
 		| 'IMPACT';
 
-	export type TtelemetryData = {
+	export type TrocketData = {
 		teamID: string;
 		timeStamp: string;
 		packetCount: number;
@@ -83,17 +85,46 @@ declare global {
 		accel_y: number;
 		accel_z: number;
 		softwareState: TsoftwareState;
-		velocity: number;
 		gasConcn: number;
+		velocity: number;
 	};
 
-	export type TgraphDatatype =
+	export type TpayloadData = {
+		teamID: string;
+		packetCount: number;
+		altitude: number;
+		pressure: number;
+		temperature: number;
+		orientation_x: number;
+		orientation_y: number;
+		orientation_z: number;
+		accel_x: number;
+		accel_y: number;
+		accel_z: number;
+		gasConcn: number;
+		velocity: number;
+	};
+
+	export type TrocketGraphField =
 		| 'altitude'
 		| 'pressure'
 		| 'temperature'
 		| 'voltage'
 		| 'gasConcn'
 		| 'gnss_altitude'
+		| 'velocity'
+		| 'accel_x'
+		| 'accel_y'
+		| 'accel_z'
+		| 'orientation_x'
+		| 'orientation_y'
+		| 'orientation_z';
+
+	export type TpayloadGraphField =
+		| 'altitude'
+		| 'pressure'
+		| 'temperature'
+		| 'gasConcn'
 		| 'velocity'
 		| 'accel_x'
 		| 'accel_y'

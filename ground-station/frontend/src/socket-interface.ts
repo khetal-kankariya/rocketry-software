@@ -3,11 +3,12 @@ import {
 	initTime,
 	last_command,
 	missionProgress,
-	readData,
+	rocketData,
 	sensors_calibrated,
 	server_connected,
 	server_connecting,
-	storecsvdata,
+	server_disconnecting,
+	csvdata,
 	telemetry_running,
 	travelled_coords
 } from './store';
@@ -23,22 +24,27 @@ const socket = io('http://localhost:5000', {
 	autoConnect: false
 });
 
-export const socket_init = () => {
-	console.log(socket);
-};
-
 export const connect_socket = () => {
 	socket.connect();
 
 	let i = 0;
 	while (i++ < 500 && !socket.connected) server_connecting.set(true);
+	if (socket.connected) {
+		server_connected.set(true);
+		server_connecting.set(false);
+	}
 };
 
 export const disconnect_socket = () => {
+	toggle_telemetry(true);
 	socket.disconnect();
 
 	let i = 0;
-	while (i++ < 500 && !socket.disconnected) server_connecting.set(true);
+	while (i++ < 500 && !socket.disconnected) server_disconnecting.set(true);
+	if (socket.disconnected) {
+		server_connected.set(false);
+		server_disconnecting.set(false);
+	}
 };
 
 /**
@@ -48,27 +54,24 @@ export const disconnect_socket = () => {
  * - Listens for the `connect_error` event to invoke the `server_disconnected_fn` callback when there is a connection error.
  * - Listens for the `disconnect` event to invoke the `server_disconnected_fn` callback when the server is disconnected.
  */
-const socket_status_fn = () => {
-	socket.on('connect', () => {
-		server_connected_fn();
-	});
-	socket.on('connect_error', () => {
-		server_disconnected_fn();
-	});
-	socket.on('disconnect', () => {
-		server_disconnected_fn();
-	});
-};
-socket_status_fn();
+socket.on('connect', () => {
+	server_connected_fn('Server Connected!');
+});
+socket.on('connect_error', () => {
+	server_disconnected_fn('Server disconnected!');
+});
+socket.on('disconnect', () => {
+	server_disconnected_fn('Server disconnected!');
+});
 
-const server_connected_toast = () => {
-	toast.success('Server Connected!', {
+const server_connected_toast = (message: string) => {
+	toast.success(message, {
 		duration: 1500
 	});
 };
 
-const server_disconnected_toast = () => {
-	toast.error('Server disconnected!', {
+const server_disconnected_toast = (message: string) => {
+	toast.error(message, {
 		duration: 1500
 	});
 };
@@ -82,7 +85,7 @@ const server_disconnected_toast = () => {
  * - Stores the server connection status in the session storage for persistence.
  * - Displays a toast notification to inform the user about the successful connection.
  */
-const server_connected_fn = () => {
+const server_connected_fn = (message: string) => {
 	server_connected.set(true);
 	server_connecting.set(false);
 
@@ -91,7 +94,7 @@ const server_connected_fn = () => {
 
 	window.sessionStorage.setItem('server-connected', 'true');
 
-	server_connected_toast();
+	server_connected_toast(message);
 };
 
 /**
@@ -101,13 +104,13 @@ const server_connected_fn = () => {
  * - Updates the `server-connected` key in `window.sessionStorage` to `'false'` for persistence across page reloads.
  * - Invokes the `server_disconnected_toast` function to notify the user about the disconnection.
  */
-const server_disconnected_fn = () => {
+const server_disconnected_fn = (message: string) => {
 	server_connected.set(false);
 	server_connecting.set(false);
 
 	window.sessionStorage.setItem('server-connected', 'false');
 
-	server_disconnected_toast();
+	server_disconnected_toast(message);
 };
 
 const get_telemetry_status = () => {
@@ -162,8 +165,8 @@ export const save_startupdata = () => {
  *   of the telemetry data.
  */
 const get_data = () => {
-	socket.on('datasent', (newData: TtelemetryData) => {
-		readData.update((prevData) => {
+	socket.on('datasent', (newData: TrocketData) => {
+		rocketData.update((prevData) => {
 			if (prevData.packetCount == newData.packetCount) {
 				return prevData;
 			} else {
@@ -195,10 +198,10 @@ const add_coords = (coord: LatLngExpression) => {
  * representing the CSV data. The received data is then stored in a reactive store (`storecsvdata`).
  */
 export const get_csv_data = () => {
-	socket.emit('get-csv-data', (csvdata: { data: string[] }) => {
-		const scsvdata = csvdata.data;
+	socket.emit('get-csv-data', (xcsvdata: { data: string[] }) => {
+		const scsvdata = xcsvdata.data;
 
-		storecsvdata.set(scsvdata);
+		csvdata.set(scsvdata);
 	});
 };
 
@@ -207,47 +210,52 @@ const update_last_command = (command_string: Tcommand_from_gcs) => {
 	window.sessionStorage.setItem('last-command', command_string || '');
 };
 
-const command_toast_success = (command_string: Tcommand_from_gcs) => {
-	const toast_text =
-		command_string == 'telestart'
-			? 'Telemetry Started'
-			: command_string == 'telestop'
-				? 'Telemetry Stopped'
-				: command_string == 'calibrate'
-					? 'Sensors Calibrated'
-					: '';
-	toast.success(toast_text, {
+const toast_success = (message: string) => {
+	toast.success(message, {
 		duration: 1500
 	});
 };
 
-const command_toast_failure = (command_string: Tcommand_from_gcs) => {
-	const toast_text =
-		command_string == 'telestart'
-			? 'Could not start Telemetry '
-			: command_string == 'telestop'
-				? 'Could not stop Telemetry'
-				: command_string == 'calibrate'
-					? 'Could not calibrate Sensors'
-					: '';
-	toast.error(toast_text, {
+const toast_failure = (message: string) => {
+	toast.error(message, {
 		duration: 1500
 	});
 };
 
-export const toggle_telemetry = (pres_telemetry_running: boolean) => {
-	let response: boolean = false;
-	socket.emit('toggle-telemetry', pres_telemetry_running, (res: boolean) => {
-		telemetry_running.set(res);
-		response = res;
-		if (res) {
-			update_last_command('telestart');
+export const toggle_telemetry = async (pres_telemetry_running: boolean) => {
+	if (server_connected_local) {
+		type response = {
+			status: 'success' | 'failure';
+			telemetry_running: boolean;
+			message: string;
+		};
+
+		const toggle_status: response = await new Promise((resolve) => {
+			socket.emit('toggle-telemetry', pres_telemetry_running, (res: response) => {
+				resolve(res);
+			});
+		});
+
+		if (toggle_status.status == 'success') {
+			if (toggle_status.telemetry_running) {
+				toast_success('Telemetry Started');
+				update_last_command('telestart');
+			} else {
+				toast_success('Telemetry Stopped');
+				update_last_command('telestop');
+			}
+			telemetry_running.set(toggle_status.telemetry_running);
 		} else {
-			update_last_command('telestop');
+			if (toggle_status.telemetry_running) {
+				toast_failure('Could not stop Telemetry');
+				update_last_command('telestop');
+			} else {
+				toast_failure('Could not start Telemetry');
+				update_last_command('telestart');
+			}
+			telemetry_running.set(toggle_status.telemetry_running);
 		}
-	});
-
-	return response;
+	} else server_disconnected_fn('Server Disconnected!');
 };
 
 export const calibrate_sensors = async () => {
@@ -262,19 +270,17 @@ export const calibrate_sensors = async () => {
 		if (calibration_status.status == 'success') {
 			sensors_calibrated.set(true);
 
-			command_toast_success('calibrate');
+			toast_success('Sensors Calibrated');
 
 			response = true;
 		} else {
 			sensors_calibrated.set(false);
 
-			command_toast_failure('calibrate');
+			toast_failure('Could not calibrate Sensors');
 
 			response = false;
 		}
-	} else {
-		server_disconnected_fn();
-	}
+	} else server_disconnected_fn('Server disconnected!');
 
 	return response;
 };
