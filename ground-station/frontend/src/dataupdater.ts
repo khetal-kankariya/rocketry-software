@@ -1,15 +1,23 @@
-import { onMount } from 'svelte';
-import { allGraphPastDatas, initTime, nowTime, readData, timeElapsed, upTime } from './store';
+import {
+	rocketPastDatas,
+	initTime,
+	nowTime,
+	rocketData,
+	timeElapsed,
+	upTime,
+	payloadPastDatas,
+	payloadData
+} from './store';
 
-// Updating data derived from readData
-readData.subscribe((presentData) => {
+// Updating data derived from rocketData
+rocketData.subscribe((presentData) => {
 	// Setting time elapsed
 	timeElapsed.set(presentData.timeStamp);
 
-	window.sessionStorage.setItem('latest-data', JSON.stringify(presentData));
+	window.sessionStorage.setItem('latest-rocket-data', JSON.stringify(presentData));
 
 	// updating graph data array
-	allGraphPastDatas.update((val) => {
+	rocketPastDatas.update((val) => {
 		if (val.accel_x.length == 180) val.accel_x.pop();
 		if (val.accel_y.length == 180) val.accel_x.pop();
 		if (val.accel_z.length == 180) val.accel_z.pop();
@@ -43,6 +51,42 @@ readData.subscribe((presentData) => {
 	});
 });
 
+// Updating data derived from payloadData
+payloadData.subscribe((presentData) => {
+	window.sessionStorage.setItem('latest-payload-data', JSON.stringify(presentData));
+
+	// updating graph data array
+	payloadPastDatas.update((val) => {
+		if (val.accel_x.length == 180) val.accel_x.pop();
+		if (val.accel_y.length == 180) val.accel_x.pop();
+		if (val.accel_z.length == 180) val.accel_z.pop();
+		if (val.altitude.length == 180) val.altitude.pop();
+		if (val.pressure.length == 180) val.pressure.pop();
+		if (val.temperature.length == 180) val.temperature.pop();
+		if (val.gasConcn.length == 180) val.gasConcn.pop();
+		if (val.velocity.length == 180) val.velocity.pop();
+		if (val.orientation_x.length == 180) val.orientation_x.pop();
+		if (val.orientation_y.length == 180) val.orientation_y.pop();
+		if (val.orientation_z.length == 180) val.orientation_z.pop();
+
+		const newVal = {
+			altitude: [presentData.altitude, ...val.altitude],
+			pressure: [presentData.pressure, ...val.pressure],
+			temperature: [presentData.temperature, ...val.temperature],
+			gasConcn: [presentData.gasConcn, ...val.gasConcn],
+			velocity: [presentData.velocity, ...val.velocity],
+			accel_x: [presentData.accel_x, ...val.accel_x],
+			accel_y: [presentData.accel_y, ...val.accel_y],
+			accel_z: [presentData.accel_z, ...val.accel_z],
+			orientation_x: [presentData.orientation_x, ...val.orientation_x],
+			orientation_y: [presentData.orientation_y, ...val.orientation_y],
+			orientation_z: [presentData.orientation_z, ...val.orientation_z]
+		};
+		return newVal;
+	});
+});
+
+initTime.set(Math.floor(Date.now()));
 setInterval(() => {
 	nowTime.set(Math.floor(Date.now()));
 }, 1000);
@@ -52,11 +96,14 @@ initTime.subscribe((initVal) => {
 		let uptime = Math.floor(val - initVal);
 
 		// Setting time elapsed
-		let hoursElapsed = Math.floor(uptime / 3600000);
-		let minutesElapsed = Math.floor((uptime - 3600000 * hoursElapsed) / 60000);
-		let secondsElapsed = uptime - 3600000 * hoursElapsed - 60000 * minutesElapsed;
+		let hoursElapsed = Math.floor(uptime / 36000000);
+		let minutesElapsed = Math.floor((uptime - 36000000 * hoursElapsed) / 60000);
+		let secondsElapsed = Math.floor(
+			(uptime - 3600000 * hoursElapsed - 60000 * minutesElapsed) / 1000
+		);
 		upTime.set(
 			`${hoursElapsed < 10 ? `0${hoursElapsed}` : hoursElapsed}:${minutesElapsed < 10 ? `0${minutesElapsed}` : minutesElapsed}:${secondsElapsed < 10 ? `0${secondsElapsed}` : secondsElapsed}`
 		);
+		console.log(val, initVal);
 	});
 });

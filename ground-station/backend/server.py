@@ -1,6 +1,6 @@
 import random
 from flask import Flask, jsonify
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO
 from flask_cors import CORS
 import time
 import threading
@@ -8,6 +8,7 @@ import csv
 import logging
 
 import boardconnector
+from boardconnector import sim_mode, teleDataTypes
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -22,12 +23,10 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M",
 )
 
-
 starttime = time.time()
-nowtime = 0
 
 prevdata = {
-    "teamID": "",
+    "teamID": "2024-ASI-ROCKETRY-026",
     "timeStamp": 0,
     "packetCount": 0,
     "altitude": 0,
@@ -47,7 +46,9 @@ prevdata = {
     "accel_z": 0,
     "softwareState": "BOOT",
     "gasConcn": 0,
+    "velocity": 0,
 }
+
 newdata = prevdata
 
 
@@ -90,23 +91,26 @@ sensor_field = {
 
 # NEW TELEMETRY DATA AND CSV WRITING
 def new_telemetry_data():
+    if telemetry_running:
+        global prevdata
+        if sim_mode:
+            newdata = random_telemetry_data()
+            newdata["velocity"] = newdata["altitude"] - prevdata["altitude"]
+        else:
+            newdata = boardconnector.read_new_telemetry_data()
+        prevdata = newdata
+        global all_previous_data
+        write_csv_data(newdata)
+        all_previous_data.append(newdata)
 
-    global nowtime, newdata, prevdata
-    nowtime = time.time()
-    # newdata = random_telemetry_data()
-    newdata = boardconnector.read_new_telemetry_data()
-    prevdata = newdata
-    global all_previous_data
-    all_previous_data.append(newdata)
-
-    # write_csv_data(newdata)
-    return newdata
+        print(newdata)
+        return newdata
 
 
 def random_telemetry_data():
     newdata = {
-        "teamID": "2024ASI-ROCKETRY-026",
-        "timeStamp": int(nowtime - starttime),
+        "teamID": "2024-ASI-ROCKETRY-026",
+        "timeStamp": 0,
         "packetCount": (
             prevdata["packetCount"] + 1 if prevdata["packetCount"] < 255 else 0
         ),
@@ -115,9 +119,9 @@ def random_telemetry_data():
         "temperature": int(random.random() * 51),
         "voltage": int(random.random() * 51),
         "gnss_time": int(random.random() * 51),
-        "gnss_lat": 23.1293,
-        "gnss_lng": 72.5417,
-        "gnss_alt": int(random.random() * 51),
+        "gnss_latitude": 23.1293,
+        "gnss_longitude": 72.5417,
+        "gnss_altitude": int(random.random() * 51),
         "gnss_sats": int(random.random() * 51),
         "accel_x": int(random.random() * 51),
         "accel_y": int(random.random() * 51),
@@ -131,7 +135,7 @@ def random_telemetry_data():
         "orientation_z": (
             prevdata["orientation_z"] + 1 if prevdata["orientation_z"] < 359 else 0
         ),
-        "softwareState": "boot",
+        "softwareState": "BOOT",
         "gasConcn": int(random.random() * 51),
         "velocity": 0,
     }
@@ -147,8 +151,12 @@ def send_telemetry_data():
     while True:
         new_data = new_telemetry_data()
         if telemetry_running:
-            socketio.emit("datasent", new_data)
-        time.sleep(0.1)
+            socketio.emit("datasent", new_data, callback=datasent_callback)
+        time.sleep(1)
+
+
+def datasent_callback():
+    print("data sent!")
 
 
 # WRITING CSV DATA
@@ -166,9 +174,9 @@ def write_csv_data(data: dict[str, any]):
         f"{newdata['temperature']},"
         f"{newdata['voltage']},"
         f"{newdata['gnss_time']},"
-        f"{newdata['gnss_lat']},"
-        f"{newdata['gnss_lng']},"
-        f"{newdata['gnss_alt']},"
+        f"{newdata['gnss_latitude']},"
+        f"{newdata['gnss_longitude']},"
+        f"{newdata['gnss_altitude']},"
         f"{newdata["gnss_sats"]},"
         f"{newdata['accel_x']},"
         f"{newdata['accel_y']},"
@@ -203,7 +211,7 @@ def get_csv_data():
 @socketio.on("get-all-prevdata")
 def get_all_prevdata():
     global all_previous_data
-    return {data: all_previous_data}
+    return {"data": all_previous_data}
 
 
 @socketio.on("get-startupdata")
@@ -217,29 +225,43 @@ def get_startupdata():
 
 @socketio.on("toggle-telemetry")
 def toggle_telemetry(telemetry_state: bool):
-    telemetry_status = {"status": "yet to send", "message": "none"}
+    command_status = {
+        "status": "yet to send",
+        "telemetry_running": False,
+        "message": "none",
+    }
     global telemetry_running
     if telemetry_state == False:
         telemetry_running = True
         commandsend_status = send_command("telestart")
         if commandsend_status["status"] == "success":
-            telemetry_status = {"status": "success", "message": "telemetry started"}
+            command_status = {
+                "status": "success",
+                "telemetry_running": True,
+                "message": "telemetry started",
+            }
         else:
-            telemetry_status = {
-                "status": "failed",
+            command_status = {
+                "status": "failure",
+                "telemetry_running": False,
                 "message": "could not start telemetry",
             }
     else:
         telemetry_running = False
         commandsend_status = send_command("telestop")
         if commandsend_status["status"] == "success":
-            telemetry_status = {"status": "success", "message": "telemetry stopped"}
+            command_status = {
+                "status": "success",
+                "telemetry_running": False,
+                "message": "telemetry stopped",
+            }
         else:
-            telemetry_status = {
-                "status": "failed",
+            command_status = {
+                "status": "failure",
+                "telemetry_running": True,
                 "message": "could not stop telemetry",
             }
-    return telemetry_running
+    return command_status
 
 
 @socketio.on("get-telemetry-state")
@@ -271,11 +293,11 @@ def calibrate_sensors():
 
     if commandsend_status["status"] != "success":
         calistart_status = {
-            "status": "failed",
+            "status": "failure",
             "message": "could not calibrate sensors",
         }
 
-        print("failed")
+        print("failure")
         return calistart_status
     else:
         calistart_status = {"status": "success", "message": "calibration started"}
@@ -296,7 +318,7 @@ def calibrate_sensors():
             return {"status": "success", "message": "sensors calibrated"}
         else:
             return {
-                "status": "failed",
+                "status": "failure",
                 "message": "could not calibrate sensors",
             }
 
@@ -307,11 +329,13 @@ def calibrate_sensors():
 
 
 def send_command(command_str: str):
-    command_status = {"status": "success", "message": "command sent"}
-    # command_status = boardconnector.send_command(command_str)
+    if sim_mode:
+        command_status = {"status": "success", "message": "command sent"}
+    else:
+        command_status = boardconnector.send_command(command_str)
     return command_status
 
 
 if __name__ == "__main__":
     logging.log(logging.INFO, "Server started")
-    socketio.run(app)
+    socketio.run(app, port=5000)

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { readData } from '@src/store';
+	import { rocketData } from '@src/store';
 	import { cn } from '$lib/utils';
 	import * as Card from '$lib/components/ui/card';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
@@ -11,8 +11,8 @@
 	let incomingTelemetry: string = $state('');
 
 	$effect(() => {
-		incomingTelemetry = $readData
-			? `${$readData.teamID}, ${$readData.timeStamp}, ${$readData.packetCount}, ${$readData.altitude},  ${$readData.pressure}, ${$readData.temperature}, ${$readData.voltage}, ${$readData.gnss_time}, ${$readData.gnss_altitude}, ${$readData.gnss_latitude}, ${$readData.gnss_longitude}, ${$readData.gnss_sats}, ${$readData.orientation_x}, ${$readData.orientation_y}, ${$readData.orientation_z}, ${$readData.accel_x}, ${$readData.accel_y}, ${$readData.accel_z}, ${$readData.softwareState}, ${$readData.gasConcn}`
+		incomingTelemetry = $rocketData
+			? `${$rocketData.teamID}, ${$rocketData.timeStamp}, ${$rocketData.packetCount}, ${$rocketData.altitude},  ${$rocketData.pressure}, ${$rocketData.temperature}, ${$rocketData.voltage}, ${$rocketData.gnss_time}, ${$rocketData.gnss_altitude}, ${$rocketData.gnss_latitude}, ${$rocketData.gnss_longitude}, ${$rocketData.gnss_sats}, ${$rocketData.orientation_x}, ${$rocketData.orientation_y}, ${$rocketData.orientation_z}, ${$rocketData.accel_x}, ${$rocketData.accel_y}, ${$rocketData.accel_z}, ${$rocketData.softwareState}, ${$rocketData.gasConcn}`
 			: '<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>';
 	});
 </script>

@@ -1,21 +1,14 @@
 import serial
-import serial.tools.list_ports
+import serial.serialutil
 
-sumserial = serial.Serial(port="COM13", baudrate=115200)
-
-serialPorts = serial.tools.list_ports.comports()
-
-serialBaudrate = sumserial.baudrate
-print("baud rate: ", serialBaudrate)
-
-serialports = []
-
-print("ports available: ")
-for port, desc, hwid in sorted(serialPorts):
-    if desc != "n/a":
-        serialports.append(port)
-        print("\t", port, desc)
-
+sim_mode = False
+rocket_serial = serial.Serial()
+payload_serial = serial.Serial()
+try:
+    rocket_serial = serial.Serial(port="COM13", baudrate=115200)
+    payload_serial = serial.Serial(port="COM13", baudrate=115200)
+except Exception as err:
+    sim_mode = True
 
 teleFormat = (
     "<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>,"
@@ -47,11 +40,12 @@ class teleDataTypes:
         "accel_z",
         "softwareState",
         "gasConcn",
+        "velocity",
     ]
 
 
-teleData: dict[teleDataTypes,] = {
-    "teamID": "",
+teleData: dict[teleDataTypes, int | float | str] = {
+    "teamID": "2024-ASI-ROCKETRY-026",
     "timeStamp": "",
     "packetCount": 0,
     "altitude": 0,
@@ -71,56 +65,45 @@ teleData: dict[teleDataTypes,] = {
     "accel_z": 0,
     "softwareState": "BOOT",
     "gasConcn": 0,
+    "velocity": 0,
 }
 
 
 def read_new_telemetry_data():
+    try:
+        serialReadData = rocket_serial.readline().decode().removesuffix("\r\n")
+        new_data_read = len(serialReadData)
 
-    serialReadData = sumserial.readline().decode().removesuffix("\r\n")
-    new_data_read = len(serialReadData)
-
-    (
-        teleData["teamID"],
-        teleData["timeStamp"],
-        teleData["packetCount"],
-        teleData["altitude"],
-        teleData["pressure"],
-        teleData["temperature"],
-        teleData["voltage"],
-        teleData["gnss_time"],
-        teleData["gnss_alt"],
-        teleData["gnss_lat"],
-        teleData["gnss_lng"],
-        teleData["gnss_sats"],
-        teleData["orientation_x"],
-        teleData["orientation_y"],
-        teleData["orientation_z"],
-        teleData["accel_x"],
-        teleData["accel_y"],
-        teleData["accel_z"],
-        teleData["softwareState"],
-        teleData["gasConcn"],
-    ) = serialReadData.split(",")
-
-    print(teleData)
-
-    return teleData
-
-
-def get_all_comports():
-    global ports
-    return ports
-
-
-def get_baudrate():
-    global serialBaudrate
-    return serialBaudrate
+        (
+            teleData["teamID"],
+            teleData["timeStamp"],
+            teleData["packetCount"],
+            teleData["altitude"],
+            teleData["pressure"],
+            teleData["temperature"],
+            teleData["voltage"],
+            teleData["gnss_time"],
+            teleData["gnss_latitude"],
+            teleData["gnss_longitude"],
+            teleData["gnss_altitude"],
+            teleData["gnss_sats"],
+            teleData["orientation_x"],
+            teleData["orientation_y"],
+            teleData["orientation_z"],
+            teleData["accel_x"],
+            teleData["accel_y"],
+            teleData["accel_z"],
+            teleData["softwareState"],
+            teleData["gasConcn"],
+        ) = serialReadData.split(",")
+    finally:
+        return teleData
 
 
 def send_command(command_str: str):
     command_status = {"status": "none", "message": "none"}
     try:
-        sumserial.write(command_str.encode())
+        rocket_serial.write(command_str.encode())
 
         command_status = {"status": "success", "message": "command sent"}
     except OSError as err:
