@@ -86,6 +86,7 @@ payloadData.subscribe((presentData) => {
 	});
 });
 
+initTime.set(Math.floor(Date.now()));
 setInterval(() => {
 	nowTime.set(Math.floor(Date.now()));
 }, 1000);
@@ -95,11 +96,14 @@ initTime.subscribe((initVal) => {
 		let uptime = Math.floor(val - initVal);
 
 		// Setting time elapsed
-		let hoursElapsed = Math.floor(uptime / 3600000);
-		let minutesElapsed = Math.floor((uptime - 3600000 * hoursElapsed) / 60000);
-		let secondsElapsed = uptime - 3600000 * hoursElapsed - 60000 * minutesElapsed;
+		let hoursElapsed = Math.floor(uptime / 36000000);
+		let minutesElapsed = Math.floor((uptime - 36000000 * hoursElapsed) / 60000);
+		let secondsElapsed = Math.floor(
+			(uptime - 3600000 * hoursElapsed - 60000 * minutesElapsed) / 1000
+		);
 		upTime.set(
 			`${hoursElapsed < 10 ? `0${hoursElapsed}` : hoursElapsed}:${minutesElapsed < 10 ? `0${minutesElapsed}` : minutesElapsed}:${secondsElapsed < 10 ? `0${secondsElapsed}` : secondsElapsed}`
 		);
+		console.log(val, initVal);
 	});
 });
