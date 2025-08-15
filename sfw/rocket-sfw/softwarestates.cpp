@@ -8,32 +8,36 @@ bool is_calibrated = false;
 
 void calibrate() {
   int i = 0;
-  while (i++ < 50) {
-    if (calibrate_sensors()) {
-      start_telemetry();
-      is_calibrated = true;
-      return;
-    };
-  }
+  if (calibrate_sensors()) {
+    is_calibrated = true;
+    return;
+  };
   is_calibrated = false;
 }
 
 
 void software_state_manager() {
-  // String command = read_from_xbee();
 
-  // if (command == "telestart") {
-  //   start_telemetry();
-  // } else if (command == "telestop") {
-  //   stop_telemetry();
-  // }
+  if (Serial.available()) {
+    String command = Serial.readString();
+    command.trim();
 
-  // if (is_fresh_start() == false) {
-  //   int latest_software_state_num = get_last_state_num();
+    if (command == "telestart") {
+      start_telemetry();
+    } else if (command == "telestop") {
+      stop_telemetry();
+    } else if (command == "calibrate" && software_state_num == 1) {
+      calibrate();
+    }
+  }
+
+  // if (!is_fresh_start()) {
+  //   int latest_software_state_num = read_from_eeprom();
   //   Serial.println(software_state_num);
 
   //   set_software_state(latest_software_state_num);
   // }
+
 
 
   switch (software_state_num) {
@@ -43,10 +47,6 @@ void software_state_manager() {
       break;
     // SETUP to LAUNCH
     case 1:
-      // if (command == "calibrate") {
-      //   stop_telemetry();
-      //   calibrate();
-      // }
       if (is_calibrated) increment_software_state();
       break;
     case 2:

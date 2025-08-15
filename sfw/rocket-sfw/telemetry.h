@@ -1,8 +1,7 @@
 #ifndef TELEMETRY_H
 #define TELEMETRY_H
 
-#include "structs.h"
-#include "functions.h"
+#include "header.h"
 
 extern telemetry_data_struct telemetry_data;
 extern String telemetry_string;

@@ -1,4 +1,4 @@
-#include "telemetry.h"
+#include "header.h"
 
 void setup() {
   Serial.begin(115200);
@@ -7,17 +7,20 @@ void setup() {
 
 void loop() {
   software_state_manager();
-
-  // if (telemetry_state() == true) {
-
+  
+  if (telemetry_state()) {
     make_telemetry_data();
     save_prev_data(telemetry_data);
 
     write_to_openlog(telemetry_string);
-    // // send_thru_xbee(telemetry_string);
-
+    // write_to_eeprom(telemetry_data);
+    // send_thru_xbee(telemetry_string);
     Serial.println(telemetry_string);
 
-    delay(1000);
-  // }
+    // LoRa Sending
+    // LoRa.beginPacket();
+    // LoRa.print(telemetry_string);
+    // LoRa.endPacket();
+  }
+  delay(1000);
 }
