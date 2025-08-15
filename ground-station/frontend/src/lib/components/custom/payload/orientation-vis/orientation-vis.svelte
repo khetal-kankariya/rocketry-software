@@ -28,7 +28,7 @@
 		});
 	};
 	$effect.root(() => {
-		const filePath = '/rocket.STL'; // Update with your STL file path
+		const filePath = '/payload.STL'; // Update with your STL file path
 		let scene = new THREE.Scene();
 		setTimeout(() => {
 			const loadSTLFromPath = async () => {
@@ -55,18 +55,18 @@
 					mesh = new THREE.Mesh(geometry, material);
 					mesh.name = 'payload mesh';
 
-					mesh.position.set(0, 0, 0);
+					// mesh.position.set(0, 0, 0);
 					geometry.center();
-					geometry.scale(0.5, 0.5, 0.5);
+					// geometry.scale(0.5, 0.5, 0.5);
 					scene.add(mesh);
 
-					const axesHelper = new THREE.AxesHelper(500);
-					scene.add(axesHelper);
+					// const axesHelper = new THREE.AxesHelper(500);
+					// scene.add(axesHelper);
 
-					const cameraDistance = 1000; // Adjust distance to fit the mesh comfortably
-					camera.position.set(cameraDistance, center.y, cameraDistance);
+					const cameraDistance = 300; // Adjust distance to fit the mesh comfortably
+					camera.position.set(cameraDistance, 2 * center.y, cameraDistance);
 					camera.getWorldPosition(idealCameraPosition);
-					camera.lookAt(new THREE.Vector3(0, 0, 0));
+					camera.lookAt(new THREE.Vector3(center.x, center.y, center.z));
 					scene.translateY(center.y);
 
 					controls.target.copy(center);
@@ -119,7 +119,7 @@
 	});
 </script>
 
-<Card.Root class="relative h-[444px] w-[336px] bg-background p-2 text-gray-600">
+<Card.Root class="bg-background relative h-[444px] w-[336px] p-2 text-gray-600">
 	<canvas class="orientation-canvas aspect-square h-full w-full rounded-lg border"></canvas>
 	<Button variant="default" class="absolute bottom-4 right-4" onclick={resetView}>refresh</Button>
 </Card.Root>

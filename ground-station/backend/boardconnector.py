@@ -5,7 +5,7 @@ sim_mode = False
 rocket_serial = serial.Serial()
 payload_serial = serial.Serial()
 try:
-    rocket_serial = serial.Serial(port="COM13", baudrate=115200)
+    rocket_serial = serial.Serial(port="COM3", baudrate=115200)
     payload_serial = serial.Serial(port="COM13", baudrate=115200)
 except Exception as err:
     sim_mode = True

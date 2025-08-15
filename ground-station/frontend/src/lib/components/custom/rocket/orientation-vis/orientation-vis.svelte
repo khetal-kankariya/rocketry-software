@@ -55,21 +55,20 @@
 					mesh = new THREE.Mesh(geometry, material);
 					mesh.name = 'rocket mesh';
 
-					mesh.position.set(0, 0, 0);
 					geometry.center();
 					geometry.scale(0.5, 0.5, 0.5);
+					mesh.position.set(0, 0, 0);
 					scene.add(mesh);
 
 					const axesHelper = new THREE.AxesHelper(500);
 					scene.add(axesHelper);
 
 					const cameraDistance = 1000; // Adjust distance to fit the mesh comfortably
-					camera.position.set(cameraDistance, center.y, cameraDistance);
+					camera.position.set(cameraDistance, 0, cameraDistance);
 					camera.getWorldPosition(idealCameraPosition);
 					camera.lookAt(new THREE.Vector3(0, 0, 0));
-					scene.translateY(center.y);
 
-					controls.target.copy(center);
+					controls.target.copy(mesh.position);
 					controls.update();
 				} catch (error) {
 					console.error('Error loading STL file:', error);
@@ -119,7 +118,7 @@
 	});
 </script>
 
-<Card.Root class="bg-background relative h-[444px] w-[336px] p-2 text-gray-600">
+<Card.Root class="relative h-[444px] w-[336px] bg-background p-2 text-gray-600">
 	<canvas class="orientation-canvas aspect-square h-full w-full rounded-lg border"></canvas>
 	<Button variant="default" class="absolute bottom-4 right-4" onclick={resetView}>refresh</Button>
 </Card.Root>
