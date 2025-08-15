@@ -1,5 +1,5 @@
-#ifndef STRUCT_DEFINITIONS_H
-#define STRUCT_DEFINITIONS_H
+#ifndef STRUCTS_H
+#define STRUCTS_H
 
 #include <Arduino.h>
 

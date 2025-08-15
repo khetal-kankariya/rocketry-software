@@ -53,26 +53,13 @@ void make_telemetry_data() {
 
 void make_telemetry_data_string() {
 
-  String gnss_data_string = String(telemetry_data.gnss_time) + "," +
-                            String(telemetry_data.gnss_latitude) + "," +
-                            String(telemetry_data.gnss_longitude) + "," +
-                            String(telemetry_data.gnss_altitude) + "," +
-                            String(telemetry_data.gnss_satellites);
+  String gnss_data_string = String(telemetry_data.gnss_time) + "," + String(telemetry_data.gnss_latitude) + "," + String(telemetry_data.gnss_longitude) + "," + String(telemetry_data.gnss_altitude) + "," + String(telemetry_data.gnss_satellites);
 
   String accelerometer_data_string =
-      String(telemetry_data.orientation_x) + "," +
-      String(telemetry_data.orientation_y) + "," +
-      String(telemetry_data.orientation_z) + "," +
-      String(telemetry_data.acceleration_x) + "," +
-      String(telemetry_data.acceleration_y) + "," +
-      String(telemetry_data.acceleration_z);
+    String(telemetry_data.orientation_x) + "," + String(telemetry_data.orientation_y) + "," +
+
+    String(telemetry_data.orientation_z) + "," + String(telemetry_data.acceleration_x) + "," + String(telemetry_data.acceleration_y) + "," + String(telemetry_data.acceleration_z);
 
   telemetry_string =
-      String(telemetry_data.teamID) + "," + String(telemetry_data.time) + "," +
-      String(telemetry_data.packet_count) + "," +
-      String(telemetry_data.altitude) + "," + String(telemetry_data.pressure) +
-      "," + String(telemetry_data.temperature) + "," +
-      String(telemetry_data.voltage) + "," + gnss_data_string + "," +
-      accelerometer_data_string + "," + (telemetry_data.software_state) + "," +
-      String(telemetry_data.gas_concentration);
+    String(telemetry_data.teamID) + "," + String(telemetry_data.time) + "," + String(telemetry_data.packet_count) + "," + String(telemetry_data.altitude) + "," + String(telemetry_data.pressure) + "," + String(telemetry_data.temperature) + "," + String(telemetry_data.voltage) + "," + gnss_data_string + "," + accelerometer_data_string + "," + (telemetry_data.software_state) + "," + String(telemetry_data.gas_concentration);
 }
