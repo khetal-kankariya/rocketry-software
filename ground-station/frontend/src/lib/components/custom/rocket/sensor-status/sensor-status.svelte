@@ -27,6 +27,7 @@
 		temp: 'temperature',
 		gnss: 'gnss_altitude',
 		gas: 'gasConcn',
+		logger: 'logger',
 		voltage: 'voltage'
 	};
 
@@ -41,7 +42,7 @@
 		if ($rocketData[sensor_fields[sensor_name] as TrocketField]) return true;
 	};
 
-	let parachute_released = $state(false);
+	let parachute_released = $state([false, false]);
 </script>
 
 <div class="flex h-full w-[336px] flex-col gap-1 border bg-transparent p-1">
@@ -52,7 +53,9 @@
 				<div class="flex flex-col gap-2">
 					{#each sensor_list as sensor, j}
 						<div class="flex w-[142px] justify-between gap-2 px-2">
-							<span class="text text-sm uppercase">{sensor_names[sensor]}</span>
+							<span class="text text-sm uppercase"
+								>{sensor_names[sensor as keyof typeof sensor_names]}</span
+							>
 							<Checkbox class="pointer-events-none" checked={sensor_working[i][j]}></Checkbox>
 						</div>
 					{/each}
@@ -65,7 +68,8 @@
 		<span class="text-lg">PARACHUTE STATUS</span>
 		<div class="flex w-[142px] justify-between">
 			<span class="text-sm"> RELEASED </span>
-			<Checkbox class="pointer-events-none" checked={parachute_released}></Checkbox>
+			<Checkbox class="pointer-events-none" checked={parachute_released[0]}></Checkbox>
+			<Checkbox class="pointer-events-none" checked={parachute_released[1]}></Checkbox>
 		</div>
 	</Card.Root>
 

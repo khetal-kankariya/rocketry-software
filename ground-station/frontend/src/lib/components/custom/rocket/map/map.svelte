@@ -2,16 +2,18 @@
 	import 'leaflet/dist/leaflet.css';
 	import { sim_coords } from '@src/simulationData';
 	import * as Card from '$lib/components/ui/card';
-	import { onMount, untrack } from 'svelte';
-	import type { LatLngBounds, LatLngExpression } from 'leaflet';
-	import { simulation_mode, travelled_coords } from '@src/store';
+	import type { LatLngTuple } from 'leaflet';
+	import { travelled_coords } from '@src/store';
 	import L from 'leaflet';
 	import type { Action } from 'svelte/action';
 
 	var map: L.Map;
 	let markers: L.Marker[] = [];
-	const default_coord = [22, 72];
-	let local_coords = $derived($travelled_coords.length ? $travelled_coords : [default_coord]);
+	let polyline: L.Polyline | null = null;
+	const default_coord: LatLngTuple = [22, 72];
+	let local_coords: LatLngTuple[] = $derived(
+		$travelled_coords.length ? ($travelled_coords as LatLngTuple[]) : [default_coord]
+	);
 
 	let mapaction: Action = (node) => {
 		map = L.map(node, {
@@ -28,6 +30,7 @@
 			if (local_coords.length) {
 				addMarker(map);
 				fitBounds(map);
+				updateTrail(map);
 			}
 		});
 	};
@@ -42,7 +45,7 @@
 	function addMarker(map: L.Map) {
 		const lastCoord = local_coords.at(-1);
 		if (lastCoord !== undefined) {
-			let new_marker = L.marker(lastCoord);
+			let new_marker = L.marker(lastCoord as LatLngTuple);
 			new_marker.addTo(map);
 			markers.unshift(new_marker);
 		}
@@ -53,7 +56,7 @@
 	}
 
 	function fitBounds(map: L.Map) {
-		var bounds = L.latLngBounds(local_coords);
+		var bounds = L.latLngBounds(local_coords as LatLngTuple[]);
 		map.fitBounds(bounds, {
 			padding: [40, 40]
 		});
@@ -92,16 +95,46 @@
 			.addTo(map);
 	}
 
-	function addPolygon(map: L.Map) {
-		L.polyline(local_coords, {
+	function getGeographicCenter(coords: LatLngTuple[]): LatLngTuple {
+		if (!coords.length) return [0, 0];
+		let latSum = 0,
+			lngSum = 0;
+		for (const [lat, lng] of coords) {
+			latSum += lat;
+			lngSum += lng;
+		}
+		return [latSum / coords.length, lngSum / coords.length];
+	}
+
+	function updateTrail(map: L.Map) {
+		// Remove previous polyline if exists
+		if (polyline) {
+			map.removeLayer(polyline);
+		}
+		polyline = L.polyline(local_coords as LatLngTuple[], {
 			color: 'red',
-			fillOpacity: 0
-		}).addTo(map);
+			weight: 3,
+			opacity: 0.8
+		});
+		polyline.addTo(map);
 	}
 
 	travelled_coords.subscribe((new_coords) => {
 		const lastCoord = new_coords.at(-1);
-		if (lastCoord !== undefined) local_coords.push(lastCoord);
+		if (
+			Array.isArray(lastCoord) &&
+			lastCoord.length === 2 &&
+			typeof lastCoord[0] === 'number' &&
+			typeof lastCoord[1] === 'number'
+		) {
+			local_coords.push(lastCoord as LatLngTuple);
+		}
+
+		// Update map center to geographic center
+		if (map && local_coords.length) {
+			const center = getGeographicCenter(local_coords);
+			map.setView(center, map.getZoom());
+		}
 	});
 </script>
 
