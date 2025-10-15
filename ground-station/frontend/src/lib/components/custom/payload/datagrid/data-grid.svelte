@@ -6,10 +6,10 @@
 
 <ul class="datagrid grid w-full min-w-[1392px] grid-cols-4 gap-4 p-0">
 	{#if $activeTab == 'Overview'}
-		<SingleCellItem datatype="teamID"></SingleCellItem>
-		<SingleCellItem datatype="packetCount"></SingleCellItem>
+		<SingleCellItem datatype="team_id"></SingleCellItem>
+		<SingleCellItem datatype="packet_count"></SingleCellItem>
 		<SingleCellItem datatype="temperature"></SingleCellItem>
-		<SingleCellItem datatype="gasConcn"></SingleCellItem>
+		<SingleCellItem datatype="gas_concentration"></SingleCellItem>
 		<SingleCellItem datatype="altitude"></SingleCellItem>
 		<SingleCellItem datatype="pressure"></SingleCellItem>
 		<SingleCellItem datatype="velocity"></SingleCellItem>
@@ -22,6 +22,6 @@
 		<TwoCellItem datatype="orientation"></TwoCellItem>
 		<TwoCellItem datatype="accel"></TwoCellItem>
 		<SingleCellItem datatype="temperature"></SingleCellItem>
-		<SingleCellItem datatype="gasConcn"></SingleCellItem>
+		<SingleCellItem datatype="gas_concentration"></SingleCellItem>
 	{/if}
 </ul>

@@ -12,7 +12,7 @@
 
 	$effect(() => {
 		incomingTelemetry = $rocketData
-			? `${$rocketData.teamID}, ${$rocketData.timeStamp}, ${$rocketData.packetCount}, ${$rocketData.altitude},  ${$rocketData.pressure}, ${$rocketData.temperature}, ${$rocketData.voltage}, ${$rocketData.gnss_time}, ${$rocketData.gnss_altitude}, ${$rocketData.gnss_latitude}, ${$rocketData.gnss_longitude}, ${$rocketData.gnss_sats}, ${$rocketData.orientation_x}, ${$rocketData.orientation_y}, ${$rocketData.orientation_z}, ${$rocketData.accel_x}, ${$rocketData.accel_y}, ${$rocketData.accel_z}, ${$rocketData.softwareState}, ${$rocketData.gasConcn}`
+			? `${$rocketData.team_id}, ${$rocketData.time_stamp}, ${$rocketData.packet_count}, ${$rocketData.altitude},  ${$rocketData.pressure}, ${$rocketData.temperature}, ${$rocketData.voltage}, ${$rocketData.gnss_time}, ${$rocketData.gnss_altitude}, ${$rocketData.gnss_latitude}, ${$rocketData.gnss_longitude}, ${$rocketData.gnss_sats}, ${$rocketData.orientation_x}, ${$rocketData.orientation_y}, ${$rocketData.orientation_z}, ${$rocketData.accel_x}, ${$rocketData.accel_y}, ${$rocketData.accel_z}, ${$rocketData.software_state}, ${$rocketData.gas_concentration}`
 			: '<TEAM ID>, <TIME STAMPING>, <PACKET COUNT>, <ALTITUDE>, <PRESSURE>, <TEMP>, <VOLTAGE>, <GNSS TIME>, <GNSS LATITUDE>, <GNSS LONGITUDE>, <GNSS ALTITUDE>, <GNSS SATS>, <ACCELEROMETER DATA>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>';
 	});
 </script>

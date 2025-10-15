@@ -1,7 +1,7 @@
 <script>
 	import { get_csv_data } from '@src/socket-interface';
 	import { Button } from '@src/lib/components/ui/button';
-	import { activeTab, GCS_started, csvdata } from '@src/store';
+	import { activeTab, GCS_started, csvdata_rocket } from '@src/store';
 
 	let csvDataFields = [
 		'TEAM ID',
@@ -42,7 +42,7 @@
 				{/each}
 			</tr>
 
-			{#each $csvdata as data}
+			{#each $csvdata_rocket as data}
 				<tr>
 					{#each data as fielddat}
 						<td class="text-nowrap text-center">{fielddat}</td>

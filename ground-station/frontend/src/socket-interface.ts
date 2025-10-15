@@ -4,13 +4,17 @@ import {
 	last_command,
 	missionProgress,
 	rocketData,
-	sensors_calibrated,
 	server_connected,
 	server_connecting,
 	server_disconnecting,
-	csvdata,
-	telemetry_running,
-	travelled_coords
+	travelled_coords,
+	telemetry_rocket_running,
+	telemetry_payload_running,
+	sensors_rocket_calibrated,
+	sensors_payload_calibrated,
+	payloadData,
+	csvdata_payload,
+	csvdata_rocket
 } from './store';
 import { io } from 'socket.io-client';
 import type { LatLngExpression } from 'leaflet';
@@ -114,14 +118,16 @@ const server_disconnected_fn = (message: string) => {
 };
 
 const get_telemetry_status = () => {
-	socket.emit('get-telemetry-state', (res: boolean) => {
-		telemetry_running.set(res);
+	socket.emit('get-telemetry-state', (res: { rocket: boolean; payload: boolean }) => {
+		telemetry_rocket_running.set(res.rocket);
+		telemetry_payload_running.set(res.payload);
 	});
 };
 
 const get_calibration_status = () => {
-	socket.emit('get-calibration-state', (res: boolean) => {
-		sensors_calibrated.set(res);
+	socket.emit('get-calibration-state', (res: { rocket: boolean; payload: boolean }) => {
+		sensors_rocket_calibrated.set(res.rocket);
+		sensors_payload_calibrated.set(res.payload);
 	});
 };
 
@@ -159,21 +165,29 @@ export const save_startupdata = () => {
  *
  * @remarks
  * - The `datasent` event is expected to emit data of type `TtelemetryData`.
- * - The `readData` store is updated only if the `packetCount` of the new data differs
+ * - The `readData` store is updated only if the `packet_count` of the new data differs
  *   from the previous data.
  * - GNSS coordinates are extracted from the `gnss_latitude` and `gnss_longitude` fields
  *   of the telemetry data.
  */
 const get_data = () => {
-	socket.on('datasent', (newData: TrocketData) => {
+	socket.on('datasent', (newData: { rocket: TrocketTelemetry; payload: TpayloadTelemetry }) => {
 		rocketData.update((prevData) => {
-			if (prevData.packetCount == newData.packetCount) {
+			if (prevData.packet_count == newData.rocket.packet_count) {
 				return prevData;
 			} else {
-				return newData;
+				return newData.rocket;
 			}
 		});
-		add_coords([newData.gnss_latitude, newData.gnss_longitude]);
+		add_coords([newData.rocket.gnss_latitude, newData.rocket.gnss_longitude]);
+
+		payloadData.update((prevData) => {
+			if (prevData.packet_count == newData.payload.packet_count) {
+				return prevData;
+			} else {
+				return newData.payload;
+			}
+		});
 	});
 };
 get_data();
@@ -198,10 +212,9 @@ const add_coords = (coord: LatLngExpression) => {
  * representing the CSV data. The received data is then stored in a reactive store (`storecsvdata`).
  */
 export const get_csv_data = () => {
-	socket.emit('get-csv-data', (xcsvdata: { data: string[] }) => {
-		const scsvdata = xcsvdata.data;
-
-		csvdata.set(scsvdata);
+	socket.emit('get-csv-data', (csvdata: { data: { rocket: string[]; payload: string[] } }) => {
+		csvdata_rocket.set(csvdata.data.rocket);
+		csvdata_payload.set(csvdata.data.payload);
 	});
 };
 
@@ -224,65 +237,72 @@ const toast_failure = (message: string) => {
 
 export const toggle_telemetry = async (pres_telemetry_running: boolean) => {
 	if (server_connected_local) {
-		type response = {
-			status: 'success' | 'failure';
-			telemetry_running: boolean;
-			message: string;
-		};
-
-		const toggle_status: response = await new Promise((resolve) => {
-			socket.emit('toggle-telemetry', pres_telemetry_running, (res: response) => {
+		const toggle_status: TcommandRepsonse = await new Promise((resolve) => {
+			socket.emit('toggle-telemetry', (res: TcommandRepsonse) => {
 				resolve(res);
 			});
 		});
 
-		if (toggle_status.status == 'success') {
-			if (toggle_status.telemetry_running) {
-				toast_success('Telemetry Started');
+		if (pres_telemetry_running == false) {
+			// Telemetry is to be started
+			if (toggle_status.rocket) {
+				toast_success('Rocket Telemetry Started');
+				if (toggle_status.payload) {
+					toast_success('Payload Telemetry Started');
+				}
 				update_last_command('telestart');
 			} else {
 				toast_success('Telemetry Stopped');
 				update_last_command('telestop');
 			}
-			telemetry_running.set(toggle_status.telemetry_running);
 		} else {
-			if (toggle_status.telemetry_running) {
-				toast_failure('Could not stop Telemetry');
+			//Telemetry is to be stopped
+			if (toggle_status.rocket) {
+				toast_success('Rocket Telemetry Stopped');
+				if (toggle_status.payload) {
+					toast_success('Payload Telemetry Stopped');
+				}
 				update_last_command('telestop');
 			} else {
-				toast_failure('Could not start Telemetry');
-				update_last_command('telestart');
+				toast_success("Couldn't Stop Telemetry");
+				update_last_command('telestop (failed)');
 			}
-			telemetry_running.set(toggle_status.telemetry_running);
 		}
+		telemetry_rocket_running.set(toggle_status.rocket);
+		telemetry_payload_running.set(toggle_status.rocket);
 	} else server_disconnected_fn('Server Disconnected!');
 };
 
 export const calibrate_sensors = async () => {
-	let response = false;
+	let calibration_status: TcommandRepsonse = {
+		status: false,
+		rocket: false,
+		payload: false,
+		message: ''
+	};
 	if (server_connected_local) {
-		update_last_command('calibrate');
-		const calibration_status: { status: string; message: string } = await new Promise((resolve) => {
-			socket.emit('calibrate-sensors', (res: { status: string; message: string }) => {
+		calibration_status = await new Promise((resolve) => {
+			socket.emit('calibrate-sensors', (res: TcommandRepsonse) => {
 				resolve(res);
 			});
 		});
-		if (calibration_status.status == 'success') {
-			sensors_calibrated.set(true);
-
-			toast_success('Sensors Calibrated');
-
-			response = true;
-		} else {
-			sensors_calibrated.set(false);
-
+		if (calibration_status.rocket) {
+			sensors_rocket_calibrated.set(true);
+			toast_success('Rocket Sensors Calibrated');
+		}
+		if (calibration_status.payload) {
+			sensors_payload_calibrated.set(true);
+			toast_success('Payload Sensors Calibrated');
+		}
+		if (calibration_status.payload && calibration_status.rocket) {
+			sensors_rocket_calibrated.set(false);
+			sensors_payload_calibrated.set(false);
 			toast_failure('Could not calibrate Sensors');
-
-			response = false;
+			update_last_command('calibrate (failed)');
 		}
 	} else server_disconnected_fn('Server disconnected!');
 
-	return response;
+	return calibration_status;
 };
 
 export const get_mission_progress = () => {

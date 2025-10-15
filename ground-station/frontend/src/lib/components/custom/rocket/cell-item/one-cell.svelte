@@ -31,10 +31,13 @@
 				{$rocketDataInfo[datatype].displayName}:
 			</span>
 			<span class="flex items-baseline gap-2 text-3xl">
-				<span class="uppercase" class:text-lg={datatype == 'teamID' || datatype == 'softwareState'}>
+				<span
+					class="uppercase"
+					class:text-lg={datatype == 'team_id' || datatype == 'software_state'}
+				>
 					{sumdata}
 				</span>
-				{#if datatype != 'teamID' && datatype != 'packetCount' && datatype != 'softwareState'}
+				{#if datatype != 'team_id' && datatype != 'packet_count' && datatype != 'software_state'}
 					<span class="text-sm">
 						{unit}
 					</span>

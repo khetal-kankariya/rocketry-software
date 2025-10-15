@@ -21,12 +21,12 @@
 	};
 
 	let sensor_fields = {
-		rtc: 'timeStamp',
+		rtc: 'time_stamp',
 		imu: 'orientation',
 		pressure: 'pressure',
 		temp: 'temperature',
 		gnss: 'gnss_altitude',
-		gas: 'gasConcn',
+		gas: 'gas_concentration',
 		logger: 'logger',
 		voltage: 'voltage'
 	};
@@ -88,7 +88,7 @@
 	<Card.Root class="flex h-full w-full flex-col gap-2 bg-transparent px-4 py-2">
 		<div class="flex w-full items-center gap-2">
 			<span class="text-sm"> TEAM ID: </span>
-			<span>{$rocketData.teamID}</span>
+			<span>{$rocketData.team_id}</span>
 		</div>
 
 		<div class="flex w-full items-center gap-2">

@@ -2,7 +2,7 @@
 	import '@src/app.css';
 	import Button from '@src/lib/components/ui/button/button.svelte';
 	import { activeTab, GCStype, payloadData, server_connected, server_connecting } from '@src/store';
-	import Sidebar from '@src/lib/components/custom/common/sidebar/sidebar.svelte';
+	import Sidebar from '@src/lib/components/custom/payload/sidebar/sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import {
 		connect_socket,

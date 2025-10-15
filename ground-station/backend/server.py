@@ -6,9 +6,10 @@ import time
 import threading
 import csv
 import logging
+from typing import Union
 
 import boardconnector
-from boardconnector import sim_mode, teleDataTypes
+import boardconnector
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -25,15 +26,15 @@ logging.basicConfig(
 
 starttime = time.time()
 
-prevdata = {
-    "teamID": "2024-ASI-ROCKETRY-026",
-    "timeStamp": 0,
-    "packetCount": 0,
+prev_rocket_telemetry: boardconnector.TrocketField = {
+    "team_id": "2024-ASI-ROCKETRY-026",
+    "time_stamp": "00:00:00",
+    "packet_count": 0,
     "altitude": 0,
     "pressure": 0,
     "temperature": 0,
     "voltage": 0,
-    "gnss_time": 0,
+    "gnss_time": "00:00:00",
     "gnss_latitude": 0,
     "gnss_longitude": 0,
     "gnss_altitude": 0,
@@ -44,13 +45,29 @@ prevdata = {
     "accel_x": 0,
     "accel_y": 0,
     "accel_z": 0,
-    "softwareState": "BOOT",
-    "gasConcn": 0,
+    "software_state": "BOOT",
+    "gas_concentration": 0,
     "velocity": 0,
 }
 
-newdata = prevdata
+prev_payload_telemetry: boardconnector.TpayloadField = {
+    "team_id": "2024-ASI-ROCKETRY-026",
+    "packet_count": 0,
+    "altitude": 0,
+    "pressure": 0,
+    "temperature": 0,
+    "orientation_x": 0,
+    "orientation_y": 0,
+    "orientation_z": 0,
+    "accel_x": 0,
+    "accel_y": 0,
+    "accel_z": 0,
+    "gas_concentration": 0,
+    "velocity": 0,
+}
 
+rocket_telemetry = prev_rocket_telemetry
+payload_telemetry = prev_payload_telemetry
 
 all_previous_data = []
 
@@ -61,27 +78,16 @@ csv_write_format = (
     "<GYRO SPIN RATE>, <FLIGHT SOFTWARE STATE>, <ANY OPTIONAL DATA>"
 )
 
-telemetry_running = False
-calibration_done = False
-
-mission_progress = 0
-
-sensor_status = {
-    "rtc": True,
-    "gnss": True,
-    "imu": True,
-    "gas": True,
-    "pressure": True,
-    "logger": True,
-    "temp_humid": True,
-    "voltage": True,
-}
+telemetry_rocket_running = False
+telemetry_payload_running = False
+rocket_calibration_done = False
+payload_calibration_done = False
 
 sensor_field = {
-    "rtc": "timeStamp",
+    "rtc": "time_stamp",
     "gnss": "gnss",
     "imu": "orientation",
-    "gas": "gasConcn",
+    "gas": "gas_concentration",
     "pressure": "pressure",
     "logger": None,
     "temp_humid": "temperature",
@@ -91,34 +97,44 @@ sensor_field = {
 
 # NEW TELEMETRY DATA AND CSV WRITING
 def new_telemetry_data():
-    if telemetry_running:
-        global prevdata
-        if sim_mode:
-            newdata = random_telemetry_data()
-            newdata["velocity"] = newdata["altitude"] - prevdata["altitude"]
-        else:
-            newdata = boardconnector.read_new_telemetry_data()
-        prevdata = newdata
+    global prev_rocket_telemetry, prev_payload_telemetry, rocket_telemetry, payload_telemetry
+    if boardconnector.sim_mode:
+        rocket_telemetry = random_rocket_telemetry()
+        payload_telemetry = random_payload_telemetry()
+    else:
+        rocket_telemetry = boardconnector.read_rocket_telemetry()
+        payload_telemetry = boardconnector.read_rocket_telemetry()
+
+    if telemetry_rocket_running:
+        prev_rocket_telemetry = rocket_telemetry
+        prev_payload_telemetry = payload_telemetry
+
         global all_previous_data
-        write_csv_data(newdata)
-        all_previous_data.append(newdata)
+        all_previous_data.append(rocket_telemetry)
 
-        print(newdata)
-        return newdata
+        write_rocket_csv(rocket_telemetry)
+        write_payload_csv(payload_telemetry)
+
+        print(rocket_telemetry, payload_telemetry)
+        return rocket_telemetry, payload_telemetry
+    else:
+        return None, None
 
 
-def random_telemetry_data():
-    newdata = {
-        "teamID": "2024-ASI-ROCKETRY-026",
-        "timeStamp": 0,
-        "packetCount": (
-            prevdata["packetCount"] + 1 if prevdata["packetCount"] < 255 else 0
+def random_rocket_telemetry() -> boardconnector.TrocketField:
+    newdata: boardconnector.TrocketField = {
+        "team_id": "2024-ASI-ROCKETRY-026",
+        "time_stamp": "00:00:00",
+        "packet_count": (
+            prev_rocket_telemetry["packet_count"] + 1
+            if prev_rocket_telemetry["packet_count"] < 255
+            else 0
         ),
         "altitude": int(random.random() * 51),
         "pressure": int(random.random() * 51),
         "temperature": int(random.random() * 51),
         "voltage": int(random.random() * 51),
-        "gnss_time": int(random.random() * 51),
+        "gnss_time": "00:00:00",
         "gnss_latitude": 23.1293,
         "gnss_longitude": 72.5417,
         "gnss_altitude": int(random.random() * 51),
@@ -127,31 +143,73 @@ def random_telemetry_data():
         "accel_y": int(random.random() * 51),
         "accel_z": int(random.random() * 51),
         "orientation_x": (
-            prevdata["orientation_x"] + 1 if prevdata["orientation_x"] < 359 else 0
+            prev_rocket_telemetry["orientation_x"] + 1
+            if prev_rocket_telemetry["orientation_x"] < 359
+            else 0
         ),
         "orientation_y": (
-            prevdata["orientation_y"] + 1 if prevdata["orientation_y"] < 359 else 0
+            prev_rocket_telemetry["orientation_y"] + 1
+            if prev_rocket_telemetry["orientation_y"] < 359
+            else 0
         ),
         "orientation_z": (
-            prevdata["orientation_z"] + 1 if prevdata["orientation_z"] < 359 else 0
+            prev_rocket_telemetry["orientation_z"] + 1
+            if prev_rocket_telemetry["orientation_z"] < 359
+            else 0
         ),
-        "softwareState": "BOOT",
-        "gasConcn": int(random.random() * 51),
+        "software_state": "BOOT",
+        "gas_concentration": int(random.random() * 51),
         "velocity": 0,
     }
 
-    newdata["velocity"] = (newdata["altitude"] - prevdata["altitude"]) / (
-        max(newdata["timeStamp"] - prevdata["timeStamp"], 0.5)
-    )
+    return newdata
+
+
+def random_payload_telemetry() -> boardconnector.TpayloadField:
+    newdata: boardconnector.TpayloadField = {
+        "team_id": "2024-ASI-ROCKETRY-026",
+        "packet_count": (
+            prev_rocket_telemetry["packet_count"] + 1
+            if prev_rocket_telemetry["packet_count"] < 255
+            else 0
+        ),
+        "altitude": int(random.random() * 51),
+        "pressure": int(random.random() * 51),
+        "temperature": int(random.random() * 51),
+        "accel_x": int(random.random() * 51),
+        "accel_y": int(random.random() * 51),
+        "accel_z": int(random.random() * 51),
+        "orientation_x": (
+            prev_rocket_telemetry["orientation_x"] + 1
+            if prev_rocket_telemetry["orientation_x"] < 359
+            else 0
+        ),
+        "orientation_y": (
+            prev_rocket_telemetry["orientation_y"] + 1
+            if prev_rocket_telemetry["orientation_y"] < 359
+            else 0
+        ),
+        "orientation_z": (
+            prev_rocket_telemetry["orientation_z"] + 1
+            if prev_rocket_telemetry["orientation_z"] < 359
+            else 0
+        ),
+        "gas_concentration": int(random.random() * 51),
+        "velocity": 0,
+    }
 
     return newdata
 
 
 def send_telemetry_data():
     while True:
-        new_data = new_telemetry_data()
-        if telemetry_running:
-            socketio.emit("datasent", new_data, callback=datasent_callback)
+        new_rocket_data, new_payload_data = new_telemetry_data()
+        if telemetry_rocket_running and telemetry_payload_running:
+            socketio.emit(
+                "datasent",
+                {"rocket": new_rocket_data, "payload": new_payload_data},
+                callback=datasent_callback,
+            )
         time.sleep(1)
 
 
@@ -160,32 +218,62 @@ def datasent_callback():
 
 
 # WRITING CSV DATA
-def write_csv_data(data: dict[str, any]):
+def write_rocket_csv(data: boardconnector.TrocketField):
     csv_write_file = open(
-        newline="\n", file="../files/2024ASI-ROCKETRY-026.csv", mode="a+"
+        newline="\n", file="../files/2024ASI-ROCKETRY-026-rocket.csv", mode="a+"
     )
     csv_write_file.write(
-        f"{newdata['teamID']},"
-        f"{newdata['timeStamp']},"
-        f"{newdata['packetCount']},"
-        f"{newdata['softwareState']},"
-        f"{newdata['altitude']},"
-        f"{newdata['pressure']},"
-        f"{newdata['temperature']},"
-        f"{newdata['voltage']},"
-        f"{newdata['gnss_time']},"
-        f"{newdata['gnss_latitude']},"
-        f"{newdata['gnss_longitude']},"
-        f"{newdata['gnss_altitude']},"
-        f"{newdata["gnss_sats"]},"
-        f"{newdata['accel_x']},"
-        f"{newdata['accel_y']},"
-        f"{newdata['accel_z']},"
-        f"{newdata['orientation_x']},"
-        f"{newdata['orientation_y']},"
-        f"{newdata['orientation_z']},"
-        f"{newdata['gasConcn']},"
-        f"{newdata['velocity']}\n"
+        f"{rocket_telemetry['team_id']},"
+        f"{rocket_telemetry['time_stamp']},"
+        f"{rocket_telemetry['packet_count']},"
+        f"{rocket_telemetry['software_state']},"
+        f"{rocket_telemetry['altitude']},"
+        f"{rocket_telemetry['pressure']},"
+        f"{rocket_telemetry['temperature']},"
+        f"{rocket_telemetry['voltage']},"
+        f"{rocket_telemetry['gnss_time']},"
+        f"{rocket_telemetry['gnss_latitude']},"
+        f"{rocket_telemetry['gnss_longitude']},"
+        f"{rocket_telemetry['gnss_altitude']},"
+        f"{rocket_telemetry["gnss_sats"]},"
+        f"{rocket_telemetry['accel_x']},"
+        f"{rocket_telemetry['accel_y']},"
+        f"{rocket_telemetry['accel_z']},"
+        f"{rocket_telemetry['orientation_x']},"
+        f"{rocket_telemetry['orientation_y']},"
+        f"{rocket_telemetry['orientation_z']},"
+        f"{rocket_telemetry['gas_concentration']},"
+        f"{rocket_telemetry['velocity']}\n"
+    )
+    csv_write_file.close()
+
+
+def write_payload_csv(data: boardconnector.TpayloadField):
+    csv_write_file = open(
+        newline="\n", file="../files/2024ASI-ROCKETRY-026-payload.csv", mode="a+"
+    )
+    csv_write_file.write(
+        f"{rocket_telemetry['team_id']},"
+        f"{rocket_telemetry['time_stamp']},"
+        f"{rocket_telemetry['packet_count']},"
+        f"{rocket_telemetry['software_state']},"
+        f"{rocket_telemetry['altitude']},"
+        f"{rocket_telemetry['pressure']},"
+        f"{rocket_telemetry['temperature']},"
+        f"{rocket_telemetry['voltage']},"
+        f"{rocket_telemetry['gnss_time']},"
+        f"{rocket_telemetry['gnss_latitude']},"
+        f"{rocket_telemetry['gnss_longitude']},"
+        f"{rocket_telemetry['gnss_altitude']},"
+        f"{rocket_telemetry["gnss_sats"]},"
+        f"{rocket_telemetry['accel_x']},"
+        f"{rocket_telemetry['accel_y']},"
+        f"{rocket_telemetry['accel_z']},"
+        f"{rocket_telemetry['orientation_x']},"
+        f"{rocket_telemetry['orientation_y']},"
+        f"{rocket_telemetry['orientation_z']},"
+        f"{rocket_telemetry['gas_concentration']},"
+        f"{rocket_telemetry['velocity']}\n"
     )
     csv_write_file.close()
 
@@ -196,14 +284,20 @@ threading.Thread(target=send_telemetry_data).start()
 # READING AND SENDING CSV DATA ON DEMAND
 @socketio.on("get-csv-data")
 def get_csv_data():
-    csv_readdata = []
+    csv_readdata: dict[str, list[list[str]]] = {"rocket": [], "payload": []}
 
-    csv_read_file = open(
-        newline="\n", file="../files/2024ASI-ROCKETRY-026.csv", mode="r"
+    csv_read_file__rocket = open(
+        newline="\n", file="../files/2024ASI-ROCKETRY-026-rocket.csv", mode="r"
+    )
+    csv_read_file__payload = open(
+        newline="\n", file="../files/2024ASI-ROCKETRY-026-payload.csv", mode="r"
     )
 
-    for line in csv.reader(csv_read_file):
-        csv_readdata.append(line)
+    for line in csv.reader(csv_read_file__rocket):
+        csv_readdata["rocket"].append(line)
+
+    for line in csv.reader(csv_read_file__payload):
+        csv_readdata["payload"].append(line)
 
     return {"data": csv_readdata}
 
@@ -224,116 +318,88 @@ def get_startupdata():
 
 
 @socketio.on("toggle-telemetry")
-def toggle_telemetry(telemetry_state: bool):
-    command_status = {
-        "status": "yet to send",
-        "telemetry_running": False,
-        "message": "none",
-    }
-    global telemetry_running
-    if telemetry_state == False:
-        telemetry_running = True
-        commandsend_status = send_command("telestart")
-        if commandsend_status["status"] == "success":
-            command_status = {
-                "status": "success",
-                "telemetry_running": True,
-                "message": "telemetry started",
-            }
-        else:
-            command_status = {
-                "status": "failure",
-                "telemetry_running": False,
-                "message": "could not start telemetry",
-            }
+def toggle_telemetry():
+    global telemetry_rocket_running
+    if telemetry_rocket_running == False:
+        telemetry_rocket_running = True
+        return send_command("telestart")
     else:
-        telemetry_running = False
-        commandsend_status = send_command("telestop")
-        if commandsend_status["status"] == "success":
-            command_status = {
-                "status": "success",
-                "telemetry_running": False,
-                "message": "telemetry stopped",
-            }
-        else:
-            command_status = {
-                "status": "failure",
-                "telemetry_running": True,
-                "message": "could not stop telemetry",
-            }
-    return command_status
+        telemetry_rocket_running = False
+        return send_command("telestop")
 
 
 @socketio.on("get-telemetry-state")
 def get_telemetry_state():
-    global telemetry_running
-    return telemetry_running
+    global telemetry_rocket_running
+    return telemetry_rocket_running
 
 
 @socketio.on("get-calibration-state")
 def get_calibration_state():
-    global calibration_done
-    return calibration_done
-
-
-@socketio.on("get-mission-progress")
-def get_mission_progress():
-    return mission_progress
+    global rocket_calibration_done, payload_calibration_done
+    return {"rocket": rocket_calibration_done, "payload": payload_calibration_done}
 
 
 @socketio.on("calibrate-sensors")
-def calibrate_sensors():
-    calistart_status = {"status": "yet to send", "message": "none"}
-    calibration_status = {
-        "status": "not calibrated",
-        "message": "calibration command yet not sent",
-    }
+def calibrate_sensors() -> boardconnector.Tstatus:
+    command_status = send_command("calibrate")
+    return command_status
 
-    commandsend_status = send_command("calibrate")
 
-    if commandsend_status["status"] != "success":
-        calistart_status = {
-            "status": "failure",
-            "message": "could not calibrate sensors",
-        }
-
-        print("failure")
-        return calistart_status
+def send_command(command_str: str, platform="both") -> boardconnector.Tstatus:
+    if not boardconnector.sim_mode:
+        if platform == "rocket":
+            status_rocket = boardconnector.send_rocket_command(
+                boardconnector.sim_mode, command_str
+            )
+            return {
+                "status": status_rocket["status"],
+                "rocket": status_rocket["status"],
+                "payload": False,
+                "message": status_rocket["message"]
+                + " and No command sent for payload",
+            }
+        elif platform == "payload":
+            status_payload = boardconnector.send_payload_command(
+                boardconnector.sim_mode, command_str
+            )
+            return {
+                "status": status_payload["status"],
+                "rocket": False,
+                "payload": status_payload["status"],
+                "message": "No command sent for rocket and "
+                + status_payload["message"],
+            }
+        else:
+            status_rocket = boardconnector.send_rocket_command(
+                boardconnector.sim_mode, command_str
+            )
+            status_payload = boardconnector.send_payload_command(
+                boardconnector.sim_mode, command_str
+            )
+            return {
+                "status": status_rocket["status"] and status_payload["status"],
+                "rocket": status_rocket["status"],
+                "payload": status_payload["status"],
+                "message": status_rocket["message"]
+                + " and "
+                + status_payload["message"],
+            }
     else:
-        calistart_status = {"status": "success", "message": "calibration started"}
-
-    # CHECK CALIBRATION
-    def calibration_checker():
-        timern = time.time()
-        calibrated = True
-        while time.time() - timern < 6:
-            if float(newdata["altitude"]) > 1:
-                time.sleep(1)
-                pass
-            else:
-                calibrated = True
-                break
-
-        if calibrated:
-            return {"status": "success", "message": "sensors calibrated"}
+        if command_str == "calibrate" or "telestart" or "telestop":
+            return {
+                "status": True,
+                "rocket": True,
+                "payload": True,
+                "message": f"{command_str} executed successfully",
+            }
         else:
             return {
-                "status": "failure",
-                "message": "could not calibrate sensors",
+                "status": False,
+                "rocket": True,
+                "payload": True,
+                "message": "Invalid Command",
             }
-
-    calibration_status = calibration_checker()
-    global calibration_done
-    calibration_done = True
-    return calibration_status
-
-
-def send_command(command_str: str):
-    if sim_mode:
-        command_status = {"status": "success", "message": "command sent"}
-    else:
-        command_status = boardconnector.send_command(command_str)
-    return command_status
 
 
 if __name__ == "__main__":

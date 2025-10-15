@@ -14,28 +14,42 @@ declare global {
 	export type TdataField = TrocketField | TpayloadField;
 
 	export type TrocketField =
-		| 'teamID'
-		| 'timeStamp'
-		| 'packetCount'
+		| 'team_id'
+		| 'time_stamp'
+		| 'packet_count'
 		| 'altitude'
 		| 'pressure'
 		| 'temperature'
 		| 'voltage'
-		| TgnssParams
-		| TmultiAxisDatatypes
-		| 'softwareState'
-		| 'gasConcn'
+		| 'gnss_time'
+		| 'gnss_latitude'
+		| 'gnss_longitude'
+		| 'gnss_altitude'
+		| 'gnss_sats'
+		| 'orientation_x'
+		| 'orientation_y'
+		| 'orientation_z'
+		| 'accel_x'
+		| 'accel_y'
+		| 'accel_z'
+		| 'software_state'
+		| 'gas_concentration'
 		| 'velocity';
 
 	export type TpayloadField =
-		| 'teamID'
-		| 'packetCount'
+		| 'team_id'
+		| 'packet_count'
 		| 'altitude'
 		| 'pressure'
 		| 'temperature'
-		| TmultiAxisDatatypes
+		| 'orientation_x'
+		| 'orientation_y'
+		| 'orientation_z'
+		| 'accel_x'
+		| 'accel_y'
+		| 'accel_z'
 		| 'velocity'
-		| 'gasConcn';
+		| 'gas_concentration';
 
 	export type TgnssParams =
 		| 'gnss_time'
@@ -56,7 +70,7 @@ declare global {
 
 	export type TtabName = 'Overview' | 'Graphs' | 'CSV';
 
-	export type TsoftwareState =
+	export type Tsoftware_state =
 		| 'BOOT'
 		| 'SETUP'
 		| 'LAUNCH_READY'
@@ -65,10 +79,10 @@ declare global {
 		| 'DESCENT'
 		| 'IMPACT';
 
-	export type TrocketData = {
-		teamID: string;
-		timeStamp: string;
-		packetCount: number;
+	export type TrocketTelemetry = {
+		team_id: string;
+		time_stamp: string;
+		packet_count: number;
 		altitude: number;
 		pressure: number;
 		temperature: number;
@@ -84,14 +98,14 @@ declare global {
 		accel_x: number;
 		accel_y: number;
 		accel_z: number;
-		softwareState: TsoftwareState;
-		gasConcn: number;
+		software_state: Tsoftware_state;
+		gas_concentration: number;
 		velocity: number;
 	};
 
-	export type TpayloadData = {
-		teamID: string;
-		packetCount: number;
+	export type TpayloadTelemetry = {
+		team_id: string;
+		packet_count: number;
 		altitude: number;
 		pressure: number;
 		temperature: number;
@@ -101,7 +115,7 @@ declare global {
 		accel_x: number;
 		accel_y: number;
 		accel_z: number;
-		gasConcn: number;
+		gas_concentration: number;
 		velocity: number;
 	};
 
@@ -110,7 +124,7 @@ declare global {
 		| 'pressure'
 		| 'temperature'
 		| 'voltage'
-		| 'gasConcn'
+		| 'gas_concentration'
 		| 'gnss_altitude'
 		| 'velocity'
 		| 'accel_x'
@@ -124,7 +138,7 @@ declare global {
 		| 'altitude'
 		| 'pressure'
 		| 'temperature'
-		| 'gasConcn'
+		| 'gas_concentration'
 		| 'velocity'
 		| 'accel_x'
 		| 'accel_y'
@@ -133,7 +147,26 @@ declare global {
 		| 'orientation_y'
 		| 'orientation_z';
 
-	export type Tcommand_from_gcs = null | 'telestart' | 'telestop' | 'calibrate';
+	export type Tcommand_from_gcs =
+		| null
+		| 'telestart'
+		| 'telestop'
+		| 'calibrate'
+		| 'telestart (failed)'
+		| 'telestop (failed)'
+		| 'calibrate (failed)';
+
+	export type TsimModeCommandRepsonse = {
+		status: boolean;
+		message: string;
+	};
+
+	export type TcommandRepsonse = {
+		status: boolean;
+		rocket: boolean;
+		payload: boolean;
+		message: string;
+	};
 }
 
 export {};

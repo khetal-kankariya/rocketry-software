@@ -43,8 +43,14 @@
 					const geometry = loader.parse(arrayBuffer);
 					getSize(geometry);
 
-					const material = new THREE.MeshMatcapMaterial({
-						color: 0xffffff
+					const material = new THREE.MeshPhysicalMaterial({
+						color: 0xffffff,
+						metalness: 0.3,
+						roughness: 0.4,
+						clearcoat: 0.1,
+						clearcoatRoughness: 0.1,
+						reflectivity: 0.9,
+						ior: 1.5
 					});
 
 					geometry.computeBoundingBox();
@@ -62,6 +68,14 @@
 
 					const axesHelper = new THREE.AxesHelper(500);
 					scene.add(axesHelper);
+
+					// Add lighting for the StandardMaterial
+					const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+					scene.add(ambientLight);
+
+					const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+					directionalLight.position.set(100, 100, 50);
+					scene.add(directionalLight);
 
 					const cameraDistance = 1000; // Adjust distance to fit the mesh comfortably
 					camera.position.set(cameraDistance, 0, cameraDistance);

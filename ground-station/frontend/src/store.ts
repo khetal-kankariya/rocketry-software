@@ -6,9 +6,9 @@ export const GCStype: Writable<null | 'rocket' | 'payload'> = writable(null);
 export const apiconnected = writable(false);
 
 export const rocketAllDataNames: Readable<TrocketField[]> = readable([
-	'teamID',
-	'timeStamp',
-	'packetCount',
+	'team_id',
+	'time_stamp',
+	'packet_count',
 	'altitude',
 	'pressure',
 	'temperature',
@@ -24,14 +24,14 @@ export const rocketAllDataNames: Readable<TrocketField[]> = readable([
 	'accel_x',
 	'accel_y',
 	'accel_z',
-	'softwareState',
-	'gasConcn',
+	'software_state',
+	'gas_concentration',
 	'velocity'
 ]);
 
 export const payloadAllDataNames: Readable<TrocketField[]> = readable([
-	'teamID',
-	'packetCount',
+	'team_id',
+	'packet_count',
 	'altitude',
 	'pressure',
 	'temperature',
@@ -41,8 +41,8 @@ export const payloadAllDataNames: Readable<TrocketField[]> = readable([
 	'accel_x',
 	'accel_y',
 	'accel_z',
-	'softwareState',
-	'gasConcn',
+	'software_state',
+	'gas_concentration',
 	'velocity'
 ]);
 
@@ -53,13 +53,13 @@ export const rocketDataInfo: Readable<{
 		displayName: string;
 	};
 }> = readable({
-	teamID: { graph: false, unit: '', displayName: 'Team ID' },
-	timeStamp: {
+	team_id: { graph: false, unit: '', displayName: 'Team ID' },
+	time_stamp: {
 		graph: false,
 		unit: '',
 		displayName: 'Time Stamp'
 	},
-	packetCount: {
+	packet_count: {
 		graph: false,
 		unit: '',
 		displayName: 'Packet Count'
@@ -72,7 +72,7 @@ export const rocketDataInfo: Readable<{
 		displayName: 'Temperature'
 	},
 	voltage: { graph: true, unit: 'V', displayName: 'Voltage' },
-	gasConcn: {
+	gas_concentration: {
 		graph: true,
 		unit: 'ppm',
 		displayName: 'Gas Concentration'
@@ -88,7 +88,7 @@ export const rocketDataInfo: Readable<{
 	orientation_x: { graph: true, unit: '°', displayName: 'X' },
 	orientation_y: { graph: true, unit: '°', displayName: 'Y' },
 	orientation_z: { graph: true, unit: '°', displayName: 'Z' },
-	softwareState: {
+	software_state: {
 		graph: false,
 		unit: '',
 		displayName: 'Software State'
@@ -107,8 +107,8 @@ export const payloadDataInfo: Readable<{
 		displayName: string;
 	};
 }> = readable({
-	teamID: { graph: false, unit: '', displayName: 'Team ID' },
-	packetCount: {
+	team_id: { graph: false, unit: '', displayName: 'Team ID' },
+	packet_count: {
 		graph: false,
 		unit: '',
 		displayName: 'Packet Count'
@@ -120,7 +120,7 @@ export const payloadDataInfo: Readable<{
 		unit: '°C',
 		displayName: 'Temperature'
 	},
-	gasConcn: {
+	gas_concentration: {
 		graph: true,
 		unit: 'ppm',
 		displayName: 'Gas Concentration'
@@ -142,15 +142,15 @@ export const alltabs: Readable<TtabName[]> = readable(['Overview', 'Graphs', 'CS
 
 export const activeTab: Writable<TtabName> = writable('Overview');
 
-export const rocketData: Writable<TrocketData> = writable({
-	teamID: '2024ASI-ROCKETRY-026',
-	timeStamp: '00:00:00',
-	packetCount: 0,
+export const rocketData: Writable<TrocketTelemetry> = writable({
+	team_id: '2024ASI-ROCKETRY-026',
+	time_stamp: '00:00:00',
+	packet_count: 0,
 	altitude: 0,
 	pressure: 0,
 	temperature: 0,
 	voltage: 0,
-	gasConcn: 0,
+	gas_concentration: 0,
 	gnss_time: '00:00:00',
 	gnss_latitude: 0,
 	gnss_longitude: 0,
@@ -162,17 +162,17 @@ export const rocketData: Writable<TrocketData> = writable({
 	orientation_x: 0,
 	orientation_y: 0,
 	orientation_z: 0,
-	softwareState: 'BOOT',
+	software_state: 'BOOT',
 	velocity: 0
 });
 
-export const payloadData: Writable<TpayloadData> = writable({
-	teamID: '2024-ASI-ROCKETRY-026',
-	packetCount: 0,
+export const payloadData: Writable<TpayloadTelemetry> = writable({
+	team_id: '2024-ASI-ROCKETRY-026',
+	packet_count: 0,
 	altitude: 0,
 	pressure: 0,
 	temperature: 0,
-	gasConcn: 0,
+	gas_concentration: 0,
 	accel_x: 0,
 	accel_y: 0,
 	accel_z: 0,
@@ -188,15 +188,17 @@ export const missionProgress = writable(20);
 export const initTime = writable(0);
 export const nowTime = writable(Date.now());
 export const upTime = writable('00:00:00');
-export const telemetry_running = writable(false);
-export const sensors_calibrated = writable(false);
+export const telemetry_rocket_running = writable(false);
+export const telemetry_payload_running = writable(false);
+export const sensors_rocket_calibrated = writable(false);
+export const sensors_payload_calibrated = writable(false);
 
 export const graphDataTypes__rocket: Readable<TrocketGraphField[]> = readable([
 	'altitude',
 	'pressure',
 	'temperature',
 	'voltage',
-	'gasConcn',
+	'gas_concentration',
 	'gnss_altitude',
 	'velocity',
 	'accel_x',
@@ -209,9 +211,9 @@ export const graphDataTypes__rocket: Readable<TrocketGraphField[]> = readable([
 ]);
 
 export const overviewDataTypes__rocket: Readable<TrocketField[]> = readable([
-	'teamID',
-	'timeStamp',
-	'packetCount',
+	'team_id',
+	'time_stamp',
+	'packet_count',
 	'altitude',
 	'pressure',
 	'temperature',
@@ -227,8 +229,8 @@ export const overviewDataTypes__rocket: Readable<TrocketField[]> = readable([
 	'accel_x',
 	'accel_y',
 	'accel_z',
-	'softwareState',
-	'gasConcn',
+	'software_state',
+	'gas_concentration',
 	'velocity'
 ]);
 
@@ -242,13 +244,13 @@ export const graphDataTypes__payload: Readable<TpayloadGraphField[]> = readable(
 	'accel_x',
 	'accel_y',
 	'accel_z',
-	'gasConcn',
+	'gas_concentration',
 	'velocity'
 ]);
 
 export const overviewDataTypes__payload: Readable<TpayloadField[]> = readable([
-	'teamID',
-	'packetCount',
+	'team_id',
+	'packet_count',
 	'altitude',
 	'pressure',
 	'temperature',
@@ -258,7 +260,7 @@ export const overviewDataTypes__payload: Readable<TpayloadField[]> = readable([
 	'accel_x',
 	'accel_y',
 	'accel_z',
-	'gasConcn',
+	'gas_concentration',
 	'velocity'
 ]);
 
@@ -269,7 +271,7 @@ export const rocketPastDatas: Writable<{
 	pressure: [0],
 	temperature: [0],
 	voltage: [0],
-	gasConcn: [0],
+	gas_concentration: [0],
 	gnss_altitude: [0],
 	velocity: [0],
 	accel_x: [0],
@@ -286,7 +288,7 @@ export const payloadPastDatas: Writable<{
 	altitude: [0],
 	pressure: [0],
 	temperature: [0],
-	gasConcn: [0],
+	gas_concentration: [0],
 	velocity: [0],
 	accel_x: [0],
 	accel_y: [0],
@@ -296,7 +298,8 @@ export const payloadPastDatas: Writable<{
 	orientation_z: [0]
 });
 
-export const csvdata: Writable<string[]> = writable([]);
+export const csvdata_rocket: Writable<string[]> = writable([]);
+export const csvdata_payload: Writable<string[]> = writable([]);
 
 export const simulation_mode = writable(false);
 export const travelled_coords: Writable<LatLngExpression[]> = writable([]);

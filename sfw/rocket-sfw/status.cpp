@@ -2,7 +2,6 @@
 
 components_status_struct components_status;
 
-
 bool get_component_status(String component_name) {
   if (component_name == "aht")
     return components_status.aht;
@@ -22,7 +21,8 @@ bool get_component_status(String component_name) {
     return components_status.rtc;
   else if (component_name == "xbee")
     return components_status.xbee;
-  else return false;
+  else
+    return false;
 }
 
 void set_component_status(String component_name, bool status) {

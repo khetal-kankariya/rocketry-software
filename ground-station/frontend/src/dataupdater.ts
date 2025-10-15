@@ -12,7 +12,7 @@ import {
 // Updating data derived from rocketData
 rocketData.subscribe((presentData) => {
 	// Setting time elapsed
-	timeElapsed.set(presentData.timeStamp);
+	timeElapsed.set(presentData.time_stamp);
 
 	window.sessionStorage.setItem('latest-rocket-data', JSON.stringify(presentData));
 
@@ -25,7 +25,7 @@ rocketData.subscribe((presentData) => {
 		if (val.pressure.length == 180) val.pressure.pop();
 		if (val.temperature.length == 180) val.temperature.pop();
 		if (val.voltage.length == 180) val.voltage.pop();
-		if (val.gasConcn.length == 180) val.gasConcn.pop();
+		if (val.gas_concentration.length == 180) val.gas_concentration.pop();
 		if (val.velocity.length == 180) val.velocity.pop();
 		if (val.gnss_altitude.length == 180) val.gnss_altitude.pop();
 		if (val.orientation_x.length == 180) val.orientation_x.pop();
@@ -37,7 +37,7 @@ rocketData.subscribe((presentData) => {
 			pressure: [presentData.pressure, ...val.pressure],
 			temperature: [presentData.temperature, ...val.temperature],
 			voltage: [presentData.voltage, ...val.voltage],
-			gasConcn: [presentData.gasConcn, ...val.gasConcn],
+			gas_concentration: [presentData.gas_concentration, ...val.gas_concentration],
 			velocity: [presentData.velocity, ...val.velocity],
 			accel_x: [presentData.accel_x, ...val.accel_x],
 			accel_y: [presentData.accel_y, ...val.accel_y],
@@ -63,7 +63,7 @@ payloadData.subscribe((presentData) => {
 		if (val.altitude.length == 180) val.altitude.pop();
 		if (val.pressure.length == 180) val.pressure.pop();
 		if (val.temperature.length == 180) val.temperature.pop();
-		if (val.gasConcn.length == 180) val.gasConcn.pop();
+		if (val.gas_concentration.length == 180) val.gas_concentration.pop();
 		if (val.velocity.length == 180) val.velocity.pop();
 		if (val.orientation_x.length == 180) val.orientation_x.pop();
 		if (val.orientation_y.length == 180) val.orientation_y.pop();
@@ -73,7 +73,7 @@ payloadData.subscribe((presentData) => {
 			altitude: [presentData.altitude, ...val.altitude],
 			pressure: [presentData.pressure, ...val.pressure],
 			temperature: [presentData.temperature, ...val.temperature],
-			gasConcn: [presentData.gasConcn, ...val.gasConcn],
+			gas_concentration: [presentData.gas_concentration, ...val.gas_concentration],
 			velocity: [presentData.velocity, ...val.velocity],
 			accel_x: [presentData.accel_x, ...val.accel_x],
 			accel_y: [presentData.accel_y, ...val.accel_y],
@@ -104,6 +104,5 @@ initTime.subscribe((initVal) => {
 		upTime.set(
 			`${hoursElapsed < 10 ? `0${hoursElapsed}` : hoursElapsed}:${minutesElapsed < 10 ? `0${minutesElapsed}` : minutesElapsed}:${secondsElapsed < 10 ? `0${secondsElapsed}` : secondsElapsed}`
 		);
-		console.log(val, initVal);
 	});
 });

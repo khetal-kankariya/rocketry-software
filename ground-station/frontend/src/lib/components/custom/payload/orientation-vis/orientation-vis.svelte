@@ -28,7 +28,7 @@
 		});
 	};
 	$effect.root(() => {
-		const filePath = '/payload.STL'; // Update with your STL file path
+		const filePath = '/payload.STL';
 		let scene = new THREE.Scene();
 		setTimeout(() => {
 			const loadSTLFromPath = async () => {
@@ -43,8 +43,14 @@
 					const geometry = loader.parse(arrayBuffer);
 					getSize(geometry);
 
-					const material = new THREE.MeshMatcapMaterial({
-						color: 0xffffff
+					const material = new THREE.MeshPhysicalMaterial({
+						color: 0xffffff,
+						metalness: 0.3,
+						roughness: 0.4,
+						clearcoat: 0.1,
+						clearcoatRoughness: 0.1,
+						reflectivity: 0.9,
+						ior: 1.5
 					});
 
 					geometry.computeBoundingBox();
@@ -55,18 +61,26 @@
 					mesh = new THREE.Mesh(geometry, material);
 					mesh.name = 'payload mesh';
 
-					// mesh.position.set(0, 0, 0);
+					mesh.position.set(0, 0, 0);
 					geometry.center();
 					// geometry.scale(0.5, 0.5, 0.5);
 					scene.add(mesh);
 
+					// Add lighting for the StandardMaterial
+					const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+					scene.add(ambientLight);
+
+					const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+					directionalLight.position.set(100, 100, 50);
+					scene.add(directionalLight);
+
 					// const axesHelper = new THREE.AxesHelper(500);
 					// scene.add(axesHelper);
 
-					const cameraDistance = 300; // Adjust distance to fit the mesh comfortably
-					camera.position.set(cameraDistance, 2 * center.y, cameraDistance);
+					const cameraDistance = 300;
+					camera.position.set(cameraDistance, center.y, 2 * cameraDistance);
 					camera.getWorldPosition(idealCameraPosition);
-					camera.lookAt(new THREE.Vector3(center.x, center.y, center.z));
+					camera.lookAt(new THREE.Vector3(0, 0, 0));
 					scene.translateY(center.y);
 
 					controls.target.copy(center);
@@ -105,7 +119,8 @@
 
 			controls = new OrbitControls(camera, renderer.domElement);
 
-			scene.background = new THREE.Color(0x020719);
+			// scene.background = new THREE.Color(0x020719);
+			scene.background = new THREE.Color(0x000);
 
 			const animate = () => {
 				requestAnimationFrame(animate);
@@ -119,7 +134,7 @@
 	});
 </script>
 
-<Card.Root class="bg-background relative h-[444px] w-[336px] p-2 text-gray-600">
+<Card.Root class="relative h-[444px] w-[336px] bg-background p-2 text-gray-600">
 	<canvas class="orientation-canvas aspect-square h-full w-full rounded-lg border"></canvas>
 	<Button variant="default" class="absolute bottom-4 right-4" onclick={resetView}>refresh</Button>
 </Card.Root>

@@ -7,7 +7,7 @@ void setup() {
 
 void loop() {
   software_state_manager();
-  
+
   if (telemetry_state()) {
     make_telemetry_data();
     save_prev_data(telemetry_data);
